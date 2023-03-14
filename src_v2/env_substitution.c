@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:40:10 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/08 15:22:25 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/14 10:30:38 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ bool	env_res(char **str, t_data *data)
 	data->env_len = 0;
 	while (i < cnt)
 	{
-		ft_printf("|%s|", get_env(*str, data));
 		*str = substitute_var(*str, get_env(*str, data), data->env_len + 1, data);
 		if (!*str)
 			return (false);

@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 12:07:08 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/08 15:21:03 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/14 10:29:20 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,6 @@
 // Assuming if both sides of the redirect are found like <     >
 // then we error
 
-// int	scan_string(char *str, int found)
-// {
-// 	// int	found
-// 	// int	found2;
-	
-// 	if (!str || !str[0])
-// 		return (-1);
-// 	found = ft_search_c(str, '>', '\'');
-// 	// found2 = ft_search_c(str, '<', '\'');
-// 	if (found != -1)
-// 		return (found);
-// 	found = ft_search_c(str, '>', '\'');
-// 	if (found != -1)
-// 		return (found);
-// 	return (-1);
-// }
 
 int	scan_string(char *str)
 {
