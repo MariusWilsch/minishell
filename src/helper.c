@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:28:28 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/10 12:04:34 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/13 13:28:52 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,10 @@ int	cnt_occur_skip(char *str, char c, char *skip)
 	}
 	return (cnt);
 }
+
+
+
+
 
 /**
  * @brief Checks if quotes are closed and if there only single pipes

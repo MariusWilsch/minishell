@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/10 13:06:29 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/13 13:29:43 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_cmds	*struct_init(char *str, t_cmds *cmds, t_data *data)
 	const int	cnt_pipe = cnt_occur_skip(str, '|', "\'\"");
 	
 	data->cmd_cnt = 1;
+	ft_printf("%d\n", data->cmd_cnt + cnt_pipe);
 	cmds = malloc(sizeof(t_cmds) * (data->cmd_cnt + cnt_pipe));
 	if (!cmds)
 		return (NULL);
@@ -49,24 +50,33 @@ void	print_2D_arr(char **arr) // Delete after completion
 
 char **prep_for_parser(char *input, t_cmds **cmds, t_data *data)
 {
-	char **arr;
+	char **arr = NULL; // Delete = NULL later
+	
+
 	
 	if (!input || !check_input(input))
+	{
+		puts("In here");
 		return (NULL);
+	}
+	// return (NULL); // For debugging purposes
 	*cmds = struct_init(input, *cmds, data);
 	if (!(*cmds) || !data)
 		return (NULL);
-	// To safeguard ft_split from splitting if the pipe is between quotations
-	// if (data->cmd_cnt == 1)
-	// 	return (input);
+	
+
+	
 	// If a pipe is between quotations then ft_split has to skip that pipe
 		// my ft_split_ultimate should fix that problem
-	arr = ft_split(input, '|'); 
-	if (!arr)
-		return (NULL);
+	
+
+
+
+
+
 	// (*cmds)->cmd_name = "TEST";
 	// printf("%s\n", (*cmds)->cmd_name);
-	print_2D_arr(arr); // Just for debugging purposes
+	// print_2D_arr(arr); // Just for debugging purposes
 	return (arr);
 }
 
@@ -85,9 +95,10 @@ int	main(void)
 
 	while (1)
 	{
-		// input = readline("Minishell-0.1$ ");
-		input = "echo test";
-		arr = prep_for_parser(input, &cmds, &data);
+		input = readline("Minishell-0.1$ ");
+		// input = "echo test";
+		// arr = prep_for_parser(input, &cmds, &data);
+		printf("%d", check_input(input));
 		free(input);
 		break ; //  For debugging purposes
 	}
