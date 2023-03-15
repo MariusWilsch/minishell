@@ -6,16 +6,18 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 19:10:36 by mwilsch           #+#    #+#             */
-/*   Updated: 2022/10/26 13:05:34 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/15 15:22:20 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *str)
+int	ft_strlen(const char *str)
 {
-	size_t	x;
+	int	x;
 
+	if (!str)
+		return (-1);
 	x = 0;
 	while (str[x])
 		x++;

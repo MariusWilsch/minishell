@@ -124,3 +124,66 @@ void	get_tok(char *input)
 		i++; // Skip spaces
 	}
 }
+
+
+
+/**
+ * @brief sth here
+ * 
+ * @param len The length of the string. If len is -1 then str is NULL
+*/
+char	*prep_cmd(char *str, int len)
+{
+	char *temp;
+	int	i;
+	int	k;
+
+	i = 1;
+	if (len != -1 && str[0] == '|')
+	{
+		str[0] = '/';
+		while (str[i] && str[i] == ' ')
+			i++;
+		str = del_substr(str, 1, i - 1);
+		return (str);
+	}
+	k = 0;
+	temp = malloc(sizeof(char ) * (len + 2));
+	if (!temp || len == -1)
+		return (NULL);
+	temp[len + 1] = '\0';
+	temp[0] = '/';
+	
+	while (str[k] && i < len + 1)
+		temp[i++] = str[k++];
+	return (temp);
+}
+
+
+// Improvement Ideas
+	// 1. strlcpy temp & up to $
+	// 2. If !env_var skip over while loop and just copy from there
+char	*substitute_var(char *str, char *env_var, int env_len, t_data *data)
+{
+	char				*temp;
+	int					i;
+	int					k;
+	int					temp_i;
+
+	i = 0;
+	k = 0;
+	if (!env_var)
+		return (del_substr(str, data->env_start - 1, data->env_len + 1));
+	temp = malloc(sizeof(char) * (data->env_size + 1));
+	if (!temp || !str)
+		return (NULL);
+	temp[data->env_size] = '\0';
+	i += copy_before(&temp, str, data); // Use strlcpy here
+	temp_i = env_len + i; 
+	while (env_var[k]) // Only copy if env_var exists if not just skip
+		temp[i++] = env_var[k++];
+	while (str[temp_i])
+		temp[i++] = str[temp_i++];
+	free(str);
+	return (temp);
+}

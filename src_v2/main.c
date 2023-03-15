@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 11:52:23 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/10 10:33:51 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/15 16:50:08 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "testing.h"
+#include "testing_v2.h"
 
 t_cmd *structs_init(char *input, t_cmd *cmds, t_data *data)
 {	
@@ -62,12 +62,12 @@ int main(int argc, char *argv[])
 	{
 		if (!cmd_res(arr[i], &cmds[i], &data))
 			return (1);
-		if (!redirect_pars(arr[i], &data))
-			return (1);
+		// if (!redirect_pars(arr[i], &data))
+		// 	return (1);
 		if (!env_res(&arr[i], &data))
 			return (1);
-		ft_printf("CMDS:\t|%s|\n", cmds[i].name);
-		ft_printf("ARGS:\t|%s|\n\n", arr[i]);
+		// ft_printf("CMDS:\t|%s|\n", cmds[i].name);
+		// ft_printf("ARGS:\t|%s|\n\n", arr[i]);
 		i++;
 	}
 }

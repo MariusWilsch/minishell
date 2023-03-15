@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/15 10:38:31 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/15 18:15:28 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,19 @@
 # include "../libft/include/ft_printf.h"
 
 
-
+/**
+ * @brief Gives high level meaning to the tokens
+ * 
+ * @param OPER a token which includes a redirect or a pipe
+ * @param ARG a token which can be a command (if it's the first) or a argument
+ * @param QUOTE_ARG Chained arguments. Special chars other than $ lose their meaning
+*/
 typedef enum s_tokens {
 	OPER,
 	ARG,
-	QUOTE,
+	QUOTE_ARG,
+	CMD,
+	REDIRECT,
 } t_type_tok;
 
 typedef struct t_args {
@@ -52,10 +60,23 @@ typedef struct s_data {
 	int cmd_cnt;
 } t_data;
 
-// Helper_1
-bool	incl_char(char c, char *search_str);
-bool	are_quotes_even(char *input);
-char	*del_substr(char *str, int start, int len);
+/*			Helper_1			*/
 
+bool		incl_char(char c, char *search_str);
+bool		are_quotes_even(char *input);
+char		*del_substr(char *str, int start, int len);
+int			cnt_len_between(char *str, char c, int index);
+
+/*			Tokenizer			*/
+
+char		*get_tok(char *input, int start, t_type_tok type);
+int			add_tok(char *str_tok, t_args **head, t_type_tok type);
+t_args	*create_tok_list(char *input, t_args *head);
+
+
+/*			Processing			*/
+
+char	*prep_cmd(char *str);
+char	*resolute_cmd(char *str);
 
 #endif

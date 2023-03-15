@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 17:54:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/02/09 18:32:02 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/15 14:38:13 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ char **ft_split(char const *s, char c)
 
 	s_arr = malloc(sizeof(char *) * (wrd_cnt + 1));
 	if (!s_arr || wrd_cnt == -1)
-		return (free(s_arr), NULL);
+		return (free(s_arr), NULL); // Do I need to free here?
 	s_arr[wrd_cnt] = NULL;
 	while (i < wrd_cnt)
 	{

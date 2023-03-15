@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/15 13:20:01 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/15 18:57:13 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,116 +19,70 @@ int	debug_msg(char *str)
 }
 
 
-/**
- * @brief Counts the length of characters between quotes
- * 
- * @note Usecase: When I want to skip over the characters between quotes
-*/
-int	cnt_len_between(char *str, char c, int index)
+void print_list(t_args *head)
 {
-	int		i;
-
-	i = 0;
-	while (str[index])
+	t_args *temp = head;
+	// ft_printf("%s", temp->);
+	while (temp != NULL)
 	{
-		if (str[index] == c)
-			return (i); // Does this work? If not use break ; here
-		index++;
-		i++;
+		ft_printf("%d:\t", temp->type);
+		ft_printf("`%s`\n", temp->arg);
+		temp = temp->next;
 	}
-	return (-1);
 }
 
 
-/**
- * @brief Cutting out the token out of the input string
- * 
- * @note I add 2 to len because of the quotes
-*/
-char	*get_tok(char *input, int start, t_type_tok type)
+void	env_res(char *str, int start, t_type_tok type)
 {
-	char	*res;
+	char *env_var;
+	char *temp;
 	int		len;
 
 	len = start;
-	while (type == 0 && input[len] && incl_char(input[len], " >|<"))
-		len++;
-	while (input[len] && !incl_char(input[len], " ><"))
-		len++;
-	len -= start;
-	if (type == 2)
-		len = cnt_len_between(input, input[start], start + 1) + 2;
-	res = ft_substr(input, start, len);
-	input = del_substr(input, start, len);
-	if (!res || !input)
-		return (NULL);
-	return (res);
+	temp = NULL;
+	if (type == QUOTE_ARG && str[0] == '\"')
+	{
+		while (str[len] && !incl_char(str[len], " <>\""))
+			len++;
+		len = len - start;
+		temp = ft_substr(str, start, len);
+	}
+	ft_printf("%s ", str);
+	if (start == 0 && type == ARG)
+		temp = del_substr(str, 0, 1);
+	ft_printf("%s", temp);
+	// env_var = getenv(temp);
+	// if (type == QUOTE_ARG)
+		free(temp);
+	// return (temp);
 }
 
-// "test HOME"
 
 
-int	add_tok(char *str_tok, t_args **head, t_type_tok type)
+void	process_tok(t_args *head)
 {
-	t_args	*new;
-	t_args	*temp;
 
-	temp = *head;
-	new = malloc(sizeof(t_args));
-	if (!new)
-		return (-1);
-	new->arg = str_tok;
-	new->type = type;
-	new->next = NULL;
-	if (!temp)
+	t_args *temp = head;
+
+	while (temp != NULL)
 	{
-		*head = new;
-		new->next = NULL;
-		return (0);
-	}
-	while (temp->next != NULL)
+		if (temp->type == CMD)
+			temp->arg = resolute_cmd(temp->arg);
+		// if (temp->type == REDIRECT)
+			// Do red_checks
+		if (ft_strchr(temp->arg, '$') && temp->arg[0] != '\'')
+			env_res(temp->arg, ft_strclen(temp->arg, '$') + 1, temp->type);
 		temp = temp->next;
-	temp->next = new;
-	return (0);
-}
-
-t_args	*prep_tok(char *input, t_args *head)
-{
-	int	i;
-	bool	flag;
-
-	i = 0;
-	while (ft_strlen(input) != 0 && input[i])
-	{
-		if (incl_char(input[i], ">|<"))
-			i = add_tok(get_tok(input, i, OPER), &head, OPER);
-		if (ft_isalnum(input[i]) || incl_char(input[i], "$-"))
-			i = add_tok(get_tok(input, i, ARG), &head, ARG);
-		if (incl_char(input[i], "\'\""))
-			i = add_tok(get_tok(input, i, QUOTE), &head, QUOTE);
-		if (i == -1)
-			return (NULL);
-		i++; // Skip spaces
 	}
-	return (head);
+	// print_list(head);
+	return ;
 }
-
-			// ft_printf("%d", cnt_len_between(input, input[i], i + 1));
-// "tok 1 tok2"
 
 void	tokenizer(char *input, t_args *head)
 {
-	int i;
-
-	i = 0;
-	head = prep_tok(input, head);
-	t_args *temp = head;
-	while (temp != NULL)
-	{
-		ft_printf("%s\t", temp->arg);
-		ft_printf("%d\n", temp->type);
-		temp = temp->next;
-	}
+	head = create_tok_list(input, head);
+	// print_list(head);
+	process_tok(head);
 }
 
 
@@ -136,7 +90,9 @@ int	main(int argc, char *argv[])
 {
 	// With strtrim it will proab. cause mem leak
 	char	*input = ft_strtrim(readline(""), " ");  // Reading the cmd line input
-	// char	*input = "ls libft | echo \"||| test\""; // When Debugging
+	// char	*input = ft_strtrim("echo    |    ls", " "); // When Debugging
+	
+
 	
 	t_args *head;
 
@@ -145,5 +101,4 @@ int	main(int argc, char *argv[])
 	tokenizer(input, head);
 	return (EXIT_SUCCESS);
 }
-
 

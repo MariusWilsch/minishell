@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:28:28 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/15 10:27:40 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/15 14:31:31 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,3 +97,25 @@ char	*del_substr(char *str, int start, int len)
 	return (str);
 }
 
+
+/**
+ * @brief Counts the length of characters between quotes
+ * 
+ * @param 
+ * 
+ * @note Usecase: When I want to skip over the characters between quotes
+*/
+int	cnt_len_between(char *str, char c, int index)
+{
+	int		i;
+
+	i = 0;
+	while (str[index])
+	{
+		if (str[index] == c)
+			return (i); // Does this work? If not use break ; here
+		index++;
+		i++;
+	}
+	return (-1);
+}
