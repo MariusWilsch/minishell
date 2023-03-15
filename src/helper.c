@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:28:28 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/13 13:28:52 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/15 10:27:40 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,67 +34,66 @@ bool	incl_char(char c, char *search_str)
 	return (false);
 }
 
-
 /**
- * @brief Counts occurences of char c inside of a string
+ * @brief Checks if quotes are opened and closed
  * 
- * @param str String to search occurence in
- * @param c the character to search for
+ * @param input command line input
  * 
- * @note Does not count the occurence if the char c is inside of 
- * quotations
- */
-int	cnt_occur_skip(char *str, char c, char *skip)
+ * @note Quotes inside of quotes are not considered
+*/
+bool are_quotes_even(char *input)
 {
-	int	i;
-	int	cnt;
-	
+	bool	flag;
+	char	c;
+	int		i;
+
 	i = 0;
-	cnt = 0;
-	if (!str)
-		return (-1);
-	while (str[i])
+	flag = true;
+	while (input[i])
 	{
-		if (incl_char(str[i], skip)) // Could be it's own int function i += skip()
+		if (!flag && input[i] == c)
 		{
+			flag = true;
 			i++;
-			while (!incl_char(str[i], skip) && str[i + 1] != '\0')
-				i++;
 		}
-		if (str[i] == c)
-			cnt++;
-		i++;
+		if (flag && incl_char(input[i], "\'\""))
+		{
+			c = input[i];
+			flag = false;
+		}
+		if (input[i])
+			i++;
 	}
-	return (cnt);
+	return (flag);
 }
-
-
-
 
 
 /**
- * @brief Checks if quotes are closed and if there only single pipes
+ * @brief Deletes a substr from a str
  * 
- * @param str Unproccsed command line input
- * @return true or false
- */
-bool	check_input(const char *str)
+ * @param start The starting index of str to delete from
+ * @param len The amount of chars to delete
+ * 
+ * @note I could rewrite this function to be a bool and use a double ptr
+ * for char *str so that I do not lose the changes outside local scope, however
+ * this would entail that I have to rewrite my env_subsitution to accomodate
+ * for that
+ * 
+ * @note Benefits: 1. I can check if del_substr went right or not 2. I can 
+ * save lines
+*/
+char	*del_substr(char *str, int start, int len)
 {
-	int	i;
-	int	cnt_single;
-	int	cnt_double;
+	int	copy_from;
 
-	cnt_single = 0;
-	cnt_double = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			cnt_single++;
-		if (str[i] == '\"')
-			cnt_double++;
-		if (str[i] == '|' && str[i + 1] == '|')
-				return (false);
-		i++;
-	}
-	return ((cnt_single % 2) == 0 && (cnt_double % 2) == 0);
+	if (!str)
+		return (NULL);
+	if (len == 0)
+		return (str);
+	copy_from = start + len;
+	while (str[copy_from])
+		str[start++] = str[copy_from++];
+	str[start] = '\0';
+	return (str);
 }
+
