@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/15 18:15:28 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/17 17:12:45 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,17 @@ typedef enum s_tokens {
 	REDIRECT,
 } t_type_tok;
 
+typedef enum s_err_toks {
+	OK,
+	NO_CMD,
+	NO_FILE_DIR,
+	// MALLOC_ERR,
+} t_err_tok;
+
 typedef struct t_args {
 	char					*arg;
 	t_type_tok		type;
+	t_err_tok			err_tok;
 	struct t_args	*next;
 } t_args;
 
@@ -76,7 +84,8 @@ t_args	*create_tok_list(char *input, t_args *head);
 
 /*			Processing			*/
 
+char	*resolute_cmd(t_args *node, char *str);
 char	*prep_cmd(char *str);
-char	*resolute_cmd(char *str);
-
+char	*env_res(char *str, int env_len);
+int		get_env_len(char *str);
 #endif

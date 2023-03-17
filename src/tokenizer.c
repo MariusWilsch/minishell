@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/15 18:23:55 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/17 15:34:27 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,26 @@
  * 
  * @note I add 2 to len because of the quotes
 */
+
+
+
+
 char	*get_tok(char *input, int start, t_type_tok type)
 {
 	char	*res;
 	int		len;
 
 	len = start;
-	while (type == 0 && input[len] && incl_char(input[len], " >|<"))
+	while (type == OPER && input[len] && incl_char(input[len], " >|<"))
 		len++;
 	while (input[len] && !incl_char(input[len], " >|<"))
+	{
+		if (incl_char(input[len], "\'\""))
+			len += cnt_len_between(input, input[len], len + 1) + 2;
 		len++;
+	}
 	len -= start;
-	if (type == 2)
+	if (type == QUOTE_ARG)
 		len = cnt_len_between(input, input[start], start + 1) + 2;
 	res = ft_substr(input, start, len);
 	input = del_substr(input, start, len);
@@ -101,7 +109,8 @@ t_args	*create_tok_list(char *input, t_args *head)
 			i = add_tok(get_tok(input, i, QUOTE_ARG), &head, QUOTE_ARG);
 		if (i == -1)
 			return (NULL);
-		i++; // Skip spaces
+		if (input[i] == ' ')
+			i++; // Skip spaces
 	}
 	return (head);
 }
