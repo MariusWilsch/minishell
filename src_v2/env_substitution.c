@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:40:10 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/15 17:06:05 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/17 11:34:20 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ int	copy_before(char **temp, char *str, t_data *data)
 	}
 	return (i);
 }
+
+echo "TEST $HOME test"
+
 
 char	*get_env(char *str, t_data *data)
 {

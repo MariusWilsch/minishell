@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 18:12:44 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/15 18:13:07 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/17 11:39:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	*resolute_cmd(char *str)
 			return (free_split(path_2D), NULL);
 		if (access(temp, X_OK) == 0)
 			break ;
+		free(temp);
 		i++;
 	}
 	free(str);

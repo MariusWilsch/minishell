@@ -31,6 +31,30 @@ int	cnt_occur_skip1(char *input, char c)
 }
 
 
+int	get_env(char *str,char **env_var, t_type_tok type)
+{
+	const int start = ft_strclen(str, '$') + 1;
+	char *temp;
+	int		len;
+
+	len = ft_strlen(str) - 1;
+	if (type == QUOTE_ARG && str[0] == '\"')
+	{
+		len = start;
+		while (str[len] && !incl_char(str[len], " <>\""))
+			len++;
+		len = len - start;
+	}
+	ft_printf("%d\n", len);
+	temp = ft_substr(str, start, len);
+	if (!temp)
+		return (-1);
+	*env_var = getenv(temp);
+	free(temp);
+	len = (ft_strlen(str) + ft_strlen(*env_var)) - len;
+	return (len - 1);
+}
+
 
 
 char *cut_tok(char *input, int start, int flag)
@@ -187,3 +211,61 @@ char	*substitute_var(char *str, char *env_var, int env_len, t_data *data)
 	free(str);
 	return (temp);
 }
+
+
+
+
+
+0x7fb780500020
+/bin/echo
+leaks Report Version: 4.0
+Process 13708: 297 nodes malloced for 204 KB
+Process 13708: 4 leaks for 80 total leaked bytes.
+
+    4 (80 bytes) << TOTAL >>
+
+      2 (48 bytes) ROOT LEAK: 0x7fb780500030 [32]
+         1 (16 bytes) 0x7fb780500060 [16]  length: 9  "/bin/echo"
+
+      1 (16 bytes) ROOT LEAK: 0x7fb780500000 [16]  length: 4  "echo"
+      1 (16 bytes) ROOT LEAK: 0x7fb780500010 [16]
+
+
+
+
+
+int	get_env(char *str,char **env_var, t_type_tok type)
+{
+	const int start = ft_strclen(str, '$') + 1;
+	char *temp;
+	int		len;
+
+	len = start;
+	temp = ft_strdup(str);
+	if (type == QUOTE_ARG && str[0] == '\"')
+	{
+		while (str[len] && !incl_char(str[len], " <>\""))
+			len++;
+		len = len - start;
+		temp = ft_substr(str, start, len);
+	}
+	if (start == 1 && type == ARG)
+		temp = del_substr(temp, 0, 1);
+	if (!temp)
+		return (-1);
+	*env_var = getenv(temp);
+	len = ft_strlen(temp) + 1;
+	free(temp);
+	return (len);
+}
+
+"test /Users/mwilsch
+"test $HOME test"
+
+What I need is the index of the orginal string plus the length of len of temp
+from get_env
+
+
+12 14 5
+
+26 - 5
