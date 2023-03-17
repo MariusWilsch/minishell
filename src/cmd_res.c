@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_res.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/17 19:49:09 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/17 19:57:15 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Writes error messages
+ * 
+ * @param node the node of the linked list where a error occured
+ * 
+ * @note To do: I need to remove the "" from the str for example if I have echo"test"test
+ */
 char	*cmd_err(t_args *node)
 {
 	char *str = node->arg;
@@ -49,7 +56,13 @@ char *prep_cmd(char *str)
 
 
 
-
+/**
+ * @brief 
+ * 
+ * @param node A single node of the linked list containg a string to be resoluted
+ * @param cmd A duplicate of the orginal string
+ * @return cmd If command resolution was succesfull and cmd_err which returns the unchanged string
+ */
 char	*resolute_cmd(t_args *node, char *cmd)
 {
 	char *temp;
