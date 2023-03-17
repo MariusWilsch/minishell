@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/17 15:34:27 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/17 19:47:04 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,18 @@ char	*get_tok(char *input, int start, t_type_tok type)
 	int		len;
 
 	len = start;
-	while (type == OPER && input[len] && incl_char(input[len], " >|<"))
-		len++;
-	while (input[len] && !incl_char(input[len], " >|<"))
+	if (type != QUOTE_ARG)
 	{
-		if (incl_char(input[len], "\'\""))
-			len += cnt_len_between(input, input[len], len + 1) + 2;
-		len++;
+		while (type == OPER && input[len] && incl_char(input[len], " >|<"))
+			len++;
+		while (input[len] && !incl_char(input[len], " >|<"))
+		{
+			len++;
+			if (incl_char(input[len], "\'\""))
+				len += cnt_len_between(input, input[len], len + 1) + 2;
+		}
+		len -= start;
 	}
-	len -= start;
 	if (type == QUOTE_ARG)
 		len = cnt_len_between(input, input[start], start + 1) + 2;
 	res = ft_substr(input, start, len);
@@ -75,7 +78,7 @@ int	add_tok(char *str_tok, t_args **head, t_type_tok type)
 	if (!temp) // This marks the first node
 	{
 		*head = new;
-		if (type != OPER)
+		if (type == ARG)
 			new->type = CMD;
 		new->next = NULL;
 		return (0);

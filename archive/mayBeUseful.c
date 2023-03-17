@@ -114,3 +114,10 @@ char	*resolute_cmd(char *str)
 	free_split(path_2D);
 	return (temp);
 }
+
+
+
+
+
+
+test $HOE test

@@ -10,7 +10,7 @@ INCFLAGS	= -I include
 LDFLAGS		= -lreadline
 RM				= rm -rf
 
-SRC_FILES	=	main tokenizer processing helper\
+SRC_FILES	=	main tokenizer env_sub cmd_res helper\
 
 SRC			=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ			=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
