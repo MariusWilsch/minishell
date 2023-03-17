@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/17 19:47:36 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/17 19:58:46 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_args	*tokenizer(char *input, t_args *head)
 /**
  * @note Do I need the quotes or should I leave them already?
  * 
- * @note I should spent an hour or 2 on testing inputs
+ * @note I should spent an hour or 2 on testing inputs - ToDo adding redirect checking logic
 */
 int	main(void)
 {
