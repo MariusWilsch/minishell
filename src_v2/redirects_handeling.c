@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 12:07:08 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/14 10:29:20 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/18 14:29:33 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ char *cut_out(char *str, int start, t_data *data)
  * I was thinking that I could build a wrapper around ft_printf and send the 
  * correct msg then 
 */
+
+
+
 bool	check_syntax(char *str, char c, int cnt, t_data *data)
 {
 	int	i;

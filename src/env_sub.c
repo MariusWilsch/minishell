@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:33:01 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/17 19:33:50 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/18 16:54:19 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	get_env_len(char *str)
 /**
  * @brief Substitutes the environment variable inside of of the string
  * 
- * @param str String to be subsitutued. str gets freed!
+ * @param str String to be subsitutued. str gets freed! Do I want that?
  * @param env_len The length of the unsubsituted env_var
  * 
  * @note First it copies all chars before the $. Then it concatenates the env_var.
@@ -41,7 +41,7 @@ int	get_env_len(char *str)
  * 
  * @note I'm missing the deletion of env_var if env_var does not exsit
 */
-char	*env_res(char *str, int env_len)
+char	*sub_env(char *str, int env_len)
 {
 	const int	start = ft_strclen(str, '$') + 1;
 	char			*env_var;

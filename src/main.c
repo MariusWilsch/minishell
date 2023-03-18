@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/17 19:58:46 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/18 17:35:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ t_args	*process_tok(t_args *head)
 	{
 		if (node->type == CMD)
 			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		// if (node->type == REDIRECT)
-		// 	node->arg = 
-		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
-		{
-			while (ft_strchr(node->arg, '$'))
-				node->arg = env_res(node->arg, get_env_len(node->arg));
-		}
+		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0]) != 0)
+			return (NULL);
+		// if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
+		// {
+		// 	while (ft_strchr(node->arg, '$'))
+		// 		node->arg = sub_env(node->arg, get_env_len(node->arg));
+		// }
 		node = node->next;
 	}
 	return (head);
@@ -63,7 +63,7 @@ t_args	*tokenizer(char *input, t_args *head)
 {
 	head = create_tok_list(input, head);
 	head = process_tok(head);
-	print_list(head);
+	// print_list(head);
 	return (head);
 }
 
@@ -76,12 +76,15 @@ t_args	*tokenizer(char *input, t_args *head)
 /**
  * @note Do I need the quotes or should I leave them already?
  * 
- * @note I should spent an hour or 2 on testing inputs - ToDo adding redirect checking logic
+ * @note 
+ * I should spent an hour or 2 on testing inputs
+ * ToDo adding redirect checking logic
+ * Do I want that free gets freed in sub_var
 */
 int	main(void)
 {
 	char	*input = ft_strtrim(readline(""), " ");  // Reading the cmd line input
-	// char	*input = ft_strtrim("echo\"test\" test", " "); // When Debugging
+	// char	*input = ft_strtrim("echo test\"test\"test", " "); // When Debugging
 
 	t_args *head;
 	if (!input || !are_quotes_even(input))

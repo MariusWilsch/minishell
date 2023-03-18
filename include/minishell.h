@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/17 19:37:47 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/18 16:27:30 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
 /**
  * @brief Gives high level meaning to the tokens
  * 
- * @param OPER a token which includes a redirect or a pipe
+ * @param OPERATOR a token which includes a redirect or a pipe
  * @param ARG a token which can be a command (if it's the first) or a argument
  * @param QUOTE_ARG Chained arguments. Special chars other than $ lose their meaning
 */
 typedef enum s_tokens {
-	OPER,
+	OPERATOR,
 	ARG,
 	QUOTE_ARG,
 	CMD,
@@ -42,6 +42,10 @@ typedef enum s_err_toks {
 	OK,
 	NO_CMD,
 	NO_FILE_DIR,
+	TO_MANY,
+	NO_ALNUM_BETWEEN,
+	NEWLINE_ERR,
+	ENV_REDIRECT,
 	// MALLOC_ERR,
 } t_err_tok;
 
@@ -78,7 +82,8 @@ int			cnt_len_between(char *str, char c, int index);
 /*			Tokenizer			*/
 
 char		*get_tok(char *input, int start, t_type_tok type);
-int			add_tok(char *str_tok, t_args **head, t_type_tok type);
+t_args	*create_node(char *str, t_type_tok type);
+int			add_tok(char *str, t_args **head, t_type_tok type);
 t_args	*create_tok_list(char *input, t_args *head);
 
 
@@ -91,6 +96,10 @@ char	*resolute_cmd(t_args *node, char *cmd);
 /*			Environment Subsitution			*/
 
 int		get_env_len(char *str);
-char	*env_res(char *str, int env_len);
+char	*sub_env(char *str, int env_len);
+
+/*			Redirect Checking			*/
+
+int	check_redirect(char *str, char c);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_res.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/17 19:57:15 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/18 12:27:26 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*cmd_err(t_args *node)
 	char *str = node->arg;
 	if (ft_strchr(str, '$'))
 	{
-		str = env_res(str, get_env_len(str)); // Leak?
+		str = sub_env(str, get_env_len(str)); // Leak?
 		ft_printf("minishell: %s: No such file or directory\n", str);
 		node->err_tok = NO_FILE_DIR;
 		return (str);

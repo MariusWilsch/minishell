@@ -121,3 +121,61 @@ char	*resolute_cmd(char *str)
 
 
 test $HOE test
+
+char	*get_tok(char *input, int start, t_type_tok type)
+{
+	char	*res;
+	int		len;
+
+	len = start;
+	if (type != QUOTE_ARG)
+	{
+		while (type == OPERATOR && input[len] && incl_char(input[len], " >|<"))
+			len++;
+		while (input[len] && !incl_char(input[len], " >|<"))
+		{
+			if (incl_char(input[len], "\'\""))
+				len += cnt_len_between(input, input[len], len + 1) + 1;
+			len++;
+		}
+		len -= start;
+	}
+	if (type == QUOTE_ARG)
+		len = cnt_len_between(input, input[start], start + 1) + 2;
+	res = ft_substr(input, start, len);
+	input = del_substr(input, start, len);
+	if (!res || !input)
+		return (NULL);
+	return (res);
+}
+
+int	add_tok(char *str, t_args **head, t_type_tok type)
+{
+	t_args	*new;
+	t_args	*temp;
+
+	temp = *head;
+	new = malloc(sizeof(t_args));
+	if (!new)
+		return (-1);
+	new->arg = str;
+	new->type = type;
+	new->err_tok = OK;
+	new->next = NULL;
+	if (str[0] == '|' && type == OPERATOR)
+		new->type = CMD;
+	if (incl_char(str[0], "><") && type == OPERATOR)
+		new->type = REDIRECT;
+	if (!temp) // This marks the first node
+	{
+		*head = new;
+		if (type == ARG)
+			new->type = CMD;
+		new->next = NULL;
+		return (0);
+	}
+	while (temp->next != NULL)
+		temp = temp->next;
+	temp->next = new;
+	return (0);
+}
