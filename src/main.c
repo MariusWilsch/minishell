@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/19 16:13:26 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/19 17:03:32 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,38 +37,16 @@ void	leaks(void)
 	system("leaks -q minishell");
 }
 
-
-
-t_args	*process_tok(t_args *head)
+void	free_list(t_args *head)
 {
-	t_args *node = head;
-
-	while (node != NULL)
+	while (head != NULL) // Freeing the list
 	{
-		if (node->type == CMD)
-			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0]) != 0)
-			return (head);
-		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
-		{
-			while (ft_strchr(node->arg, '$') && node->type != REDIRECT)
-				node->arg = sub_env(node->arg, get_env_len(node->arg));
-		}
-		node = node->next;
+		free(head->arg);
+		free(head);
+		head = head->next;
 	}
-	return (head);
+	// atexit(leaks);
 }
-
-t_args	*tokenizer(char *input, t_args *head)
-{
-	head = create_tok_list(input, head);
-	head = process_tok(head);
-	print_list(head);
-	return (head);
-}
-
-
-
 
 // Does readline cause the leak, like the subject says?
 
@@ -89,14 +67,10 @@ int	main(void)
 	t_args *head;
 	if (!input || !are_quotes_even(input))
 		return (debug_msg("main: input or quotes\n"));
-	head = tokenizer(input, head);
-	while (head != NULL) // Freeing the list
-	{
-		free(head->arg);
-		free(head);
-		head = head->next;
-	}
-	atexit(leaks);
+	head = create_tok_list(input, head);
+	head = process_tok(head);
+	// print_list(head);
+	// free_list(head);
 	return (free(input), EXIT_SUCCESS);
 }
 

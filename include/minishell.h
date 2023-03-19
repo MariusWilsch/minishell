@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/19 14:06:22 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/19 17:02:00 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ char		*get_tok(char *input, int start, t_type_tok type);
 t_args	*create_node(char *str, t_type_tok type);
 int			add_tok(char *str, t_args **head, t_type_tok type);
 t_args	*create_tok_list(char *input, t_args *head);
+t_args	*process_tok(t_args *head);
 
 
 /*			Command Resolution			*/
@@ -101,6 +102,8 @@ char	*sub_env(char *str, int env_len);
 
 /*			Redirect Checking			*/
 
+int	err_msg(t_err_tok err, char *str);
+int	env_var_case(char *str, int env_len, int cnt);
 int	check_redirect(char *str, char c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/18 16:28:33 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/19 16:55:35 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ char	*get_tok(char *input, int start, t_type_tok type)
 	return (res);
 }
 
-
+/**
+ * 
+*/
 t_args	*create_node(char *str, t_type_tok type)
 {
 	t_args *new;
@@ -92,7 +94,6 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 }
 
 
-
 /**
  * @brief Adds all token to a linked list
  * 
@@ -116,6 +117,29 @@ t_args	*create_tok_list(char *input, t_args *head)
 			return (NULL);
 		if (input[i] == ' ')
 			i++; // Skip spaces
+	}
+	return (head);
+}
+
+/**
+ * 
+*/
+t_args	*process_tok(t_args *head)
+{
+	t_args *node = head;
+
+	while (node != NULL)
+	{
+		if (node->type == CMD)
+			node->arg = resolute_cmd(node, ft_strdup(node->arg));
+		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0]) != 0)
+			return (head);
+		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
+		{
+			while (ft_strchr(node->arg, '$') && node->type != REDIRECT)
+				node->arg = sub_env(node->arg, get_env_len(node->arg));
+		}
+		node = node->next;
 	}
 	return (head);
 }
