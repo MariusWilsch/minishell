@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:28:28 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/18 16:17:27 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:36:29 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	*del_substr(char *str, int start, int len)
 
 	if (!str)
 		return (NULL);
-	if (len == 0)
+	if (len == 0 || len > ft_strlen(str))
 		return (str);
 	copy_from = start + len;
 	while (str[copy_from])
@@ -118,4 +118,32 @@ int	cnt_len_between(char *str, char c, int index)
 		i++;
 	}
 	return (-1);
+}
+
+/**
+ * @brief Deletes quotes from strings when they are not needed anymore
+ * 
+ * @note Does not malloc
+*/
+char	*del_quotes(char *str)
+{
+	int		cnt;
+	int		i;
+	char	c;
+
+	if (!str)
+		return (NULL);
+	if (!ft_strchr(str, '\'') && !ft_strchr(str, '\"'))
+		return (str);
+	cnt = 2;
+	c = '\"';
+	if (ft_strchr(str, '\''))
+		c = '\'';
+	while (cnt)
+	{
+		i = ft_strclen(str, c);
+		str = del_substr(str, i, 1);
+		cnt--;
+	}
+	return (str);
 }

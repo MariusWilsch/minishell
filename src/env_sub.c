@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:33:01 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/18 16:54:19 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:58:53 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,13 @@ char	*sub_env(char *str, int env_len)
 	char			*new;
 	int				len;
 
+	if (!str)
+		return (NULL);
 	new = ft_substr(str, start, env_len);
 	env_var = getenv(new);
 	free(new);
 	if (!env_var)
-		return (del_substr(str, start - 2, env_len + 2));
+		return (del_substr(str, start - 1, env_len + 1));
 	len = (ft_strlen(str) + ft_strlen(env_var)) - (env_len + 1);
 	new = malloc(sizeof(char) * (len + 1));
 	if (!new)

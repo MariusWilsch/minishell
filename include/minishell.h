@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/18 16:27:30 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/19 14:06:22 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ bool		incl_char(char c, char *search_str);
 bool		are_quotes_even(char *input);
 char		*del_substr(char *str, int start, int len);
 int			cnt_len_between(char *str, char c, int index);
+char		*del_quotes(char *str);
 
 /*			Tokenizer			*/
 

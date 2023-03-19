@@ -179,3 +179,44 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 	temp->next = new;
 	return (0);
 }
+ 
+
+ 	// this is for 
+		// 1. bash: /Users/mwilsch: Is a directory (when >$HOME)
+		// 2. bash: /Users/mwilsch test: Permission denied (when for example >"$HOME test")
+	// but this is frankenstein code and I need refactor this or think what could be done better
+	if (!ft_strchr(str, '\'') && ft_strchr(str, '$'))
+	{
+		str = sub_env(ft_strdup(str), get_env_len(str));
+		if (!ft_strchr(str, '\"'))
+		{
+			str = del_substr(str, 0, cnt);
+			if (access(str, F_OK) == 0)
+				ft_printf("%s: Is a directory", str);
+			return (1);
+		}
+		str = ft_substr(str, ft_strclen(str, '\"') + 1, cnt_len_between(str, '\"', ft_strclen(str, '\"') + 1));
+		if (access(str, R_OK) == -1)
+			ft_printf("%s: Permission Denied", str);
+		return (1);
+	}
+
+	int	env_var_case(char *str, char *dup, int len)
+{
+	// const int start = ft_strclen(str, '\"');
+	
+	while (dup[len] && dup[len] == ' ')
+		len++;
+	dup = del_substr(dup, 0, len);
+	str = sub_env(dup, get_env_len(dup));
+	if (str[0] != '\"')
+	{
+		if (access(str, F_OK) == 0)
+			return (ft_printf("minishell: %s: Is a directory", str));
+	}
+	str = del_quotes(str);
+	ft_printf("%s", str);
+	if (access(str, W_OK) == 0)
+		ft_printf("minishell: %s: Permission Denied", str);
+	return (2);
+}
