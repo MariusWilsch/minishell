@@ -35,7 +35,7 @@ int	get_env(char *str,char **env_var, t_type_tok type)
  * @note Does not count the occurence if the char c is inside of 
  * quotations
  */
-int	cnt_occur_skip(char *str, char c, char *skip)
+int	cnt_occur(char *str, char c)
 {
 	int	i;
 	int	cnt;
@@ -46,12 +46,6 @@ int	cnt_occur_skip(char *str, char c, char *skip)
 		return (-1);
 	while (str[i])
 	{
-		if (incl_char(str[i], skip)) // Could be it's own int function i += skip()
-		{
-			i++;
-			while (!incl_char(str[i], skip) && str[i + 1] != '\0')
-				i++;
-		}
 		if (str[i] == c)
 			cnt++;
 		i++;
@@ -220,3 +214,35 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 		ft_printf("minishell: %s: Permission Denied", str);
 	return (2);
 }
+
+
+int	main(void)
+{
+	char		*input;
+	t_args	*head;
+
+	while (1)
+	{
+		head = NULL;
+		input = prompt(readline("Minishell-1.0$ "));
+		if (!input) 
+			return (EXIT_FAILURE);
+		if (!are_quotes_even(input))
+		{
+			free(input);
+			continue;
+		}
+		head = create_tok_list(input, head);
+		head = process_tok(head);
+		if (head->type == REPROMPT)
+		{
+			puts("Reprompt\n"); // Del this later // I have to free then as well // reprompt
+			free_list(head);
+			continue ;
+		}
+		print_list(head);
+		free_list(head);
+		free(input);
+	}
+	return (EXIT_SUCCESS);
+}  

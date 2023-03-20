@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:28:28 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/19 15:36:29 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:02:40 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int	cnt_len_between(char *str, char c, int index)
  * @brief Deletes quotes from strings when they are not needed anymore
  * 
  * @note Does not malloc
+ * @note test with: echo "pla '$HOME"bra"'bra"
 */
 char	*del_quotes(char *str)
 {
@@ -146,4 +147,16 @@ char	*del_quotes(char *str)
 		cnt--;
 	}
 	return (str);
+}
+
+int	cnt_occur(char *str, char c)
+{
+	int	i;
+	
+	i = 0;
+	if (!str)
+		return (-1);
+	while (str[i] && str[i] == c)
+		i++;
+	return (i);
 }

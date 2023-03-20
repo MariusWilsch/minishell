@@ -6,35 +6,57 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/19 16:53:47 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:23:58 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+bool	is_builtin(t_args *node)
+{
+	if (ft_strncmp("echo", node->arg, ft_strlen(node->arg)) == 0) // just add nums instead of strlen
+		return (node->type = BUILT_IN, true);
+	if (ft_strncmp("pwd", node->arg, ft_strlen(node->arg)) == 0)
+		return (node->type = BUILT_IN, true);
+	if (ft_strncmp("cd", node->arg, ft_strlen(node->arg)) == 0)
+		return (node->type = BUILT_IN, true);
+	if (ft_strncmp("exit", node->arg, ft_strlen(node->arg)) == 0)
+		return (node->type = BUILT_IN, true);
+	if (ft_strncmp("env", node->arg, ft_strlen(node->arg)) == 0)
+		return (node->type = BUILT_IN, true);
+	if (ft_strncmp("unset", node->arg, ft_strlen(node->arg)) == 0)
+		return (node->type = BUILT_IN, true);
+	return (false);
+}
+
+
 /**
  * @brief Writes error messages
  * 
  * @param node the node of the linked list where a error occured
- * 
- * @note To do: I need to remove the "" from the str for example if I have echo"test"test
  */
 char	*cmd_err(t_args *node)
 {
 	char *str = node->arg;
 	if (ft_strchr(str, '$'))
 	{
-		str = sub_env(str, get_env_len(str)); // Leak?
+		str = sub_env(str, get_env_len(str)); // Leak? 
+		if (!ft_strchr(str, '/'))
+			return (resolute_cmd(node, ft_strdup(node->arg)));
 		ft_printf("minishell: %s: No such file or directory\n", str);
 		node->err_tok = NO_FILE_DIR;
 		return (str);
 	}
-	ft_printf("minishell: %s: command not found\n", str);
+	ft_printf("minishell: %s: command not found\n", del_quotes(str));
 	node->err_tok = NO_CMD;
 	return (str);
 }
 
 
+/**
+ * @brief Preparing the command to add it to the path directory
+*/
 char *prep_cmd(char *str)
 {
 	char *temp;
@@ -57,11 +79,13 @@ char *prep_cmd(char *str)
 
 
 /**
- * @brief 
+ * @brief Searching for the executable using the PATH variable
  * 
  * @param node A single node of the linked list containg a string to be resoluted
  * @param cmd A duplicate of the orginal string
  * @return cmd If command resolution was succesfull and cmd_err which returns the unchanged string
+ * 
+ * @note I need to also resolute in the current working directory
  */
 char	*resolute_cmd(t_args *node, char *cmd)
 {

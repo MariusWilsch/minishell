@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/19 17:03:32 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:38:58 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ void print_list(t_args *head)
 	t_args *temp = head;
 	while (temp != NULL)
 	{
-		ft_printf("%d:\t", temp->type);
+		ft_printf("ARG TYPE: %d\t", temp->type);
+		ft_printf("ERR TOK: %d\n", temp->err_tok);
 		ft_printf("`%s`\n\n", temp->arg);
 		temp = temp->next;
 	}
+	ft_printf("-----------------------------\n");
 }
 
 // Delete when finished
@@ -42,13 +44,29 @@ void	free_list(t_args *head)
 	while (head != NULL) // Freeing the list
 	{
 		free(head->arg);
-		free(head);
 		head = head->next;
 	}
+	free(head);
 	// atexit(leaks);
 }
 
 // Does readline cause the leak, like the subject says?
+
+
+char *prompt(char *str)
+{
+	char *input;
+	
+	if (!str)
+		return (NULL);
+	input = ft_strtrim(str, " ");
+	free(str);
+	if (!input)
+		return (NULL);
+	if (input[0] != '\0')
+		add_history(input);
+	return (input);
+}
 
 
 /**
@@ -56,21 +74,42 @@ void	free_list(t_args *head)
  * 
  * @note 
  * I should spent an hour or 2 on testing inputs
- * ToDo adding redirect checking logic
  * Do I want that free gets freed in sub_var
+ * To Do: working history
 */
 int	main(void)
 {
-	char	*input = ft_strtrim(readline(""), " ");  // Reading the cmd line input
-	// char	*input = ft_strtrim("echo $HOE and some text", " "); // When Debugging
+	char		*input;
+	t_args	*head;
 
-	t_args *head;
-	if (!input || !are_quotes_even(input))
-		return (debug_msg("main: input or quotes\n"));
-	head = create_tok_list(input, head);
-	head = process_tok(head);
-	// print_list(head);
-	// free_list(head);
-	return (free(input), EXIT_SUCCESS);
+	while (1)
+	{
+		head = NULL;
+		input = prompt(readline("Minishell-1.0$ "));
+		if (!input) 
+			return (free(input), EXIT_FAILURE);
+		if (!are_quotes_even(input))
+		{
+			free(input);
+			continue;
+		}
+		head = create_tok_list(input, head);
+		head = process_tok(head);
+		if (head->type == REPROMPT)
+		{
+			puts("Reprompt\n"); // Del this later // I have to free then as well // reprompt
+			free_list(head);
+			continue ;
+		}
+		print_list(head);
+		free_list(head);
+		free(input);
+	}
+	return (EXIT_SUCCESS);
 }
+
+
+// input = ft_strtrim("echo >>> test", " "); // When Debugging
+
+
 

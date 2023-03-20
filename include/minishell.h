@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/19 17:02:00 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:21:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ typedef enum s_tokens {
 	ARG,
 	QUOTE_ARG,
 	CMD,
+	BUILT_IN,
 	REDIRECT,
+	REPROMPT,
 } t_type_tok;
 
 typedef enum s_err_toks {
@@ -45,7 +47,7 @@ typedef enum s_err_toks {
 	TO_MANY,
 	NO_ALNUM_BETWEEN,
 	NEWLINE_ERR,
-	ENV_REDIRECT,
+	ENV_REDIRECT_ERR,
 	// MALLOC_ERR,
 } t_err_tok;
 
@@ -79,6 +81,7 @@ bool		are_quotes_even(char *input);
 char		*del_substr(char *str, int start, int len);
 int			cnt_len_between(char *str, char c, int index);
 char		*del_quotes(char *str);
+int			cnt_occur(char *str, char c);
 
 /*			Tokenizer			*/
 
@@ -91,6 +94,7 @@ t_args	*process_tok(t_args *head);
 
 /*			Command Resolution			*/
 
+bool	is_builtin(t_args *node);
 char	*cmd_err(t_args *node);
 char	*prep_cmd(char *str);
 char	*resolute_cmd(t_args *node, char *cmd);
@@ -102,8 +106,8 @@ char	*sub_env(char *str, int env_len);
 
 /*			Redirect Checking			*/
 
-int	err_msg(t_err_tok err, char *str);
+int	err_msg(t_err_tok err);
 int	env_var_case(char *str, int env_len, int cnt);
-int	check_redirect(char *str, char c);
+int	check_redirect(char *str, char c, int cnt, t_args *node);
 
 #endif

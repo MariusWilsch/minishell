@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 16:00:16 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/01/16 17:22:35 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 14:52:35 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 	char	*set_string;
 	int		i;
 
+	if (!s1 || !set)
+		return (NULL);
 	search_s1 = (char *)s1;
 	set_string = (char *)set;
 	i = 0;

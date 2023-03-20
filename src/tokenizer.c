@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/19 16:55:35 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:21:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 t_args	*create_tok_list(char *input, t_args *head)
 {
 	int	i;
-	bool	flag;
 
 	i = 0;
 	while (ft_strlen(input) != 0 && input[i])
@@ -115,8 +114,7 @@ t_args	*create_tok_list(char *input, t_args *head)
 			i = add_tok(get_tok(input, i, QUOTE_ARG), &head, QUOTE_ARG);
 		if (i == -1)
 			return (NULL);
-		if (input[i] == ' ')
-			i++; // Skip spaces
+		i++;
 	}
 	return (head);
 }
@@ -130,15 +128,19 @@ t_args	*process_tok(t_args *head)
 
 	while (node != NULL)
 	{
-		if (node->type == CMD)
+		if (node->type == CMD && !is_builtin(node))
 			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0]) != 0)
-			return (head);
+		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0], cnt_occur(node->arg, node->arg[0]), node) > 0)
+		{
+			head->type = REPROMPT;
+			return (head); // what if !str
+		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{
 			while (ft_strchr(node->arg, '$') && node->type != REDIRECT)
 				node->arg = sub_env(node->arg, get_env_len(node->arg));
 		}
+		del_quotes(node->arg);
 		node = node->next;
 	}
 	return (head);
