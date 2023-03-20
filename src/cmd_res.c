@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/20 15:23:58 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:30:17 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ bool	is_builtin(t_args *node)
 char	*cmd_err(t_args *node)
 {
 	char *str = node->arg;
+	if (str[0] == '.')
+	{
+		ft_printf("minishell: %s: No such file or Directory\n", str);
+		node->err_tok = NO_FILE_DIR;
+		return (str);
+	}
 	if (ft_strchr(str, '$'))
 	{
 		str = sub_env(str, get_env_len(str)); // Leak? 
@@ -94,6 +100,8 @@ char	*resolute_cmd(t_args *node, char *cmd)
 	int	i;
 
 	i = 0;
+	if (access(cmd, F_OK) == 0)
+		return (free(node->arg), cmd);
 	temp = prep_cmd(cmd); // Malloc
 	path_2D = ft_split(getenv("PATH"), ':');  // Malloc
 	while (path_2D && temp && path_2D[i] != NULL)

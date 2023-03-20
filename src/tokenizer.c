@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/20 16:21:56 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:23:44 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_args	*create_node(char *str, t_type_tok type)
 	new->err_tok = OK;
 	new->next = NULL;
 	new->type = type;
-	if (str[0] == '|' && type == OPERATOR)
+	if (incl_char(str[0], "|.") && type == OPERATOR)
 		new->type = CMD;
 	if (incl_char(str[0], "><") && type == OPERATOR)
 		new->type = REDIRECT;
@@ -106,7 +106,7 @@ t_args	*create_tok_list(char *input, t_args *head)
 	i = 0;
 	while (ft_strlen(input) != 0 && input[i])
 	{
-		if (incl_char(input[i], ">|<"))
+		if (incl_char(input[i], ".>|<"))
 			i = add_tok(get_tok(input, i, OPERATOR), &head, OPERATOR);
 		if (ft_isalnum(input[i]) || incl_char(input[i], "$-"))
 			i = add_tok(get_tok(input, i, ARG), &head, ARG);

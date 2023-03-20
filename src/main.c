@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/20 16:38:58 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:06:09 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char *prompt(char *str)
  * @note 
  * I should spent an hour or 2 on testing inputs
  * Do I want that free gets freed in sub_var
- * To Do: working history
+
 */
 int	main(void)
 {
@@ -91,13 +91,12 @@ int	main(void)
 		if (!are_quotes_even(input))
 		{
 			free(input);
-			continue;
+			continue ;
 		}
 		head = create_tok_list(input, head);
 		head = process_tok(head);
 		if (head->type == REPROMPT)
 		{
-			puts("Reprompt\n"); // Del this later // I have to free then as well // reprompt
 			free_list(head);
 			continue ;
 		}
@@ -105,6 +104,7 @@ int	main(void)
 		free_list(head);
 		free(input);
 	}
+	// rl_clear_history()
 	return (EXIT_SUCCESS);
 }
 
