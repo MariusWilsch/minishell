@@ -1,7 +1,7 @@
 # Marcos #
 
-NAME 			= minishell
-LIBFT			= libft
+NAME 		= minishell
+LIBFT		= libft
 SRC_DIR		= src/
 OBJ_DIR		= obj/
 CC				= gcc
@@ -35,7 +35,7 @@ start:
 all: $(NAME)
 $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS)  libft.a -o $(NAME)
-	@echo $(C_GREEN)"minishell compilied"$(C_RESET)
+	@echo $(C_GREEN) $(C_GREEN)"minishell compilied"$(C_RESET)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
 	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
