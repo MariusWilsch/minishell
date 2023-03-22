@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/22 15:39:32 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/22 19:53:03 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,38 @@ char *prompt(char *str)
  * Do I want that free gets freed in sub_var
 
 */
+// int	main(void)
+// {
+// 	char		*input;
+// 	t_args	*head;
+
+// 	// while (1)
+// 	// {
+// 	// 	head = NULL;
+// 		// input = prompt(readline("Minishell-1.0$ "));
+// 		input = ft_strtrim("echo arg1 arg2 >1.txt >2.txt arg3 | ls -l libft | wc -l", " ");
+// 		if (!input) 
+// 			return (EXIT_FAILURE);
+// 		if (!input[0] || !are_quotes_even(input))
+// 		{
+// 			free(input);
+// 			// continue ;
+// 		}
+// 		head = create_tok_list(input, head);
+// 		head = process_tok(head);
+// 		// if (head->type == REPROMPT)
+// 		// {
+// 		// 	free_list(head);
+// 		// 	// continue ;
+// 		// }
+// 		// print_list(head);
+// 		executor(head);
+// 		// free_list(head);
+// 		free(input);
+// 	// }
+// 	// rl_clear_history()
+// 	return (EXIT_SUCCESS);
+// }
 int	main(void)
 {
 	char		*input;
@@ -104,6 +136,7 @@ int	main(void)
 			continue ;
 		}
 		print_list(head);
+		executor(head);
 		free_list(head);
 		free(input);
 	}
@@ -112,7 +145,7 @@ int	main(void)
 }
 
 
-// input = ft_strtrim("echo >>> test", " "); // When Debugging
+
 
 
 

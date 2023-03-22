@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/22 13:00:45 by verdant          ###   ########.fr       */
+/*   Updated: 2023/03/22 19:19:43 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,15 @@ typedef struct t_args {
 	struct t_args	*next;
 } t_args;
 
-
-/**
- * @brief Command Table
- * 
- * @param cmd_name The name of the command
- */
-typedef struct s_cmds {
-	char	*tok_str;
-	enum	tok_type;
-	// char	*file;
+typedef struct s_cmd {
+	char	*name;			//	The name of the command
+	// int		num_args;		//	The number of arguments for the command
+	char	**args;			//	The names of the arguments for the command
+	char	**oper;			//	Operaters & their files
+	// void (*func)();		//	The function pointer to the implementation code
 } t_cmds;
 
-typedef struct s_data {
-	int cmd_cnt;
-} t_data;
+
 
 /*			Helper_1			*/
 
@@ -109,5 +103,10 @@ char	*sub_env(char *str, int env_len);
 int	err_msg(t_err_tok err);
 int	env_var_case(char *str, int env_len, int cnt);
 int	check_redirect(char *str, char c, int cnt, t_args *node);
+
+
+/*			Executor			*/
+
+bool executor(t_args *head);
 
 #endif
