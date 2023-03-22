@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/20 16:21:56 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/22 13:00:45 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ typedef struct t_args {
  * 
  * @param cmd_name The name of the command
  */
-// typedef struct s_cmds {
-// 	char	*tok_str;
-// 	enum	tok_type;
-// 	// char	*file;
-// } t_cmds;
+typedef struct s_cmds {
+	char	*tok_str;
+	enum	tok_type;
+	// char	*file;
+} t_cmds;
 
 typedef struct s_data {
 	int cmd_cnt;

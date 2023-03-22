@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   testing.h                                          :+:      :+:    :+:   */
+/*   testing_v2.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 20:22:26 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/08 13:57:15 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/22 13:01:11 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ typedef enum tokens {
 
 typedef struct s_command {
 	char	*name;			//	The name of the command
-	int		num_args;		//	The number of arguments for the command
+	// int		num_args;		//	The number of arguments for the command
 	char	**args;			//	The names of the arguments for the command
-	char	**oper;			//	Operaters & their files
+	// char	**oper;			//	Operaters & their files
 	void (*func)();		//	The function pointer to the implementation code
 } t_cmd;
 
