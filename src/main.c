@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/20 17:06:09 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/22 15:39:32 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ char *prompt(char *str)
 {
 	char *input;
 	
+	input = NULL;
+	if (!str[0])
+		return (str);
 	if (!str)
 		return (NULL);
 	input = ft_strtrim(str, " ");
@@ -87,8 +90,8 @@ int	main(void)
 		head = NULL;
 		input = prompt(readline("Minishell-1.0$ "));
 		if (!input) 
-			return (free(input), EXIT_FAILURE);
-		if (!are_quotes_even(input))
+			return (EXIT_FAILURE);
+		if (!input[0] || !are_quotes_even(input))
 		{
 			free(input);
 			continue ;
