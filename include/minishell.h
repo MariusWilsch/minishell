@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/24 10:25:40 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 12:00:51 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ typedef struct t_args {
 } t_args;
 
 typedef struct s_cmd {
-	char	*name;			//	The name of the command
+	char	*cmd_path;			//	The name of the command
+	char	*filename;
 	// int		num_args;		//	The number of arguments for the command
 	char	**args;			//	The names of the arguments for the command
 	char	**oper;			//	Operaters & their files
@@ -106,6 +107,6 @@ int	check_redirect(char *str, char c, int cnt, t_args *node);
 
 /*			Executor			*/
 
-int executor(t_args *head);
+int executor(t_cmds *head);
 
 #endif

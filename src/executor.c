@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/03/24 10:26:02 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 12:33:43 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@
     In the parent process, wait for the child processes to complete using wait() or waitpid().
  */
 
+int structlen(t_cmds *head)
+{
+    int i;
+
+    i = 0;
+    while (head[i].cmd_path)
+        i++;
+    return (i);
+}
 int redirect(char *cmd)
 {
     if (ft_strnstr(cmd, ">>", 2))
@@ -37,9 +46,18 @@ int redirect(char *cmd)
     if (ft_strnstr(cmd, "<", 1))
         return (4);
 }
-
-
-int executor(t_args *head)
+void	execute_command(t_cmds *head)
+{
+	if (!head->cmd_path)
+	{
+		perror("Command not found");
+	}
+	if (execve(head->cmd_path, head->args, NULL) == -1)
+	{
+		perror("Execve failed");
+	}
+}
+int executor(t_cmds *head)
 {
     int     num_commands;
     int     i;
@@ -48,12 +66,11 @@ int executor(t_args *head)
     pid_t   child_prcs;
 
     i = 0;
-
     while (i < num_commands)
     {
         if (pipe(pipe_fd + 2 * i) == -1)
         {
-            perror(pipe);
+            perror("pipe");
             return (EXIT_FAILURE);
         }
     }
@@ -67,19 +84,18 @@ int executor(t_args *head)
             child_process(head);
     }
 }
-
-int child_process(t_args *head)
+int child_process(t_cmds *head)
 {
     int     redirect_case;
     int     outfile;
 
-    redirect_case = redirect(cmd);
+    redirect_case = redirect(head->cmd_path);
     if (redirect_case == 1 || redirect_case == 2)
     {
         if (redirect_case == 1)
-            outfile = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            outfile = open(head->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
         else
-            outfile = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            outfile = open(head->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (outfile == -1) 
         {
             perror("open");
@@ -88,4 +104,5 @@ int child_process(t_args *head)
         dup2(outfile, STDOUT_FILENO);
         close(outfile);
     }
+    return (EXIT_SUCCESS);
 }
