@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/24 13:20:02 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 13:57:30 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char *prompt(char *str)
 // 	// {
 // 	// 	head = NULL;
 // 		// input = prompt(readline("Minishell-1.0$ "));
-// 		input = ft_strtrim(">>test echo | >> test ls", " ");
+// 		input = ft_strtrim("echo arg1 | wc -l", " ");
 // 		if (!input) 
 // 			return (EXIT_FAILURE);
 // 		if (!input[0] || !are_quotes_even(input))
@@ -104,8 +104,8 @@ char *prompt(char *str)
 // 		// 	free_list(head);
 // 		// 	// continue ;
 // 		// }
-// 		print_list(head);
-// 		// executor(head);
+// 		// print_list(head);
+// 		executor(head);
 // 		// free_list(head);
 // 		free(input);
 // 	// }
