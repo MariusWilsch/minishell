@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/24 12:10:46 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:08:09 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ typedef enum e_redirect_type {
 	INPUT_EOF,
 	ERR,
 } t_redirect_type;
+
+
 
 typedef struct s_operation {
 	char						*redirect;

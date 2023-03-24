@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/24 12:34:47 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:16:14 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,17 @@
 
 bool fill_operation_struct(t_operation *oper, char *str, t_err_tok err_type)
 {
-	const int cnt = cnt_occur(str, str[0]);
+	int cnt;
 	const int file_length = ft_strlen(str) - cnt;
 	const char c = str[0];
 	
+	cnt = cnt_occur(str, str[0]);
+	oper->redirect = NULL;
+	oper->filename = NULL;
 	if (err_type == ENV_REDIRECT_ERR)
-	{
-		oper->type = ERR;
-		return (true);
-	}
+		return (oper->type = ERR, true);
+	// if (str[cnt] == ' ')
+	// 	cnt += cnt_occur(str + cnt, ' ');
 	oper->redirect = ft_substr(str, 0, cnt);
 	oper->filename = ft_substr(str, cnt, file_length);
 	if (!oper->redirect || !oper->filename)
@@ -107,8 +109,12 @@ void	print_struct(t_cmds *cmds, int cmd_limit)
 		ft_printf("cmd name: %s\n", cmds[cmd_cnt].cmd);
 		for (i = 0; cmds[cmd_cnt].args[i] != NULL; i++)
 			ft_printf("args: %s\n", cmds[cmd_cnt].args[i]);
-		// for (k = 0; cmds[cmd_cnt].oper[k] != NULL; k++)
-		// 	ft_printf("oper_args: %s\n", cmds[cmd_cnt].oper[k]);
+		for (k = 0; k < 1; k++)
+		{
+			ft_printf("red: %s\t", cmds[cmd_cnt].oper[k].redirect);
+			ft_printf("filename: %s\t", cmds[cmd_cnt].oper[k].filename);
+			ft_printf("type: %d\n", cmds[cmd_cnt].oper[k].type);
+		}
 		ft_printf("\n");
 		cmd_cnt++;
 	}
@@ -117,10 +123,7 @@ void	print_struct(t_cmds *cmds, int cmd_limit)
 
 /**
  * 
- * @note 1. Quote ARG are not working yet
- * @note 2. Err Toks for CMD and ARGS do not matter but for oper they do. 
- * @note 2.1 I either change the env_var_err thing to do in the executor or add the err tok to the struct
- * @note 2.2 If I add it to the struct it would be best if change the char **oper to a small linked list
+ * @note What if there there is no cmd but a redirect as the first string
 */
 bool	executor(t_args *head)
 {
@@ -138,13 +141,11 @@ bool	executor(t_args *head)
 			cmd_cnt++;
 		node = node->next;
 	}
-	ft_printf("%d\n", cmd_cnt);
 	cmds = malloc(sizeof(t_cmds) * cmd_cnt);
 	if (!cmds)
 		return (false);
-	// cmds->cmd = NULL;
-	// cmds->oper->redirect = NULL;
-	// cmds->oper->filename = NULL;
+	cmds->cmd = NULL;
+	cmds->oper = NULL;
 	node = head;
 	cmds = cnt_rest(node, cmds, head, cmd_cnt);
 	print_struct(cmds, cmd_cnt);

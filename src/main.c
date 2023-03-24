@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/24 12:35:13 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:06:08 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,70 +80,70 @@ char *prompt(char *str)
  * Do I want that free gets freed in sub_var
 
 */
-int	main(void)
-{
-	char		*input;
-	t_args	*head;
-
-	// while (1)
-	// {
-	// 	head = NULL;
-		// input = prompt(readline("Minishell-1.0$ "));
-		input = ft_strtrim(">>test echo | >> test ls", " ");
-		if (!input) 
-			return (EXIT_FAILURE);
-		if (!input[0] || !are_quotes_even(input))
-		{
-			free(input);
-			// continue ;
-		}
-		head = create_tok_list(input, head);
-		head = process_tok(head);
-		// if (head->type == REPROMPT)
-		// {
-		// 	free_list(head);
-		// 	// continue ;
-		// }
-		// print_list(head);
-		executor(head);
-		// free_list(head);
-		free(input);
-	// }
-	// rl_clear_history()
-	return (EXIT_SUCCESS);
-}
-
 // int	main(void)
 // {
 // 	char		*input;
 // 	t_args	*head;
 
-// 	while (1)
-// 	{
-// 		head = NULL;
-// 		input = prompt(readline("Minishell-1.0$ "));
+// 	// while (1)
+// 	// {
+// 	// 	head = NULL;
+// 		// input = prompt(readline("Minishell-1.0$ "));
+// 		input = ft_strtrim(">>test echo | >> test ls", " ");
 // 		if (!input) 
 // 			return (EXIT_FAILURE);
 // 		if (!input[0] || !are_quotes_even(input))
 // 		{
 // 			free(input);
-// 			continue ;
+// 			// continue ;
 // 		}
 // 		head = create_tok_list(input, head);
 // 		head = process_tok(head);
-// 		if (head->type == REPROMPT)
-// 		{
-// 			free_list(head);
-// 			continue ;
-// 		}
+// 		// if (head->type == REPROMPT)
+// 		// {
+// 		// 	free_list(head);
+// 		// 	// continue ;
+// 		// }
 // 		print_list(head);
-// 		executor(head);
-// 		free_list(head);
+// 		// executor(head);
+// 		// free_list(head);
 // 		free(input);
-// 	}
+// 	// }
 // 	// rl_clear_history()
 // 	return (EXIT_SUCCESS);
 // }
+
+int	main(void)
+{
+	char		*input;
+	t_args	*head;
+
+	while (1)
+	{
+		head = NULL;
+		input = prompt(readline("Minishell-1.0$ "));
+		if (!input) 
+			return (EXIT_FAILURE);
+		if (!input[0] || !are_quotes_even(input))
+		{
+			free(input);
+			continue ;
+		}
+		head = create_tok_list(input, head);
+		head = process_tok(head);
+		if (head->type == REPROMPT)
+		{
+			free_list(head);
+			continue ;
+		}
+		// print_list(head);
+		executor(head);
+		free_list(head);
+		free(input);
+	}
+	// rl_clear_history()
+	return (EXIT_SUCCESS);
+}
 
 
 
