@@ -246,3 +246,35 @@ int	main(void)
 	}
 	return (EXIT_SUCCESS);
 }  
+
+
+
+t_args	*fill_struct(t_cmds *cmd, t_args	*head, int argc, int operc)
+{
+	int	i;
+	int	k;
+
+	i = 0;
+	k = 0;
+	cmd->cmd_path = head->arg;
+	cmd->oper = NULL;
+	cmd->args = malloc(sizeof(char *) * (argc + 1));
+	if (operc > 0)
+		cmd->oper = malloc(sizeof(t_operation) * operc);
+	if (!cmd->args || (operc > 0 && !cmd->oper))
+		return (NULL);
+	cmd->args[argc] = NULL;
+	if (argc == 0 && operc == 0)
+		return (head->next);
+	while (head != NULL && (head->type != CMD || head->type != BUILT_IN))
+	{
+		if (i < argc && (head->type == ARG || head->type == QUOTE_ARG))
+			cmd->args[i++] = head->arg;
+		if (k < operc && head->type == REDIRECT)
+			fill_operation_struct(&cmd->oper[k++], head->arg, head->err_tok);
+		head = head->next;
+		if (i == argc && k == operc)
+			break;
+	}
+	return (head);
+}
