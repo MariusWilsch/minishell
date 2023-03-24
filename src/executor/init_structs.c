@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   transform_data_structure.c                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/24 13:56:20 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   pre_executor.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/03/24 14:57:36 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "executor.h"
 
-bool fill_operation_struct(t_operation *oper, char *str, t_err_tok err_type)
+bool operation_init(t_operation *oper, char *str, t_err_tok err_type)
 {
 	int cnt;
 	const int file_length = ft_strlen(str) - cnt;
@@ -24,8 +24,6 @@ bool fill_operation_struct(t_operation *oper, char *str, t_err_tok err_type)
 	oper->filename = NULL;
 	if (err_type == ENV_REDIRECT_ERR)
 		return (oper->type = ERR, true);
-	// if (str[cnt] == ' ')
-	// 	cnt += cnt_occur(str + cnt, ' ');
 	oper->redirect = ft_substr(str, 0, cnt);
 	oper->filename = ft_substr(str, cnt, file_length);
 	if (!oper->redirect || !oper->filename)
@@ -41,7 +39,10 @@ bool fill_operation_struct(t_operation *oper, char *str, t_err_tok err_type)
 	return (true);
 }
 
-t_args	*fill_struct(t_cmds *cmd, t_args	*head, int argc, int operc)
+/**
+ * @note FOR EVERY COMMAND AN INDEPENT STRUCT WILL BE CREATED AND ADDED TO THE ARRAY.
+*/
+t_args	*init_members(t_cmds *cmd, t_args *head, int argc, int operc)
 {
 	int	i;
 	int	k;
@@ -63,15 +64,17 @@ t_args	*fill_struct(t_cmds *cmd, t_args	*head, int argc, int operc)
 		if (i < argc && (head->type == ARG || head->type == QUOTE_ARG))
 			cmd->args[i++] = head->arg;
 		if (k < operc && head->type == REDIRECT)
-			fill_operation_struct(&cmd->oper[k++], head->arg, head->err_tok);
+			operation_init(&cmd->oper[k++], head->arg, head->err_tok);
 		head = head->next;
 		if (i == argc && k == operc)
 			break;
 	}
 	return (head);
 }
-
-t_cmds	*cnt_rest(t_args *node, t_cmds *cmds, t_args *head, int cmd_cnt)
+/**
+ * @note ARGUMENTS ARE BEING COUNTED. 
+*/
+t_cmds	*create_structs(t_args *node, t_cmds *cmds, t_args *head, int cmd_cnt)
 {
 	int	i;
 	int	arg_cnt;
@@ -92,14 +95,16 @@ t_cmds	*cnt_rest(t_args *node, t_cmds *cmds, t_args *head, int cmd_cnt)
 				operator_cnt++;
 			node = node->next;
 		}
-		head = fill_struct(&cmds[i++], head, arg_cnt, operator_cnt);
+		head = init_members(&cmds[i++], head, arg_cnt, operator_cnt);
 		if (node != NULL)
 			node = node->next;
 	}
 	return (cmds);
 }
-
-
+/**
+ * 
+ * @note HELPS WITH TESTING THE CODE
+*/
 void	print_struct(t_cmds *cmds, int cmd_limit)
 {
 	int i = 0;
@@ -130,12 +135,11 @@ void	print_struct(t_cmds *cmds, int cmd_limit)
 	}
 }
 
-
 /**
  * 
  * @note What if there there is no cmd but a redirect as the first string
 */
-bool	executor(t_args *head)
+bool	init_structs(t_args *head)
 {
 	t_args	*node;
 	t_cmds	*cmds;
@@ -154,9 +158,8 @@ bool	executor(t_args *head)
 	cmds = malloc(sizeof(t_cmds) * cmd_cnt);
 	if (!cmds)
 		return (false);
-	cmds->cmd = NULL;
 	node = head;
-	cmds = cnt_rest(node, cmds, head, cmd_cnt);
+	create_structs(node, cmds, head, cmd_cnt);
 	print_struct(cmds, cmd_cnt);
 	return (true);
 }

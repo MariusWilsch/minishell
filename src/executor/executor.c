@@ -6,11 +6,12 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/03/24 13:13:30 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 16:04:31 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include "../include/executor.h"
 
 
 /* 
@@ -26,15 +27,6 @@
     In the parent process, wait for the child processes to complete using wait() or waitpid().
  */
 
-int structlen(t_cmds *head)
-{
-    int i;
-
-    i = 0;
-    while (head[i].cmd_path)
-        i++;
-    return (i);
-}
 int redirect(char *cmd)
 {
     if (ft_strnstr(cmd, ">>", 2))

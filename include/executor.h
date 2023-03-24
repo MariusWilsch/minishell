@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/24 13:20:34 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 16:05:09 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_operation {
 
 
 typedef struct s_cmd {
-	char *cmd; // The resoluted cmd
+	char *cmd_path; 
 	// enum token for cmds
 	char	**args;			//	The names of the arguments for the command
 	t_operation *oper;
