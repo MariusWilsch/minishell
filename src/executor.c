@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/03/24 12:33:43 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 13:13:30 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,14 @@ void	execute_command(t_cmds *head)
 		perror("Execve failed");
 	}
 }
-int executor(t_cmds *head)
+int executor(t_args *head)
 {
-    int     num_commands;
+
+}
+
+int executor2()
+{
+        int     num_commands;
     int     i;
     int     pipe_fd[2 * num_commands];
     int     redirect_case;

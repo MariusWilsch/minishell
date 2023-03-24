@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/24 12:10:46 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   executor.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/03/24 13:11:13 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ typedef struct s_operation {
 
 
 typedef struct s_cmd {
-	char *cmd; // The resoluted cmd
-	// enum token for cmds
+	char *cmd_path; // The resoluted cmd
 	char	**args;			//	The names of the arguments for the command
 	t_operation *oper;
 } t_cmds;
+
+/*			Executor			*/
+
+int executor(t_cmds *head);
 
 

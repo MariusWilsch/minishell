@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/24 12:39:47 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 13:08:57 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,5 @@ char	*sub_env(char *str, int env_len);
 int	err_msg(t_err_tok err);
 int	env_var_case(char *str, int env_len, int cnt);
 int	check_redirect(char *str, char c, int cnt, t_args *node);
-
-/*			Executor			*/
-
-int executor(t_cmds *head);
 
 #endif
