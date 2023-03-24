@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/22 16:40:00 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 10:25:40 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,15 @@ typedef struct t_args {
 	struct t_args	*next;
 } t_args;
 
-
-/**
- * @brief Command Table
- * 
- * @param cmd_name The name of the command
- */
-typedef struct s_cmds {
-	char	*tok_str;
-	enum	tok_type;
-	// char	*file;
+typedef struct s_cmd {
+	char	*name;			//	The name of the command
+	// int		num_args;		//	The number of arguments for the command
+	char	**args;			//	The names of the arguments for the command
+	char	**oper;			//	Operaters & their files
+	// void (*func)();		//	The function pointer to the implementation code
 } t_cmds;
 
-typedef struct s_data {
-	int cmd_cnt;
-} t_data;
+
 
 /*			Helper_1			*/
 
