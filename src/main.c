@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/24 10:26:37 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 13:20:02 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char *prompt(char *str)
 // 	// {
 // 	// 	head = NULL;
 // 		// input = prompt(readline("Minishell-1.0$ "));
-// 		input = ft_strtrim("echo arg1 arg2 >1.txt >2.txt arg3 | ls -l libft | wc -l", " ");
+// 		input = ft_strtrim(">>test echo | >> test ls", " ");
 // 		if (!input) 
 // 			return (EXIT_FAILURE);
 // 		if (!input[0] || !are_quotes_even(input))
@@ -104,14 +104,15 @@ char *prompt(char *str)
 // 		// 	free_list(head);
 // 		// 	// continue ;
 // 		// }
-// 		// print_list(head);
-// 		executor(head);
+// 		print_list(head);
+// 		// executor(head);
 // 		// free_list(head);
 // 		free(input);
 // 	// }
 // 	// rl_clear_history()
 // 	return (EXIT_SUCCESS);
 // }
+
 int	main(void)
 {
 	char	*input;
@@ -135,8 +136,7 @@ int	main(void)
 			free_list(head);
 			continue ;
 		}
-		executor(head);
-		print_list(head);
+		// print_list(head);
 		executor(head);
 		free_list(head);
 		free(input);

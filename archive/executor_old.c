@@ -1,12 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
+<<<<<<< HEAD
 /*                                                        ::::::::            */
 /*   executor_old.c                                     :+:    :+:            */
+=======
+<<<<<<<< HEAD:archive/executor_old.c
+/*                                                        :::      ::::::::   */
+/*   executor_old.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/22 17:41:28 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/03/24 11:37:29 by mwilsch          ###   ########.fr       */
+========
+/*                                                        ::::::::            */
+/*   executor.c                                         :+:    :+:            */
+>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184
 /*                                                     +:+                    */
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2023/03/24 12:39:07 by tklouwer      ########   odam.nl         */
+=======
+/*   Updated: 2023/03/24 13:13:30 by tklouwer      ########   odam.nl         */
+>>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184:src/executor.c
+>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +56,7 @@ int structlen(t_cmds *head)
 }
 int redirect(char *cmd)
 {
+<<<<<<< HEAD
 	int	i;
 	int	arg_cnt;
 	int	operator_cnt;
@@ -46,6 +66,26 @@ int redirect(char *cmd)
 		node = node->next;
 	while (i < cmd_cnt)
 	{
+=======
+    if (ft_strnstr(cmd, ">>", 2))
+        return (1);
+    if (ft_strnstr(cmd, ">", 1))
+        return (2);
+    if (ft_strnstr(cmd, "<<", 2))
+        return (3);
+    if (ft_strnstr(cmd, "<", 1))
+        return (4);
+}
+void	execute_command(t_cmds *head)
+{
+	if (!head->cmd_path)
+	{
+		perror("Command not found");
+	}
+	if (execve(head->cmd_path, head->args, NULL) == -1)
+	{
+<<<<<<<< HEAD:archive/executor_old.c
+>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184
 		arg_cnt = 0;
 		operator_cnt = 0;
 		while (node != NULL && node->type != CMD && node->type != BUILT_IN)
@@ -59,6 +99,7 @@ int redirect(char *cmd)
 		head = fill_struct(&cmds[i++], head, arg_cnt, operator_cnt);
 		if (node != NULL)
 			node = node->next;
+<<<<<<< HEAD
 	}
 	return (cmds);
 }
@@ -83,11 +124,52 @@ void	execute_command(t_cmds *head)
 int executor(t_cmds *head)
 {
     int     num_commands;
+=======
+========
+		perror("Execve failed");
+>>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184:src/executor.c
+	}
+}
+int executor(t_args *head)
+{
+
+<<<<<<<< HEAD:archive/executor_old.c
+	while (cmd_cnt < cmd_limit)
+	{
+		ft_printf("cmd name: %s\n", cmds[cmd_cnt].cmd);
+		for (i = 0; cmds[cmd_cnt].args[i] != NULL; i++)
+			ft_printf("args: %s\n", cmds[cmd_cnt].args[i]);
+		for (k = 0; cmds[cmd_cnt].oper[k] != NULL; k++)
+			ft_printf("oper_args: %s\n", cmds[cmd_cnt].oper[k]);
+		ft_printf("\n");
+		cmd_cnt++;
+	}
+========
+>>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184:src/executor.c
+}
+
+int executor2()
+{
+        int     num_commands;
+>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184
     int     i;
     int     pipe_fd[2 * num_commands];
     int     redirect_case;
     pid_t   child_prcs;
 
+<<<<<<< HEAD
+=======
+<<<<<<<< HEAD:archive/executor_old.c
+/**
+ * 
+ * @note 1. Quote ARG are not working yet
+ * @note 2. Err Toks for CMD and ARGS do not matter but for oper they do. 
+ * @note 2.1 I either change the env_var_err thing to do in the executor or add the err tok to the struct
+ * @note 2.2 If I add it to the struct it would be best if change the char **oper to a small linked list
+*/
+bool	executor(t_args *head)
+========
+>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184
     i = 0;
     while (i < num_commands)
     {
@@ -108,6 +190,10 @@ int executor(t_cmds *head)
     }
 }
 int child_process(t_cmds *head)
+<<<<<<< HEAD
+=======
+>>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184:src/executor.c
+>>>>>>> f5e44fdb8c88e462cafdd2fca5360f53c4200184
 {
     int     redirect_case;
     int     outfile;

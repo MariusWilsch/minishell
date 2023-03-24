@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/17 19:32:28 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/22 16:24:00 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 13:19:49 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ bool	is_builtin(t_args *node)
  */
 char	*cmd_err(t_args *node)
 {
-	char *str = node->arg;
+	int start;
+	char *str;
+
+	str = node->arg;
 	if (str[0] == '.')
 	{
 		ft_printf("minishell: %s: No such file or Directory\n", str);
@@ -51,12 +54,15 @@ char	*cmd_err(t_args *node)
 		if (!ft_strchr(str, '/'))
 			return (resolute_cmd(node, ft_strdup(node->arg)));
 		ft_printf("minishell: %s: No such file or directory\n", str);
-		node->err_tok = NO_FILE_DIR;
-		return (str);
+		return (node->err_tok = NO_FILE_DIR, str);
 	}
 	ft_printf("minishell: %s: command not found\n", del_quotes(str));
-	node->err_tok = NO_CMD;
-	return (str);
+	if (node->arg[0] == '|')
+		node->arg = del_substr(node->arg, 0, cnt_occur(node->arg + 1, ' ') + 1);
+	start = cnt_occur(node->arg, node->arg[0]);
+	if (incl_char(node->arg[0], "><"))
+		node->arg = del_substr(node->arg, start, cnt_occur(node->arg + start, ' '));
+	return (node->err_tok = NO_CMD, str);
 }
 
 

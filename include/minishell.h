@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   minishell.h                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/24 13:08:57 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 13:20:20 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,13 @@ typedef struct t_args {
 	struct t_args	*next;
 } t_args;
 
-typedef struct s_cmd {
-	char	*cmd_path;			//	The name of the command
-	char	*filename;
-	// int		num_args;		//	The number of arguments for the command
-	char	**args;			//	The names of the arguments for the command
-	char	**oper;			//	Operaters & their files
-	// void (*func)();		//	The function pointer to the implementation code
-} t_cmds;
+// typedef struct s_cmd {
+// 	char *cmd; // The resoluted cmd
+// 	// int		num_args;		//	The number of arguments for the command
+// 	char	**args;			//	The names of the arguments for the command
+// 	char	**oper;			//	Operaters & their files
+// 	// void (*func)();		//	The function pointer to the implementation code
+// } t_cmds;
 
 
 
