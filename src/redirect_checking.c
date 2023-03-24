@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 12:31:04 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/20 16:17:44 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:50:38 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	check_redirect(char *str, char c, int cnt, t_args *node)
 	}
 	if (!ft_strchr(str, '\'') && ft_strchr(str, '$'))
 		node->err_tok = env_var_case(str, get_env_len(str) + 1, cnt);
+	str = del_substr(str, cnt, cnt_occur(str + cnt, ' '));
 	return (0);
 }
 
