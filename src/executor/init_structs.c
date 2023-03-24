@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/24 16:07:20 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/24 16:08:49 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_args	*init_members(t_cmds *cmd, t_args *head, int argc, int operc)
 	return (cmd);
 }
 
-t_args	*fill_struct(t_cmds *cmd, t_args	*head, int argc, int operc)
+t_args	*fill_struct(t_cmds *cmd, t_arg *head, int argc, int operc)
 {
 	int	i;
 	int	k;
