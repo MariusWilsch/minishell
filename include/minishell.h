@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/22 13:00:45 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
+/*   Updated: 2023/03/22 16:40:00 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,9 @@ char	*sub_env(char *str, int env_len);
 int	err_msg(t_err_tok err);
 int	env_var_case(char *str, int env_len, int cnt);
 int	check_redirect(char *str, char c, int cnt, t_args *node);
+
+/*			Executor			*/
+
+int executor(t_args *head);
 
 #endif

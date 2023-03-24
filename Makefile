@@ -10,7 +10,7 @@ INCFLAGS	= -I include
 LDFLAGS		= -lreadline
 RM				= rm -rf
 
-SRC_FILES	=	main tokenizer env_sub cmd_res redirect_checking helper\
+SRC_FILES	=	main tokenizer env_sub cmd_res redirect_checking helper executor\
 
 SRC			=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ			=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
@@ -35,7 +35,7 @@ start:
 all: $(NAME)
 $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS)  libft.a -o $(NAME)
-	@echo $(C_GREEN) $(C_GREEN)"minishell compilied"$(C_RESET)
+	echo $(C_GREEN)"minishell compilied"$(C_RESET)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
 	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@

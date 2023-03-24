@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/22 15:39:32 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
+/*   Updated: 2023/03/22 16:39:23 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char *prompt(char *str)
 */
 int	main(void)
 {
-	char		*input;
+	char	*input;
 	t_args	*head;
 
 	while (1)
@@ -103,6 +103,7 @@ int	main(void)
 			free_list(head);
 			continue ;
 		}
+		executor(head);
 		print_list(head);
 		free_list(head);
 		free(input);
