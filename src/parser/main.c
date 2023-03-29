@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/24 16:07:34 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 15:14:19 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	free_list(t_args *head)
 }
 
 // Does readline cause the leak, like the subject says?
-
-
 char *prompt(char *str)
 {
 	char *input;
@@ -70,8 +68,14 @@ char *prompt(char *str)
 		add_history(input);
 	return (input);
 }
-
-
+void    handle_sigint(int sig)
+{
+	rl_replace_line("", 0);
+    printf("\n");
+	rl_on_new_line();
+    rl_redisplay();
+    return ;
+}
 /**
  * @note Do I need the quotes or should I leave them already?
  * 
@@ -85,6 +89,7 @@ int	main(void)
 	char	*input;
 	t_args	*head;
 
+	signal(SIGINT, handle_sigint);
 	while (1)
 	{
 		head = NULL;

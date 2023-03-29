@@ -1,21 +1,23 @@
 # Makefile for minishell
 
 NAME      = minishell
-LIBFT     = libft
+LIBFT     = libft/libft.a
 SRC_DIR   = src/
 OBJ_DIR   = obj/
 CC        = gcc
 CFLAGS    = # -Werror -Wall -Wextra
-INCFLAGS  = -I include
+INCFLAGS  = -I include -I/opt/homebrew/Cellar/readline/8.2.1/include
 LDFLAGS   = -lreadline
 RM        = rm -rf
 
+export RL_LIB   := -L/Users/tklouwer/.brew/opt/readline/lib
+export RL_INC   := -I/Users/tklouwer/.brew/opt/readline/include
 
 PRSR_DIR  = parser/
 PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking main
 
 XCTR_DIR  = executor/
-XCTR_SRCS = init_structs executor
+XCTR_SRCS = init_structs executor shell_builtins exec_builtin
 
 SRC_FILES += $(addprefix $(PRSR_DIR),$(PRSR_SRCS))
 SRC_FILES += $(addprefix $(XCTR_DIR),$(XCTR_SRCS))
@@ -25,24 +27,19 @@ OBJ       = $(addprefix $(OBJ_DIR),$(addsuffix .o,$(SRC_FILES)))
 
 OBJF      = test
 
-# Colors
-C_RESET = "\033[0m"
-C_GREEN = "\033[92m"
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
 
 ifdef DEBUG
 	CFLAGS += -g -fsanitize=address
 endif
 
-start:
-	@make -C $(LIBFT)
-	@cp $(LIBFT)/libft.a .
-	@make all
+all: libft $(NAME)
 
-all: $(NAME)
-
-$(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) libft.a -o $(NAME)
-	@echo $(C_GREEN)"minishell compiled"$(C_RESET)
+$(NAME): $(OBJ) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJ) -lreadline -lhistory $(RL_LIB) $(LDFLAGS) $(LIBFT) -o $(NAME)
+	@echo "$(GREEN)Minishell Compiled.$(RESET)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
 	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
@@ -52,19 +49,20 @@ $(OBJF):
 	@mkdir -p $(OBJ_DIR)$(PRSR_DIR)
 	@mkdir -p $(OBJ_DIR)$(XCTR_DIR)
 
+$(LIBFT):
+	@echo "$(GREEN)Building libft ...$(RESET)"
+	@$(MAKE) -C libft WITH_BONUS=1
+
 clean:
 	@$(RM) $(OBJ_DIR)
 	@$(RM) $(OBJF)
-	@make clean -C $(LIBFT)
+	@$(MAKE) -C libft clean
 
 fclean: clean
 	@$(RM) $(NAME)
-	@$(RM) $(LIBFT)/libft.a
-	@$(RM) libft.a
 	@find . -name ".DS_Store" -delete
-	@echo "$(Red)All libs cleaned$(Reset)"
+	@echo "$(RED)Cleaning ...$(RESET)"
 
 re: fclean all
-	@echo "$(Yellow)Recompiled everything$(Reset)"
 
 .PHONY: all clean fclean re

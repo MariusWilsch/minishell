@@ -6,82 +6,78 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/24 16:08:49 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 15:25:01 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "executor.h"
+#include "../../include/minishell.h"
+
 #include <stdio.h>
 
-bool operation_init(t_operation *oper, char *str, t_err_tok err_type)
+bool redir_init(t_redir *redir, char *str, t_err_tok err_type)
 {
 	int cnt = cnt_occur(str, str[0]);
 	const int file_length = ft_strlen(str) - cnt;
 	const char c = str[0];
-	
-	oper->redirect = NULL;
-	oper->filename = NULL;
+
 	if (err_type == ENV_REDIRECT_ERR)
-		return (oper->type = ERR, true);
-	oper->redirect = ft_substr(str, 0, cnt);
-	oper->filename = ft_substr(str, cnt, file_length);
-	if (!oper->redirect || !oper->filename)
+		return (redir->type = ERR, true);
+	redir->redirect = ft_substr(str, 0, cnt);
+	redir->filename = ft_substr(str, cnt, file_length);
+	if (!redir->redirect || !redir->filename)
 		return (false);
 	if (c == '>' && cnt == 1)
-		oper->type = TRUNC;
+		redir->type = TRUNC;
 	if (c == '>' && cnt == 2)
-		oper->type = APPEND;
+		redir->type = APPEND;
 	if (c == '<' && cnt == 1)
-		oper->type = INPUT;
+		redir->type = INPUT;
 	if (c == '<' && cnt == 2)
-		oper->type = INPUT_EOF;
+		redir->type = INPUT_EOF;
 	return (true);
 }
 
 /**
  * @note FOR EVERY COMMAND AN INDEPENT STRUCT WILL BE CREATED AND ADDED TO THE ARRAY.
 */
-t_args	*init_members(t_cmds *cmd, t_args *head, int argc, int operc)
+void	*init_members(t_cmds *cmd, t_args *head, int redirc)
 {
 	cmd->cmd_path = head->arg;
 	cmd->cmd_type = CMD_EXE;
-	if (head->type == BUILT_IN)
+	if (head->type == BUILT_IN && cmd->cmd_type == CMD_EXE)
 		cmd->cmd_type = BUILT_IN_EXE;
 	if (incl_char(head->arg[0], "<>"))
 	{
 		cmd->cmd_path = NULL;
 		cmd->cmd_type = NO_CMD_EXE;
 	}
-	cmd->oper = NULL;
-	cmd->args = malloc(sizeof(char *) * (argc + 1));
-	if (operc > 0)
-		cmd->oper = malloc(sizeof(t_operation) * operc);
-	if (!cmd->args || (operc > 0 && !cmd->oper))
+	cmd->redir = NULL;
+	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
+	if (redirc > 0)
+		cmd->redir = malloc(sizeof(t_redir) * redirc);
+	if (!cmd->argv || (redirc > 0 && !cmd->redir))
 		return (NULL);
-	cmd->args[argc] = NULL;
-	cmd->args[0] = head->arg; 
-	return (cmd);
+	cmd->argv[cmd->argc + 1] = NULL;
+	cmd->argv[0] = head->arg; 
 }
-
-t_args	*fill_struct(t_cmds *cmd, t_arg *head, int argc, int operc)
+t_args	*fill_struct(t_cmds *cmd, t_args *head, int redirc)
 {
 	int	i;
 	int	k;
 
-	i = 1;
+	i = 0;
 	k = 0;
-	cmd = init_structs(cmd, head, argc, operc);
-	if (argc == 0 && operc == 0)
+	init_members(cmd, head, redirc);
+	if (cmd->argc == 0 && redirc == 0)
 		return (head->next);
-	while (head != NULL && (head->type != CMD || head->type != BUILT_IN))
+	while (1)
 	{
-		if (i < argc && (head->type == ARG || head->type == QUOTE_ARG))
-			cmd->args[i++] = head->arg;
-		if (k < operc && head->type == REDIRECT)
-			operation_init(&cmd->oper[k++], head->arg, head->err_tok);
+		if (i < cmd->argc && (head->type == ARG || head->type == QUOTE_ARG))
+			cmd->argv[i++] = head->arg;
+		if (k < redirc && head->type == REDIRECT)
+			redir_init(&cmd->redir[k++], head->arg, head->err_tok);
 		head = head->next;
-		if (i == argc && k == operc)
+		if (i == cmd->argc && k == redirc)
 			break;
 	}
 	return (head);
@@ -89,32 +85,31 @@ t_args	*fill_struct(t_cmds *cmd, t_arg *head, int argc, int operc)
 /**
  * @note ARGUMENTS ARE BEING COUNTED. 
 */
-t_cmds	*create_structs(t_args *node, t_cmds *cmds, t_args *head, int cmd_cnt)
+static void	arg_counter(t_args *node, t_cmds *cmd, t_args *head, int cmd_cnt)
 {
 	int	i;
-	int	arg_cnt;
-	int	operator_cnt;
+	int	redir_i;
 	
 	i = 0;
+	cmd->argc = 0;
 	if (node->type == CMD || node->type == BUILT_IN)
 		node = node->next;
 	while (i < cmd_cnt)
 	{
-		arg_cnt = 1;
-		operator_cnt = 0;
+		redir_i = 0;
 		while (node != NULL && node->type != CMD && node->type != BUILT_IN)
 		{
 			if ((node->type == ARG || node->type == QUOTE_ARG))
-				arg_cnt++;
+				cmd->argc++;
 			if (node->type == REDIRECT)
-				operator_cnt++;
+				redir_i++;
 			node = node->next;
 		}
-		head = init_members(&cmds[i++], head, arg_cnt, operator_cnt);
+		fill_struct(&cmd[i], head, redir_i);
 		if (node != NULL)
 			node = node->next;
+		i++;
 	}
-	return (cmds);
 }
 /**
  * 
@@ -125,29 +120,29 @@ void	print_struct(t_cmds *cmds, int cmd_limit)
 	int i = 0;
 	int k = 0;
 	int	cmd_cnt = 0;
-	int	oper_limit;
+	int	redir_limit;
 
 	while (cmd_cnt < cmd_limit)
 	{
-		oper_limit = 0;
-		ft_printf("cmd type: %d\t", cmds[cmd_cnt].cmd_type);
-		ft_printf("cmd name: %s\n", cmds[cmd_cnt].cmd_path);
-		for (i = 0; cmds[cmd_cnt].args[i] != NULL; i++)
-			ft_printf("args: %s\n", cmds[cmd_cnt].args[i]);
-		if (cmds[cmd_cnt].oper != NULL)
+		redir_limit = 0;
+		printf("cmd type: %d\t", cmds[cmd_cnt].cmd_type);
+		printf("cmd name: %s\n", cmds[cmd_cnt].cmd_path);
+		for (i = 0; cmds[cmd_cnt].argv[i] != NULL; i++)
+			printf("argv: %s\n", cmds[cmd_cnt].argv[i]);
+		if (cmds[cmd_cnt].redir != NULL)
 		{
 			k = 0;
-			printf("Enter oper integer: ");
-			scanf("%d", &oper_limit);
-			while (k < oper_limit)
+			printf("Enter redir LIMIT integer: ");
+			scanf("%d", &redir_limit);
+			while (k < redir_limit)
 			{
-				ft_printf("red: |%s|\t", cmds[cmd_cnt].oper[k].redirect);
-				ft_printf("filename: |%s|\t", cmds[cmd_cnt].oper[k].filename);
-				ft_printf("type: %d\n", cmds[cmd_cnt].oper[k].type);
+				printf("red: |%s|\t", cmds[cmd_cnt].redir[k].redirect);
+				printf("filename: |%s|\t", cmds[cmd_cnt].redir[k].filename);
+				printf("type: %d\n", cmds[cmd_cnt].redir[k].type);
 				k++;
 			}
 		}
-		ft_printf("\n");
+		printf("\n");
 		cmd_cnt++;
 	}
 }
@@ -155,28 +150,33 @@ void	print_struct(t_cmds *cmds, int cmd_limit)
 /**
  * 
  * @note What if there there is no cmd but a redirect as the first string
+ * i = number of commmands.
+ * 
 */
-bool	init_structs(t_args *head)
+t_cmds	*create_structs(t_args *head)
 {
 	t_args	*node;
 	t_cmds	*cmds;
-	int cmd_cnt;
+	int		i;
 
 	node = head;
-	cmd_cnt = 0;
+	i = 0;
 	if (head->type == REDIRECT)
-		cmd_cnt++;
+		i++;
 	while (node != NULL)
 	{		
 		if (node->type == CMD || node->type == BUILT_IN)
-			cmd_cnt++;
+			i++;
 		node = node->next;
 	}
-	cmds = malloc(sizeof(t_cmds) * cmd_cnt);
+	printf("%d", i);
+	cmds = malloc(sizeof(t_cmds) * i + 1);
 	if (!cmds)
-		return (false);
+		return (NULL);
 	node = head;
-	create_structs(node, cmds, head, cmd_cnt);
-	print_struct(cmds, cmd_cnt);
-	return (true);
+	arg_counter(node, cmds, head, i);
+	head->cmnd_count = i;
+	print_struct(cmds, i);
+	printf("NO SEGFVLT\n");
+	return (cmds);
 }

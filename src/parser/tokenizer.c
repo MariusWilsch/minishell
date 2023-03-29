@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/24 16:07:41 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 12:44:22 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_args	*create_node(char *str, t_type_tok type)
 	new->err_tok = OK;
 	new->next = NULL;
 	new->type = type;
+	new->cmnd_count = 0;
 	if (type == OPERATOR && incl_char(str[0], "|."))
 	{
 		new->type = CMD;
