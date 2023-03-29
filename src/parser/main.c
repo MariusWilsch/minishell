@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/29 15:14:19 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 15:34:22 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ int	main(void)
 	{
 		head = NULL;
 		input = prompt(readline("Minishell-1.0$ "));
-		if (!input) 
-			return (EXIT_FAILURE);
 		if (!input[0] || !are_quotes_even(input))
 		{
 			free(input);

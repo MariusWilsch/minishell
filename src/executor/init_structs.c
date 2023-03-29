@@ -6,12 +6,11 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/29 15:25:01 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 16:48:52 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-
+#include "minishell.h"
 #include <stdio.h>
 
 bool redir_init(t_redir *redir, char *str, t_err_tok err_type)
@@ -58,14 +57,14 @@ void	*init_members(t_cmds *cmd, t_args *head, int redirc)
 	if (!cmd->argv || (redirc > 0 && !cmd->redir))
 		return (NULL);
 	cmd->argv[cmd->argc + 1] = NULL;
-	cmd->argv[0] = head->arg; 
+	cmd->argv[0] = head->arg;
 }
 t_args	*fill_struct(t_cmds *cmd, t_args *head, int redirc)
 {
 	int	i;
 	int	k;
 
-	i = 0;
+	i = 1;
 	k = 0;
 	init_members(cmd, head, redirc);
 	if (cmd->argc == 0 && redirc == 0)
@@ -91,7 +90,8 @@ static void	arg_counter(t_args *node, t_cmds *cmd, t_args *head, int cmd_cnt)
 	int	redir_i;
 	
 	i = 0;
-	cmd->argc = 0;
+	cmd->rd = 0;
+	cmd->argc = 1;
 	if (node->type == CMD || node->type == BUILT_IN)
 		node = node->next;
 	while (i < cmd_cnt)
@@ -102,13 +102,16 @@ static void	arg_counter(t_args *node, t_cmds *cmd, t_args *head, int cmd_cnt)
 			if ((node->type == ARG || node->type == QUOTE_ARG))
 				cmd->argc++;
 			if (node->type == REDIRECT)
+			{
+				cmd->rd = 1;
 				redir_i++;
+			}
 			node = node->next;
 		}
-		fill_struct(&cmd[i], head, redir_i);
+		fill_struct(&cmd[i++], head, redir_i);
 		if (node != NULL)
 			node = node->next;
-		i++;
+		// i++;
 	}
 }
 /**
@@ -169,8 +172,7 @@ t_cmds	*create_structs(t_args *head)
 			i++;
 		node = node->next;
 	}
-	printf("%d", i);
-	cmds = malloc(sizeof(t_cmds) * i + 1);
+	cmds = malloc(sizeof(t_cmds) * i);
 	if (!cmds)
 		return (NULL);
 	node = head;

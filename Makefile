@@ -6,18 +6,17 @@ SRC_DIR   = src/
 OBJ_DIR   = obj/
 CC        = gcc
 CFLAGS    = # -Werror -Wall -Wextra
-INCFLAGS  = -I include -I/opt/homebrew/Cellar/readline/8.2.1/include
-LDFLAGS   = -lreadline
+INCFLAGS  = -I include
+LDFLAGS   = -lreadline -lhistory
 RM        = rm -rf
 
 export RL_LIB   := -L/Users/tklouwer/.brew/opt/readline/lib
 export RL_INC   := -I/Users/tklouwer/.brew/opt/readline/include
-
 PRSR_DIR  = parser/
 PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking main
 
 XCTR_DIR  = executor/
-XCTR_SRCS = init_structs executor shell_builtins exec_builtin
+XCTR_SRCS = init_structs executor shell_builtins exec_utils redir_io exec_builtin
 
 SRC_FILES += $(addprefix $(PRSR_DIR),$(PRSR_SRCS))
 SRC_FILES += $(addprefix $(XCTR_DIR),$(XCTR_SRCS))
@@ -38,7 +37,7 @@ endif
 all: libft $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJ) -lreadline -lhistory $(RL_LIB) $(LDFLAGS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(RL_LIB)  $(LIBFT) -o $(NAME)
 	@echo "$(GREEN)Minishell Compiled.$(RESET)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)

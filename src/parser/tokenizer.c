@@ -6,11 +6,11 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/29 12:44:22 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 16:41:54 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 /**
  * @brief Cutting out the token out of the input string

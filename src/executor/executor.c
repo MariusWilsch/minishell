@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/03/29 15:18:54 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 16:29:47 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,8 @@
 	Execute the command in the child process using an exec() family function (e.g., execl(), execv(), execvp(), etc.).
 	In the parent process, wait for the child processes to complete using wait() or waitpid().
  */
-void	execute_command(t_cmds *head)
-{
-	if (!head->cmd_path)
-	{
-		perror("Command not found");
-		sh_exit(127);
-	}
-	if (head->cmd_type == CMD_EXE) 
-	{
-		if (execve(head->cmd_path, head->argv, NULL) == -1)
-		{
-			perror("Execve failed");
-			sh_exit(127);		
-		}
-	}
-	else
-		exec_builtin(head->cmd_path, 1, head->argv);
-}
+
+
 char *read_heredoc(const char *delimiter) // CHECK REWRITE
 {
     char *heredoc;
@@ -60,47 +44,16 @@ char *read_heredoc(const char *delimiter) // CHECK REWRITE
             strcat(heredoc, line);
         }
     }
-
     free(line);
     return heredoc;
 }
 
-int wr_perror(char *str)
-{
-	perror(str);
-	exit(EXIT_FAILURE);
-}
-int redirect_io(t_cmds *head, int *end)
-{
-    int fd = -1;
-    int open_flags;
-
-    if (head->redir->type == TRUNC || head->redir->type == APPEND)
-    {
-        open_flags = O_WRONLY | O_CREAT;
-        if (head->redir->type == TRUNC) open_flags |= O_TRUNC;
-        else open_flags |= O_APPEND;
-
-        fd = open(head->redir->filename, open_flags, 0644);
-        dup2(fd, STDOUT_FILENO);
-    }
-    else if (head->redir->type == INPUT)
-    {
-        fd = open(head->redir->filename, O_RDONLY);
-        dup2(fd, STDIN_FILENO);
-    }
-    else if (head->redir->type == INPUT_EOF)
-    {
-        read_heredoc(*head->argv);
-    }
-    if (fd == -1)
-        wr_perror("open");
-    close(fd);
-    return EXIT_SUCCESS;
-}
 int child_process(t_cmds *head, int *end)
 {
-	redirect_io(head, end);	
+	if (head->redir->type == TRUNC || head->redir->type == APPEND)
+		redirect_output(head, end);
+	else
+		redirect_input(head, end);
 	execute_command(head);
 }
 int executor(t_args *head)
@@ -111,7 +64,7 @@ int executor(t_args *head)
 
 	i = 0;
 	cmd = create_structs(head);
-	if (head->cmnd_count == 1)
+	if (head->cmnd_count == 1 && !cmd->rd)
 	{
 		execute_command(cmd);
 		return (EXIT_SUCCESS);
@@ -126,9 +79,9 @@ int executor(t_args *head)
 		}
 		child = fork();
 		if (child < 0)
-			wr_perror("fork");
+			perror("fork");
 		if (child == 0)
-			child_process(head, pipe_fd);
+			child_process(cmd, pipe_fd);
 		i++;
 	}
 	return (EXIT_SUCCESS);

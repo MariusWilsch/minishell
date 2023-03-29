@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/29 14:43:55 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/03/29 16:32:18 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,20 @@ typedef struct s_cmd {
 	char		*cmd_path;
 	char		**argv;
 	int			argc;
+	int			rd;
 	t_cmd_type	cmd_type;
 	t_redir		*redir;
 } t_cmds;
 
+
+/* 			INIT_STRUCTS		 */
+
 t_cmds	*create_structs(t_args *head);
+
+/* 			EXECUTOR			 */
 int 	executor(t_args *head);
 
-/* 			BUILT INS			 */
+/* 			BUILT-INS			 */
 
 int echo(int argc, char **argv);
 int cd(int argc, char **argv);
@@ -55,3 +61,14 @@ int sh_exit(int status);
 int env();
 void unset(const char *input);
 int     exec_builtin(char *func, int argc, char **argv);
+
+/* 				UTILS			 */
+
+void	execute_command(t_cmds *head);
+int		p_error(char *str, int status);
+int		wr_dup2(int fd1, int fd2);
+
+/* 				REDIR IO		 */
+
+int redirect_input(t_cmds *head, int *end);
+int	redirect_output(t_cmds *head, int *end);
