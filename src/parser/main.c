@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/24 15:47:56 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
+/*   Updated: 2023/03/29 15:34:22 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	free_list(t_args *head)
 }
 
 // Does readline cause the leak, like the subject says?
-
-
 char *prompt(char *str)
 {
 	char *input;
@@ -70,8 +68,14 @@ char *prompt(char *str)
 		add_history(input);
 	return (input);
 }
-
-
+void    handle_sigint(int sig)
+{
+	rl_replace_line("", 0);
+    printf("\n");
+	rl_on_new_line();
+    rl_redisplay();
+    return ;
+}
 /**
  * @note Do I need the quotes or should I leave them already?
  * 
@@ -82,15 +86,14 @@ char *prompt(char *str)
 */
 int	main(void)
 {
-	char		*input;
+	char	*input;
 	t_args	*head;
 
+	signal(SIGINT, handle_sigint);
 	while (1)
 	{
 		head = NULL;
 		input = prompt(readline("Minishell-1.0$ "));
-		if (!input) 
-			return (EXIT_FAILURE);
 		if (!input[0] || !are_quotes_even(input))
 		{
 			free(input);

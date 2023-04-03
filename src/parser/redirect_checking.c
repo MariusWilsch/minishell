@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   redirect_checking.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/18 12:31:04 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/24 15:50:38 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   redirect_checking.c                                :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/18 12:31:04 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/03/29 11:45:30 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	env_var_case(char *str, int env_len, int cnt)
 int	check_redirect(char *str, char c, int cnt, t_args *node)
 {
 	int	i;
-	
+
 	if (!str)
 		return (1);
 	i = cnt - 1;

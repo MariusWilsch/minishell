@@ -1,61 +1,67 @@
-# Marcos #
+# Makefile for minishell
 
-NAME 		= minishell
-LIBFT		= libft
-SRC_DIR		= src/
-OBJ_DIR		= obj/
-CC				= gcc
-CFLAGS		= # -Werror -Wall -Wextra
-INCFLAGS	= -I include
-LDFLAGS		= -lreadline
-RM				= rm -rf
+NAME      = minishell
+LIBFT     = libft/libft.a
+SRC_DIR   = src/
+OBJ_DIR   = obj/
+CC        = gcc
+CFLAGS    = # -Werror -Wall -Wextra
+INCFLAGS  = -I include
+LDFLAGS   = -lreadline -lhistory
+RM        = rm -rf
 
-SRC_FILES	=	main tokenizer env_sub cmd_res redirect_checking transform_data_structure helper\
+export RL_LIB   := -L/Users/tklouwer/.brew/opt/readline/lib
+export RL_INC   := -I/Users/tklouwer/.brew/opt/readline/include
+PRSR_DIR  = parser/
+PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking main
 
-SRC			=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
-OBJ			=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
+XCTR_DIR  = executor/
+XCTR_SRCS = init_structs executor shell_builtins exec_utils redir_io exec_builtin
 
-OBJF			= test
+SRC_FILES += $(addprefix $(PRSR_DIR),$(PRSR_SRCS))
+SRC_FILES += $(addprefix $(XCTR_DIR),$(XCTR_SRCS))
 
-# Colors #
+SRC       = $(addprefix $(SRC_DIR),$(addsuffix .c,$(SRC_FILES)))
+OBJ       = $(addprefix $(OBJ_DIR),$(addsuffix .o,$(SRC_FILES)))
 
-C_RESET = "\033[0m"
-C_GREEN = "\033[92m"
+OBJF      = test
+
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
 
 ifdef DEBUG
 	CFLAGS += -g -fsanitize=address
 endif
 
+all: libft $(NAME)
 
-start:
-			@make -C $(LIBFT)
-			@cp $(LIBFT)/libft.a .
-			@make all
-
-all: $(NAME)
-$(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS)  libft.a -o $(NAME)
-	@echo $(C_GREEN) $(C_GREEN)"minishell compilied"$(C_RESET)
+$(NAME): $(OBJ) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(RL_LIB)  $(LIBFT) -o $(NAME)
+	@echo "$(GREEN)Minishell Compiled.$(RESET)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
 	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
 
 $(OBJF):
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)$(PRSR_DIR)
+	@mkdir -p $(OBJ_DIR)$(XCTR_DIR)
+
+$(LIBFT):
+	@echo "$(GREEN)Building libft ...$(RESET)"
+	@$(MAKE) -C libft WITH_BONUS=1
 
 clean:
 	@$(RM) $(OBJ_DIR)
 	@$(RM) $(OBJF)
-	@make clean -C $(LIBFT)
+	@$(MAKE) -C libft clean
 
 fclean: clean
-	@$(RM) $(NAME) $(NAMESV)
-	@$(RM) $(LIBFT)/libft.a
-	@$(RM) libft.a
+	@$(RM) $(NAME)
 	@find . -name ".DS_Store" -delete
-	@echo "$(Red)All libs cleaned$(Reset)"
+	@echo "$(RED)Cleaning ...$(RESET)"
 
-re: fclean start
-	@echo "$(Yellow)Recomplied everything$(Reset)"
+re: fclean all
 
 .PHONY: all clean fclean re

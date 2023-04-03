@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/24 12:15:58 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
+/*   Updated: 2023/03/29 12:44:13 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <fcntl.h>
 # include "../libft/include/libft.h"
 # include "../libft/include/ft_printf.h"
+# include "executor.h"
 
 
 /**
@@ -48,25 +49,15 @@ typedef enum s_err_toks {
 	NO_ALNUM_BETWEEN,
 	NEWLINE_ERR,
 	ENV_REDIRECT_ERR,
-	// MALLOC_ERR,
 } t_err_tok;
 
 typedef struct t_args {
-	char					*arg;
+	char			*arg;
+	int				cmnd_count;
 	t_type_tok		type;
-	t_err_tok			err_tok;
+	t_err_tok		err_tok;
 	struct t_args	*next;
-} t_args;
-
-// typedef struct s_cmd {
-// 	char *cmd; // The resoluted cmd
-// 	// int		num_args;		//	The number of arguments for the command
-// 	char	**args;			//	The names of the arguments for the command
-// 	char	**oper;			//	Operaters & their files
-// 	// void (*func)();		//	The function pointer to the implementation code
-// } t_cmds;
-
-
+}	t_args;
 
 /*			Helper_1			*/
 
@@ -104,9 +95,6 @@ int	err_msg(t_err_tok err);
 int	env_var_case(char *str, int env_len, int cnt);
 int	check_redirect(char *str, char c, int cnt, t_args *node);
 
-
-/*			Executor			*/
-
-bool executor(t_args *head);
+// int executor(t_args *head);
 
 #endif
