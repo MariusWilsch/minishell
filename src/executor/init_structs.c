@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   init_structs.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/29 16:48:52 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   init_structs.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/04/03 11:38:33 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool redir_init(t_redir *redir, char *str, t_err_tok err_type)
 /**
  * @note FOR EVERY COMMAND AN INDEPENT STRUCT WILL BE CREATED AND ADDED TO THE ARRAY.
 */
-void	*init_members(t_cmds *cmd, t_args *head, int redirc)
+void	init_members(t_cmds *cmd, t_args *head, int redirc)
 {
 	cmd->cmd_path = head->arg;
 	cmd->cmd_type = CMD_EXE;
@@ -55,21 +55,22 @@ void	*init_members(t_cmds *cmd, t_args *head, int redirc)
 	if (redirc > 0)
 		cmd->redir = malloc(sizeof(t_redir) * redirc);
 	if (!cmd->argv || (redirc > 0 && !cmd->redir))
-		return (NULL);
-	cmd->argv[cmd->argc + 1] = NULL;
+		return ; // Do I want that?
+	cmd->argv[cmd->argc] = NULL;
 	cmd->argv[0] = head->arg;
 }
-t_args	*fill_struct(t_cmds *cmd, t_args *head, int redirc)
+t_args	*fill_struct(t_cmds *cmd, t_args *head, int argc, int redirc)
 {
 	int	i;
 	int	k;
 
 	i = 1;
 	k = 0;
+	cmd->argc = argc;
 	init_members(cmd, head, redirc);
 	if (cmd->argc == 0 && redirc == 0)
 		return (head->next);
-	while (1)
+	while (true)
 	{
 		if (i < cmd->argc && (head->type == ARG || head->type == QUOTE_ARG))
 			cmd->argv[i++] = head->arg;
@@ -88,30 +89,27 @@ static void	arg_counter(t_args *node, t_cmds *cmd, t_args *head, int cmd_cnt)
 {
 	int	i;
 	int	redir_i;
+	int arg_cnt;
 	
 	i = 0;
-	cmd->rd = 0;
-	cmd->argc = 1;
+	arg_cnt = 0;
 	if (node->type == CMD || node->type == BUILT_IN)
 		node = node->next;
 	while (i < cmd_cnt)
 	{
+		arg_cnt = 1;
 		redir_i = 0;
 		while (node != NULL && node->type != CMD && node->type != BUILT_IN)
 		{
 			if ((node->type == ARG || node->type == QUOTE_ARG))
-				cmd->argc++;
+				arg_cnt++;
 			if (node->type == REDIRECT)
-			{
-				cmd->rd = 1;
 				redir_i++;
-			}
 			node = node->next;
 		}
-		fill_struct(&cmd[i++], head, redir_i);
+		head = fill_struct(&cmd[i++], head, arg_cnt, redir_i);
 		if (node != NULL)
 			node = node->next;
-		// i++;
 	}
 }
 /**
@@ -156,29 +154,29 @@ void	print_struct(t_cmds *cmds, int cmd_limit)
  * i = number of commmands.
  * 
 */
-t_cmds	*create_structs(t_args *head)
+t_cmds *create_structs(t_args *head, int *cmd_cnt)
 {
-	t_args	*node;
-	t_cmds	*cmds;
-	int		i;
+		t_args	*node;
+		t_cmds	*cmds;
+		int			cmd_count;
 
-	node = head;
-	i = 0;
-	if (head->type == REDIRECT)
-		i++;
-	while (node != NULL)
-	{		
-		if (node->type == CMD || node->type == BUILT_IN)
-			i++;
-		node = node->next;
-	}
-	cmds = malloc(sizeof(t_cmds) * i);
-	if (!cmds)
-		return (NULL);
-	node = head;
-	arg_counter(node, cmds, head, i);
-	head->cmnd_count = i;
-	print_struct(cmds, i);
-	printf("NO SEGFVLT\n");
-	return (cmds);
+		node = head;
+		cmd_count = 0;
+		if (head->type == REDIRECT)
+				cmd_count++;
+		while (node != NULL)
+		{
+				if (node->type == CMD || node->type == BUILT_IN)
+						cmd_count++;
+				node = node->next;
+		}
+		cmds = malloc(sizeof(t_cmds) * cmd_count);
+		if (!cmds)
+				return (NULL);
+		node = head;
+		arg_counter(node, cmds, head, cmd_count);
+		print_struct(cmds, cmd_count);
+		*cmd_cnt = cmd_count;
+		return (cmds);
 }
+

@@ -7,11 +7,9 @@ OBJ_DIR   = obj/
 CC        = gcc
 CFLAGS    = # -Werror -Wall -Wextra
 INCFLAGS  = -I include
-LDFLAGS   = -lreadline -lhistory
+LDFLAGS   = -lreadline 
 RM        = rm -rf
 
-export RL_LIB   := -L/Users/tklouwer/.brew/opt/readline/lib
-export RL_INC   := -I/Users/tklouwer/.brew/opt/readline/include
 PRSR_DIR  = parser/
 PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking main
 

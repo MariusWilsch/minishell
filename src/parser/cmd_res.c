@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cmd_res.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/17 19:32:28 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/24 13:19:49 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cmd_res.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/04/03 14:19:04 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,20 @@
 
 bool	is_builtin(t_args *node)
 {
-	if (ft_strncmp("echo", node->arg, ft_strlen(node->arg)) == 0) // just add nums instead of strlen
+	if (ft_strncmp("echo", node->arg, 4) == 0) // just add nums instead of strlen
 		return (node->type = BUILT_IN, true);
-	if (ft_strncmp("pwd", node->arg, ft_strlen(node->arg)) == 0)
+	if (ft_strncmp("pwd", node->arg, 3) == 0)
 		return (node->type = BUILT_IN, true);
-	if (ft_strncmp("cd", node->arg, ft_strlen(node->arg)) == 0)
+	if (ft_strncmp("cd", node->arg, 2) == 0)
 		return (node->type = BUILT_IN, true);
-	if (ft_strncmp("exit", node->arg, ft_strlen(node->arg)) == 0)
+	if (ft_strncmp("exit", node->arg, 4) == 0)
 		return (node->type = BUILT_IN, true);
-	if (ft_strncmp("env", node->arg, ft_strlen(node->arg)) == 0)
+	if (ft_strncmp("env", node->arg, 3) == 0)
 		return (node->type = BUILT_IN, true);
-	if (ft_strncmp("unset", node->arg, ft_strlen(node->arg)) == 0)
+	if (ft_strncmp("unset", node->arg, 5) == 0)
 		return (node->type = BUILT_IN, true);
 	return (false);
 }
-
 
 /**
  * @brief Writes error messages
@@ -75,12 +74,15 @@ char *prep_cmd(char *str)
 	int	i;
 
 	i = 1;
+	temp = NULL;
 	if (str[0] == '|')
 	{
 		while (str[i] && str[i] == ' ')
 			i++;
 		str = del_substr(str, 0, i);
 	}
+	if (str[0] == '.')
+		return (temp);
 	temp = ft_strjoin("/", str);
 	free(str);
 	if (!temp)
@@ -106,7 +108,7 @@ char	*resolute_cmd(t_args *node, char *cmd)
 	int	i;
 
 	i = 0;
-	if (access(cmd, F_OK) == 0)
+	if (access(cmd, X_OK) == 0)
 		return (free(node->arg), cmd);
 	temp = prep_cmd(cmd); // Malloc
 	path_2D = ft_split(getenv("PATH"), ':');  // Malloc
@@ -123,7 +125,7 @@ char	*resolute_cmd(t_args *node, char *cmd)
 	}
 	free(temp);
 	free_split(path_2D);
-	if (cmd == NULL)
-		return (free(cmd), cmd_err(node));
+	if (cmd == NULL || temp == NULL)
+		return (free(cmd),cmd_err(node));
 	return (free(node->arg), cmd);
 }

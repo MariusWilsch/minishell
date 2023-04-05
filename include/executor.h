@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   executor.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/29 16:32:18 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   executor.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/04/04 11:45:02 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_cmd {
 	char		*cmd_path;
 	char		**argv;
 	int			argc;
-	int			rd;
+	// int			rd;
 	t_cmd_type	cmd_type;
 	t_redir		*redir;
 } t_cmds;
@@ -47,7 +47,7 @@ typedef struct s_cmd {
 
 /* 			INIT_STRUCTS		 */
 
-t_cmds	*create_structs(t_args *head);
+t_cmds	*create_structs(t_args *head, int *cmd_cnt);
 
 /* 			EXECUTOR			 */
 int 	executor(t_args *head);
@@ -55,12 +55,12 @@ int 	executor(t_args *head);
 /* 			BUILT-INS			 */
 
 int echo(int argc, char **argv);
-int cd(int argc, char **argv);
-int pwd(char *input);
+int cd(int argc, char *path);
+int pwd(void);
 int sh_exit(int status);
 int env();
-void unset(const char *input);
-int     exec_builtin(char *func, int argc, char **argv);
+int unset(int argc, char *argv[]);
+int exec_builtin(char *func, int argc, char **argv);
 
 /* 				UTILS			 */
 

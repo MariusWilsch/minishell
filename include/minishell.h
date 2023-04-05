@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/29 12:44:13 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
+/*   Updated: 2023/04/05 10:29:24 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "../libft/include/ft_printf.h"
 # include "executor.h"
 
+extern char **environ;
 
 /**
  * @brief Gives high level meaning to the tokens
@@ -53,7 +54,6 @@ typedef enum s_err_toks {
 
 typedef struct t_args {
 	char			*arg;
-	int				cmnd_count;
 	t_type_tok		type;
 	t_err_tok		err_tok;
 	struct t_args	*next;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   redir_io.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/03/29 16:29:59 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   redir_io.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/29 16:26:30 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/03 11:04:54 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int redirect_input(t_cmds *head, int *end)
 		if (dup2(end[1], STDOUT_FILENO) < 0)
 			wr_dup2(fd, end[1]);
     }
-    else if (head->redir->type == INPUT_EOF)
-    {
-        read_heredoc(*head->argv);
-    }
+    // else if (head->redir->type == INPUT_EOF)
+    // {
+    //     read_heredoc(*head->argv);
+    // }
     if (fd == -1)
         perror("open");
     close(fd);

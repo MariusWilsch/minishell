@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/03/29 15:34:22 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
+/*   Updated: 2023/04/04 11:30:18 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 // Delete when finished
 int	debug_msg(char *str)
@@ -68,14 +69,14 @@ char *prompt(char *str)
 		add_history(input);
 	return (input);
 }
-void    handle_sigint(int sig)
-{
-	rl_replace_line("", 0);
-    printf("\n");
-	rl_on_new_line();
-    rl_redisplay();
-    return ;
-}
+// void    handle_sigint(int sig)
+// {
+// 	rl_replace_line("", 0);
+//     printf("\n");
+// 	rl_on_new_line();
+//     rl_redisplay();
+//     return ;
+// }
 /**
  * @note Do I need the quotes or should I leave them already?
  * 
@@ -89,7 +90,6 @@ int	main(void)
 	char	*input;
 	t_args	*head;
 
-	signal(SIGINT, handle_sigint);
 	while (1)
 	{
 		head = NULL;

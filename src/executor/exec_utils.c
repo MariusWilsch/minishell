@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   exec_utils.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/03/29 16:21:55 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/04 12:18:31 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ int		p_error(char *str, int status)
 	perror(str);
 	sh_exit(status);
 }
-void	execute_command(t_cmds *head)
+void	execute_command(t_cmds *cmd)
 {
-	if (!head->cmd_path)
+	if (!cmd->cmd_path)
 		p_error("Command not found", 127);
-	if (head->cmd_type == CMD_EXE) 
+	if (cmd->cmd_type == CMD_EXE) 
 	{
-		if (execve(head->cmd_path, head->argv, NULL) == -1)
+		if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
 			p_error("Execve failed", 127);
 	}
-	else
-		exec_builtin(head->cmd_path, head->argc, head->argv);
+	else if (cmd->cmd_type == BUILT_IN_EXE)
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv);
 }

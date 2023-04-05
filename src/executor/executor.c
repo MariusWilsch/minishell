@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   executor.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/03/29 16:29:47 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/03 11:41:46 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,23 @@
 
 char *read_heredoc(const char *delimiter) // CHECK REWRITE
 {
-    char *heredoc;
-    char *line;
-    size_t line_len = 0;
-    ssize_t nread;
+		char *heredoc;
+		char *line;
+		size_t line_len = 0;
+		ssize_t nread;
 
-    while ((nread = getline(&line, &line_len, stdin)) != -1) {
-        if (strncmp(line, delimiter, strlen(delimiter)) == 0 && line[strlen(delimiter)] == '\n') 
-            break;
-        if (heredoc == NULL)
-            heredoc = strdup(line);
-        else {
-            heredoc = realloc(heredoc, strlen(heredoc) + nread + 1);
-            strcat(heredoc, line);
-        }
-    }
-    free(line);
-    return heredoc;
+		while ((nread = getline(&line, &line_len, stdin)) != -1) {
+				if (strncmp(line, delimiter, strlen(delimiter)) == 0 && line[strlen(delimiter)] == '\n') 
+						break;
+				if (heredoc == NULL)
+						heredoc = strdup(line);
+				else {
+						heredoc = realloc(heredoc, strlen(heredoc) + nread + 1);
+						strcat(heredoc, line);
+				}
+		}
+		free(line);
+		return heredoc;
 }
 
 int child_process(t_cmds *head, int *end)
@@ -56,33 +56,35 @@ int child_process(t_cmds *head, int *end)
 		redirect_input(head, end);
 	execute_command(head);
 }
+
+// Change the name of int i to int cmd_count
 int executor(t_args *head)
 {
-	int i;
-	pid_t child;
-	t_cmds *cmd;
-
-	i = 0;
-	cmd = create_structs(head);
-	if (head->cmnd_count == 1 && !cmd->rd)
+	int			cmd_cnt;
+	pid_t		child;
+	t_cmds	*cmd;
+	
+	cmd_cnt = 0;
+	cmd = create_structs(head, &cmd_cnt);
+	if (cmd_cnt == 1 && !cmd[0].redir)
 	{
-		execute_command(cmd);
-		return (EXIT_SUCCESS);
+			execute_command(cmd);
+			return (EXIT_SUCCESS);
 	}
-	while (i < 1)
-	{
-		int pipe_fd[2 * head->cmnd_count];
-		if (pipe(pipe_fd + 2 * i) == -1)
-		{
-			perror("pipe");
-			return (EXIT_FAILURE);
-		}
-		child = fork();
-		if (child < 0)
-			perror("fork");
-		if (child == 0)
-			child_process(cmd, pipe_fd);
-		i++;
-	}
+	// while (cmd_cnt < 1)
+	// {
+	// 		int pipe_fd[2 * cmd_cnt];
+	// 		if (pipe(pipe_fd + 2 * cmd_cnt) == -1)
+	// 		{
+	// 				perror("pipe");
+	// 				return (EXIT_FAILURE);
+	// 		}
+	// 		child = fork();
+	// 		if (child < 0)
+	// 				perror("fork");
+	// 		if (child == 0)
+	// 				child_process(cmd, pipe_fd);
+	// 		cmd_cnt++;
+	// }
 	return (EXIT_SUCCESS);
 }
