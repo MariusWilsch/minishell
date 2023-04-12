@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/05 10:29:19 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 13:33:04 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ bool pop_element(char **environ,const int env_cnt, char *str)
 	int	i;
 	
 	i = 0;
-	ft_printf(environ[env_cnt] == str);
 	if (environ[env_cnt] == str)
 	{
 		puts("I'm here");
@@ -162,6 +161,7 @@ int	unset(int argc, char *argv[])
 			ft_printf("unset: pop_element error\n");
 		i++;
 	}
+	return (EXIT_SUCCESS);
 }
 
 			// if (environ[env_cnt] == argv[i]) // If the last element of environ is the same as argv[i] then just set it to NULL

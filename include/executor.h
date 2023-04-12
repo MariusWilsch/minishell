@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/04 11:45:02 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 13:06:18 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ int		wr_dup2(int fd1, int fd2);
 
 /* 				REDIR IO		 */
 
+int handle_redirects(t_cmds *head, int *end);
 int redirect_input(t_cmds *head, int *end);
 int	redirect_output(t_cmds *head, int *end);

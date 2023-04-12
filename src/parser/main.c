@@ -6,11 +6,13 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/04 11:30:18 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 14:08:43 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
 
 // Delete when finished
@@ -57,10 +59,11 @@ char *prompt(char *str)
 	char *input;
 	
 	input = NULL;
-	if (!str[0])
-		return (str);
+	ft_printf("test |%s|\n", str);
 	if (!str)
 		return (NULL);
+	if (!str[0])
+		return (str);
 	input = ft_strtrim(str, " ");
 	free(str);
 	if (!input)
@@ -69,14 +72,7 @@ char *prompt(char *str)
 		add_history(input);
 	return (input);
 }
-// void    handle_sigint(int sig)
-// {
-// 	rl_replace_line("", 0);
-//     printf("\n");
-// 	rl_on_new_line();
-//     rl_redisplay();
-//     return ;
-// }
+
 /**
  * @note Do I need the quotes or should I leave them already?
  * 
@@ -85,15 +81,21 @@ char *prompt(char *str)
  * Do I want that free gets freed in sub_var
 
 */
-int	main(void)
+int minishell(t_args *head)
 {
 	char	*input;
-	t_args	*head;
-
+	
 	while (1)
 	{
 		head = NULL;
+    if (isatty(STDIN_FILENO)) {
+        printf("Standard input is associated with a terminal\n");
+    } else {
+        printf("Standard input is redirected from a file or another program\n");
+    }
 		input = prompt(readline("Minishell-1.0$ "));
+		if (!input)
+			p_error("prompt failed", 1);
 		if (!input[0] || !are_quotes_even(input))
 		{
 			free(input);
@@ -106,12 +108,16 @@ int	main(void)
 			free_list(head);
 			continue ;
 		}
-		print_list(head);
 		executor(head);
 		free_list(head);
 		free(input);
 	}
-	// rl_clear_history()
+}
+int	main(void)
+{
+	t_args *head;
+
+	minishell(head);
 	return (EXIT_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/03 11:41:46 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 14:07:26 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,64 +27,96 @@
  */
 
 
-char *read_heredoc(const char *delimiter) // CHECK REWRITE
+int close_pipes(int *pipe_fd, int pipes)
 {
-		char *heredoc;
-		char *line;
-		size_t line_len = 0;
-		ssize_t nread;
+	int i;
 
-		while ((nread = getline(&line, &line_len, stdin)) != -1) {
-				if (strncmp(line, delimiter, strlen(delimiter)) == 0 && line[strlen(delimiter)] == '\n') 
-						break;
-				if (heredoc == NULL)
-						heredoc = strdup(line);
-				else {
-						heredoc = realloc(heredoc, strlen(heredoc) + nread + 1);
-						strcat(heredoc, line);
-				}
-		}
-		free(line);
-		return heredoc;
-}
-
-int child_process(t_cmds *head, int *end)
-{
-	if (head->redir->type == TRUNC || head->redir->type == APPEND)
-		redirect_output(head, end);
-	else
-		redirect_input(head, end);
-	execute_command(head);
+	i = 0;
+	while (i < pipes)
+	{
+		if (pipe_fd[i] >= 0)
+			close(pipe_fd[i]);
+		i++;
+	}
 }
 
 // Change the name of int i to int cmd_count
+// int executor(t_args *head)
+// {
+// 	int			cmd_cnt;
+// 	pid_t		child;
+// 	t_cmds	*cmd;
+	
+// 	cmd_cnt = 0;
+// 	cmd = create_structs(head, &cmd_cnt);
+// 	if (cmd_cnt == 1 && !cmd[0].redir)
+// 	{
+// 			execute_command(cmd);
+// 			return (EXIT_SUCCESS);
+// 	}
+// 	// while (cmd_cnt < 1)
+// 	// {
+// 	// 		int pipe_fd[2 * cmd_cnt];
+// 	// 		if (pipe(pipe_fd + 2 * cmd_cnt) == -1)
+// 	// 		{
+// 	// 				perror("pipe");
+// 	// 				return (EXIT_FAILURE);
+// 	// 		}
+// 	// 		child = fork();
+// 	// 		if (child < 0)
+// 	// 				perror("fork");
+// 	// 		if (child == 0)
+// 	// 				child_process(cmd, pipe_fd);
+// 	// 		cmd_cnt++;
+// 	// }
+// 	return (EXIT_SUCCESS);
+// }
+
 int executor(t_args *head)
 {
 	int			cmd_cnt;
-	pid_t		child;
-	t_cmds	*cmd;
-	
-	cmd_cnt = 0;
-	cmd = create_structs(head, &cmd_cnt);
-	if (cmd_cnt == 1 && !cmd[0].redir)
+	t_cmds *cmd = create_structs(head, &cmd_cnt);
+	int			pipe_fd[2 * cmd_cnt];
+	int			i;
+
+	// ft_printf("cmd_cnt: %d\n", cmd_cnt *	2);
+	i = 0;
+	while (i < cmd_cnt)
 	{
-			execute_command(cmd);
-			return (EXIT_SUCCESS);
+		if (pipe(pipe_fd + 2 * cmd_cnt) == -1)
+			perror("pipe");
+		pid_t pid = fork();
+		if (pid < 0)
+			p_error("fork", 1);
+		if (pid == 0)
+		{
+			// if (cmd[i].redir != NULL)
+			// 	handle_redirects(&cmd[i], pipe_fd);
+			// else
+				execute_command(&cmd[i]);
+		}
+		else
+		{
+			int	status;
+			close_pipes(pipe_fd, 2 * cmd_cnt);
+			if (waitpid(pid, &status, 0) == -1)
+				p_error("waitpid", 1);
+		}
+		i++;
 	}
-	// while (cmd_cnt < 1)
-	// {
-	// 		int pipe_fd[2 * cmd_cnt];
-	// 		if (pipe(pipe_fd + 2 * cmd_cnt) == -1)
-	// 		{
-	// 				perror("pipe");
-	// 				return (EXIT_FAILURE);
-	// 		}
-	// 		child = fork();
-	// 		if (child < 0)
-	// 				perror("fork");
-	// 		if (child == 0)
-	// 				child_process(cmd, pipe_fd);
-	// 		cmd_cnt++;
-	// }
 	return (EXIT_SUCCESS);
 }
+
+	// for (i = 0; i < 2; i++) 
+	// {
+	// 		int flags = fcntl(pipe_fd[i], F_GETFD);
+	// 		if (flags == -1) 
+	// 		{
+	// 				perror("fcntl");
+	// 				exit(EXIT_FAILURE);
+	// 		}
+	// 		if (flags != 0)
+	// 				ft_printf("File descriptor %d is still open\n", pipe_fd[i]);
+	// 		else
+	// 			ft_printf("File descriptor %d is closed", pipe_fd[i]);
+	// 	}
