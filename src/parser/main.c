@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/12 14:08:43 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 15:23:41 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ char *prompt(char *str)
 	char *input;
 	
 	input = NULL;
-	ft_printf("test |%s|\n", str);
 	if (!str)
 		return (NULL);
 	if (!str[0])
@@ -88,11 +87,6 @@ int minishell(t_args *head)
 	while (1)
 	{
 		head = NULL;
-    if (isatty(STDIN_FILENO)) {
-        printf("Standard input is associated with a terminal\n");
-    } else {
-        printf("Standard input is redirected from a file or another program\n");
-    }
 		input = prompt(readline("Minishell-1.0$ "));
 		if (!input)
 			p_error("prompt failed", 1);
@@ -111,6 +105,10 @@ int minishell(t_args *head)
 		executor(head);
 		free_list(head);
 		free(input);
+		if (freopen("/dev/tty", "r", stdin) == NULL) { // m1 disassoicates stdin from terminal
+				perror("freopen");
+				return EXIT_FAILURE;
+		}
 	}
 }
 int	main(void)

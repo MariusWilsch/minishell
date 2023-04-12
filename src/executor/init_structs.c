@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/03 11:38:33 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 15:14:56 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ t_cmds *create_structs(t_args *head, int *cmd_cnt)
 				return (NULL);
 		node = head;
 		arg_counter(node, cmds, head, cmd_count);
-		print_struct(cmds, cmd_count);
+		// print_struct(cmds, cmd_count);
 		*cmd_cnt = cmd_count;
 		return (cmds);
 }

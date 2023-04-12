@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/12 14:00:29 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 15:23:27 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int		p_error(char *str, int status)
 {
 	perror(str);
 	sh_exit(status);
+	return (EXIT_FAILURE);
 }
 void	execute_command(t_cmds *head)
 {

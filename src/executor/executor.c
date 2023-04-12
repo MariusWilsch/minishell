@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/12 14:07:26 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/12 15:24:34 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int close_pipes(int *pipe_fd, int pipes)
 			close(pipe_fd[i]);
 		i++;
 	}
+	return (EXIT_SUCCESS);
 }
 
 // Change the name of int i to int cmd_count
@@ -90,9 +91,9 @@ int executor(t_args *head)
 			p_error("fork", 1);
 		if (pid == 0)
 		{
-			// if (cmd[i].redir != NULL)
-			// 	handle_redirects(&cmd[i], pipe_fd);
-			// else
+			if (cmd[i].redir != NULL)
+				handle_redirects(&cmd[i], pipe_fd);
+			else
 				execute_command(&cmd[i]);
 		}
 		else
