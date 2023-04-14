@@ -1,66 +1,60 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   redir_io.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 16:26:30 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/12 13:27:45 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   redir_io.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/04/14 13:35:44 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int handle_redirects(t_cmds *head, int *end)
+int handle_redirects(t_cmds *head)
 {
 	if (head->redir->type == TRUNC || head->redir->type == APPEND)
-		redirect_output(head, end);
-	// else
-	// 	redirect_input(head, end);
-	printf("\n%s\n", head->cmd_path);
+	{
+		redirect_output(head);
+	}
+	else
+	{
+		redirect_input(head);
+	}
 	execute_command(head);
 	return (EXIT_SUCCESS);
 }
-// int redirect_input(t_cmds *head, int *end)
-// {
-// 		int fd = -1;
-
-// 		if (head->redir->type == INPUT)
-// 		{
-// 				fd = open(head->redir->filename, O_RDONLY);
-// 				if (dup2(fd, STDIN_FILENO) < 0)
-// 					wr_dup2(fd, end[1]);
-// 		if (dup2(end[1], STDOUT_FILENO) < 0)
-// 			wr_dup2(fd, end[1]);
-// 		}
-// 		else if (head->redir->type == INPUT_EOF)
-// 				read_heredoc(*head->argv);
-// 		if (fd == -1)
-// 				perror("open");
-// 		close(fd);
-// 	close(end[0]);
-// 	return EXIT_SUCCESS;
-// }
-int	redirect_output(t_cmds *head, int *end)
+int redirect_input(t_cmds *head)
 {
-	int fd;
+	int fd = -1;
 
-	if (head->redir->type == TRUNC)
-		{
-				fd = open(head->redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (dup2(fd, STDOUT_FILENO) < 0)
-			wr_dup2(fd, end[0]);
-		}
-	if (head->redir->type == APPEND)
+	if (head->redir->type == INPUT)
 	{
-		fd = open(head->redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (dup2(fd, STDOUT_FILENO) < 0)
-			wr_dup2(fd, end[0]);
+			fd = open(head->redir->filename, O_RDONLY);
+			if (dup2(fd, STDIN_FILENO) < 0)
+				wr_dup2(fd, STDIN_FILENO);
 	}
-	if (dup2(end[0], STDIN_FILENO) < 0)
-		wr_dup2(fd, end[0]);
+	if (fd == -1)
+			perror("open");
 	close(fd);
-	close(end[1]);
-	return (EXIT_SUCCESS);
+	return EXIT_SUCCESS;
+}
+int redirect_output(t_cmds *head)
+{
+    int fd = -1;
+
+    if (head->redir->type == TRUNC)
+        fd = open(head->redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    else if (head->redir->type == APPEND)
+        fd = open(head->redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+	{
+		perror("open");
+		exit(EXIT_FAILURE);
+	}
+    if (dup2(fd, STDOUT_FILENO) < 0)
+        wr_dup2(fd, STDOUT_FILENO);
+    close(fd);
+    return (EXIT_SUCCESS);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/12 13:06:18 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   executor.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/14 12:11:35 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ typedef struct s_cmd {
 	char		*cmd_path;
 	char		**argv;
 	int			argc;
+	int			in_fd;
+	int			out_fd;
 	// int			rd;
 	t_cmd_type	cmd_type;
 	t_redir		*redir;
@@ -70,6 +72,6 @@ int		wr_dup2(int fd1, int fd2);
 
 /* 				REDIR IO		 */
 
-int handle_redirects(t_cmds *head, int *end);
-int redirect_input(t_cmds *head, int *end);
-int	redirect_output(t_cmds *head, int *end);
+int handle_redirects(t_cmds *head);
+// int redirect_input(t_cmds *head, int *end);
+// int	redirect_output(t_cmds *head, int *end);

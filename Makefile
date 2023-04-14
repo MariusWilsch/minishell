@@ -5,10 +5,12 @@ LIBFT     = libft/libft.a
 SRC_DIR   = src/
 OBJ_DIR   = obj/
 CC        = gcc
-CFLAGS    = # -Werror -Wall -Wextra
-INCFLAGS  = -I include
-LDFLAGS   = -lreadline 
-RM        = rm -rf
+CFLAGS    = -g # -Werror -Wall -Wextra
+INCFLAGS  = -I include -I $(LIBFT)
+LDFLAGS   = -lreadline
+
+export RL_LIB   := -L/Users/tklouwer/.brew/opt/readline/lib
+export RL_INC   := -I/Users/tklouwer/.brew/opt/readline/include
 
 PRSR_DIR  = parser/
 PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking main
@@ -35,11 +37,11 @@ endif
 all: libft $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(RL_LIB)  $(LIBFT) -o $(NAME)
+	@$(CC) $(OBJ) $(LIBFT) $(RL_LIB) $(RL_INC) $(INCFLAGS) $(LIBFT)  -o $(NAME) -lreadline
 	@echo "$(GREEN)Minishell Compiled.$(RESET)"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
-	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)	
+	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@ 
 
 $(OBJF):
 	@mkdir -p $(OBJ_DIR)
@@ -51,12 +53,12 @@ $(LIBFT):
 	@$(MAKE) -C libft WITH_BONUS=1
 
 clean:
-	@$(RM) $(OBJ_DIR)
-	@$(RM) $(OBJF)
+	@rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJF)
 	@$(MAKE) -C libft clean
 
 fclean: clean
-	@$(RM) $(NAME)
+	@rm -rf $(NAME)
 	@find . -name ".DS_Store" -delete
 	@echo "$(RED)Cleaning ...$(RESET)"
 

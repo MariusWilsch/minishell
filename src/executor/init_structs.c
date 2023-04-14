@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init_structs.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/12 15:14:56 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   init_structs.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/13 16:03:41 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,11 @@ void	init_members(t_cmds *cmd, t_args *head, int redirc)
 		cmd->cmd_type = NO_CMD_EXE;
 	}
 	cmd->redir = NULL;
-	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
+	cmd->argv = ft_calloc(sizeof(char *), (cmd->argc + 1));
 	if (redirc > 0)
-		cmd->redir = malloc(sizeof(t_redir) * redirc);
+		cmd->redir = ft_calloc(sizeof(t_redir), redirc);
 	if (!cmd->argv || (redirc > 0 && !cmd->redir))
-		return ; // Do I want that?
-	cmd->argv[cmd->argc] = NULL;
+		return ;
 	cmd->argv[0] = head->arg;
 }
 t_args	*fill_struct(t_cmds *cmd, t_args *head, int argc, int redirc)
@@ -156,8 +155,8 @@ void	print_struct(t_cmds *cmds, int cmd_limit)
 */
 t_cmds *create_structs(t_args *head, int *cmd_cnt)
 {
-		t_args	*node;
-		t_cmds	*cmds;
+		t_args		*node;
+		t_cmds		*cmds;
 		int			cmd_count;
 
 		node = head;
@@ -170,12 +169,11 @@ t_cmds *create_structs(t_args *head, int *cmd_cnt)
 						cmd_count++;
 				node = node->next;
 		}
-		cmds = malloc(sizeof(t_cmds) * cmd_count);
+		cmds = ft_calloc(sizeof(t_cmds), cmd_count);
 		if (!cmds)
 				return (NULL);
 		node = head;
 		arg_counter(node, cmds, head, cmd_count);
-		// print_struct(cmds, cmd_count);
 		*cmd_cnt = cmd_count;
 		return (cmds);
 }
