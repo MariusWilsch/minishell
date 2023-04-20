@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   executor.h                                         :+:    :+:            */
+/*    executor.h                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/04/14 12:11:35 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/20 12:32:36 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct s_cmd {
 	int			argc;
 	int			in_fd;
 	int			out_fd;
-	// int			rd;
 	t_cmd_type	cmd_type;
 	t_redir		*redir;
 } t_cmds;

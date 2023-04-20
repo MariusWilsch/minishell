@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/14 14:39:28 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/20 13:32:00 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 			perror("dup2");
 	}
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
-	if (cmd[i].redir) // IF IT HAS REDIRECTION SETS UP THE REDIRECTIONS. 
+	if (cmd[i].redir) // IF IT HAS REDIRECTION, SETS UP THE REDIRECTS. 
 	{
 		cmd[i].in_fd = pipe_fd[0];
 		cmd[i].out_fd = pipe_fd[1];
@@ -75,10 +75,19 @@ int child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 		execute_command(&cmd[i]);
 	exit(EXIT_SUCCESS);
 }
+
+void shell_process(t_cmds *cmd, int cmd_cnt)
+{
+	if (cmd_cnt > 1)
+		return ;
+	else
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv);
+}
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
 	AND MANAGING THE CHILD PROCESSES.
 	- CMND_CNT = NUMBER OF COMMANDS.
 	- PIPE_FD = ARRAY OF FILE DESCRIPTORS FOR THE PIPES
+	- BUILT-INS NEED TO BE EXECUTED IN THE PARENT PROCESS. SO WE DONT FORK THEM. 
  */
 int executor(t_args *head)
 {
@@ -98,16 +107,20 @@ int executor(t_args *head)
 	}
 	while (i < cmd_cnt)
 	{
-		pid_t pid = fork(); // CREATES CHILD PROCESS WHERE IT EXECUTES EACH INDIVIDUAL COMMAND
-		if (pid < 0)
-			p_error("fork", 1);
-		else if (pid == 0)
-		{
-			child_process(cmd, i, cmd_cnt, pipe_fd);
-		}
-		else
-		{
-			parent_process(pipe_fd, cmd_cnt, i, pid);
+		if (cmd[i].cmd_type == BUILT_IN_EXE && !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0)) // BUILT-IN SO NO FORK
+			shell_process(cmd, cmd_cnt);
+		else {
+			pid_t pid = fork(); // CREATES CHILD PROCESS WHERE IT EXECUTES EACH INDIVIDUAL COMMAND
+			if (pid < 0)
+				p_error("fork", 1);
+			else if (pid == 0)
+			{
+				child_process(cmd, i, cmd_cnt, pipe_fd);
+			}
+			else
+			{
+				parent_process(pipe_fd, cmd_cnt, i, pid);
+			}
 		}
 		i++;
 	}

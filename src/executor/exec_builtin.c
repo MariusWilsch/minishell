@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_builtin.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 14:00:08 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/04 11:43:06 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   exec_builtin.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/29 14:00:08 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/04/20 12:08:52 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ int     exec_builtin(char *func, int argc, char **argv)
         unset(argc, argv);
     if (ft_strncmp("env", func, 3) == 0)
         env();
+    if (ft_strncmp("exit", func, 4) == 0)
+        exit(0);
     return (EXIT_SUCCESS);
 }
