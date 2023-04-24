@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env_sub.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:33:01 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/19 15:01:04 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   env_sub.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/17 19:33:01 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/24 10:30:44 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 /**
  * @brief counts the length of the unsubsituted env_var
@@ -20,8 +19,8 @@
 */
 int	get_env_len(char *str)
 {
-	const	int start = ft_strclen(str, '$') + 1;
-	int	len;
+	const int	start = ft_strclen(str, '$') + 1;
+	int			len;
 
 	len = start;
 	while (str[len] && !incl_char(str[len], " <>\""))
@@ -35,7 +34,8 @@ int	get_env_len(char *str)
  * @param str String to be subsitutued. str gets freed! Do I want that?
  * @param env_len The length of the unsubsituted env_var
  * 
- * @note First it copies all chars before the $. Then it concatenates the env_var.
+ * @note First it copies all chars before the $. Then it 
+ * concatenates the env_var.
  * Finally it copies to the rest of the string
  * 
  * @note I'm missing the deletion of env_var if env_var does not exsit
@@ -43,9 +43,9 @@ int	get_env_len(char *str)
 char	*sub_env(char *str, int env_len)
 {
 	const int	start = ft_strclen(str, '$') + 1;
-	char			*env_var;
-	char			*new;
-	int				len;
+	char		*env_var;
+	char		*new;
+	int			len;
 
 	if (!str)
 		return (NULL);

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/19 14:19:01 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
+/*   Updated: 2023/04/24 15:10:36 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 # include <stdio.h>
 # include <stdbool.h>
@@ -24,15 +24,12 @@
 # include "../libft/include/ft_printf.h"
 # include "executor.h"
 
-
-
-
 /**
  * @brief Gives high level meaning to the tokens
  * 
  * @param OPERATOR a token which includes a redirect or a pipe
  * @param ARG a token which can be a command (if it's the first) or a argument
- * @param QUOTE_ARG Chained arguments. Special chars other than $ lose their meaning
+ * @param QUOTE_ARG Chained arguments.
 */
 
 typedef enum s_tokens {
@@ -43,7 +40,7 @@ typedef enum s_tokens {
 	BUILT_IN,
 	REDIRECT,
 	REPROMPT,
-} t_type_tok;
+}	t_type_tok;
 
 typedef enum s_err_toks {
 	OK,
@@ -53,7 +50,7 @@ typedef enum s_err_toks {
 	NO_ALNUM_BETWEEN,
 	NEWLINE_ERR,
 	ENV_REDIRECT_ERR,
-} t_err_tok;
+}	t_err_tok;
 
 typedef struct t_args {
 	char			*arg;
@@ -63,18 +60,15 @@ typedef struct t_args {
 }	t_args;
 
 typedef struct s_env {
-	char	*key;
-	char	*value;
-	bool	hidden;
-	struct s_env *next;
-	// struct s_env *prev;
-} t_env;
-
-
-void	free_list(t_args *head);
+	char			*key;
+	char			*value;
+	bool			hidden;
+	struct s_env	*next;
+}	t_env;
 
 /*			Helper_1			*/
-
+int			rl_replace_line(void);
+void		free_list(t_args *head);
 bool		incl_char(char c, char *search_str);
 bool		are_quotes_even(char *input);
 char		*del_substr(char *str, int start, int len);
@@ -86,35 +80,30 @@ int			ft_lstsize_shell(t_env *env);
 /*			Tokenizer			*/
 
 char		*get_tok(char *input, int start, t_type_tok type);
-t_args	*create_node(char *str, t_type_tok type);
+t_args		*create_node(char *str, t_type_tok type);
 int			add_tok(char *str, t_args **head, t_type_tok type);
-t_args	*create_tok_list(char *input, t_args *head);
-t_args	*process_tok(t_args *head);
-
+t_args		*create_tok_list(char *input, t_args *head);
+t_args		*process_tok(t_args *head);
 
 /*			Command Resolution			*/
-
-bool	is_builtin(t_args *node);
-char	*cmd_err(t_args *node);
-char	*prep_cmd(char *str);
-char	*resolute_cmd(t_args *node, char *cmd);
+bool		is_builtin(t_args *node);
+char		*cmd_err(t_args *node);
+char		*prep_cmd(char *str);
+char		*resolute_cmd(t_args *node, char *cmd);
 
 /*			Environment Subsitution			*/
-
-int		get_env_len(char *str);
-char	*sub_env(char *str, int env_len);
+int			get_env_len(char *str);
+char		*sub_env(char *str, int env_len);
 
 /*			Redirect Checking			*/
-
-int	err_msg(t_err_tok err);
-int	env_var_case(char *str, int env_len, int cnt);
-int	check_redirect(char *str, char c, int cnt, t_args *node);
-
+int			err_msg(t_err_tok err);
+int			env_var_case(char *str, int env_len, int cnt);
+int			check_redirect(char *str, char c, int cnt, t_args *node);
 
 /*			Environment			*/
-t_env	*get_key_value(t_env *node, char *str);
-t_env	*add_first_node(t_env *env_head, char *str);
-void	add_end(t_env **head, char *str);
-void	env_init(t_env **env, char **envp);
+t_env		*get_key_value(t_env *node, char *str);
+t_env		*add_first_node(t_env *env_head, char *str);
+void		add_end(t_env **head, char *str);
+void		env_init(t_env **env, char **envp);
 
 #endif

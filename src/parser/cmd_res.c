@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_res.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/19 15:01:18 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cmd_res.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/17 19:32:28 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/24 10:37:06 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 bool	is_builtin(t_args *node)
 {
 	if (node->arg[0] == '|')
 		del_substr(node->arg, 0, cnt_occur(node->arg + 1, ' ') + 1);
-	if (ft_strncmp("echo", node->arg, 4) == 0) // just add nums instead of strlen
+	if (ft_strncmp("echo", node->arg, 4) == 0)
 		return (node->type = BUILT_IN, true);
 	if (ft_strncmp("pwd", node->arg, 3) == 0)
 		return (node->type = BUILT_IN, true);
@@ -38,11 +37,12 @@ bool	is_builtin(t_args *node)
  * @brief Writes error messages
  * 
  * @param node the node of the linked list where a error occured
+ * int s = start
  */
 char	*cmd_err(t_args *node)
 {
-	int start;
-	char *str;
+	int		s;
+	char	*str;
 
 	str = node->arg;
 	if (str[0] == '.')
@@ -53,7 +53,7 @@ char	*cmd_err(t_args *node)
 	}
 	if (ft_strchr(str, '$'))
 	{
-		str = sub_env(str, get_env_len(str)); // Leak? 
+		str = sub_env(str, get_env_len(str));
 		if (!ft_strchr(str, '/'))
 			return (resolute_cmd(node, ft_strdup(node->arg)));
 		ft_printf("minishell: %s: No such file or directory\n", str);
@@ -62,19 +62,19 @@ char	*cmd_err(t_args *node)
 	ft_printf("minishell: %s: command not found\n", del_quotes(str));
 	if (node->arg[0] == '|')
 		node->arg = del_substr(node->arg, 0, cnt_occur(node->arg + 1, ' ') + 1);
-	start = cnt_occur(node->arg, node->arg[0]);
+	s = cnt_occur(node->arg, node->arg[0]);
 	if (incl_char(node->arg[0], "><"))
-		node->arg = del_substr(node->arg, start, cnt_occur(node->arg + start, ' '));
+		node->arg = del_substr(node->arg, s, cnt_occur(node->arg + s, ' '));
 	return (node->err_tok = NO_CMD, str);
 }
 
 /**
  * @brief Preparing the command to add it to the path directory
 */
-char *prep_cmd(char *str)
+char	*prep_cmd(char *str)
 {
-	char *temp;
-	int	i;
+	char	*temp;
+	int		i;
 
 	i = 1;
 	temp = NULL;
@@ -93,33 +93,32 @@ char *prep_cmd(char *str)
 	return (temp);
 }
 
-
-
 /**
  * @brief Searching for the executable using the PATH variable
  * 
  * @param node A single node of the linked list containg a string to be resoluted
  * @param cmd A duplicate of the orginal string
- * @return cmd If command resolution was succesfull and cmd_err which returns the unchanged string
+ * @return cmd If command resolution was succesfull 
+ * and cmd_err which returns the unchanged string
  * 
  * @note I need to also resolute in the current working directory
  */
 char	*resolute_cmd(t_args *node, char *cmd)
 {
-	char *temp;
-	char **path_2D;
-	int	i;
+	char	*temp;
+	char	**path_2d;
+	int		i;
 
 	i = 0;
 	if (access(cmd, X_OK) == 0)
 		return (free(node->arg), cmd);
-	temp = prep_cmd(cmd); // Malloc
-	path_2D = ft_split(getenv("PATH"), ':');  // Malloc
-	while (path_2D && temp && path_2D[i] != NULL)
+	temp = prep_cmd(cmd);
+	path_2d = ft_split(getenv("PATH"), ':');
+	while (path_2d && temp && path_2d[i] != NULL)
 	{
-		cmd = ft_strjoin(path_2D[i], temp); // Malloc Loop
+		cmd = ft_strjoin(path_2d[i], temp);
 		if (!cmd)
-			return (free_split(path_2D), cmd);
+			return (free_split(path_2d), cmd);
 		if (access(cmd, X_OK) == 0)
 			break ;
 		i++;
@@ -127,8 +126,8 @@ char	*resolute_cmd(t_args *node, char *cmd)
 		cmd = NULL;
 	}
 	free(temp);
-	free_split(path_2D);
+	free_split(path_2d);
 	if (cmd == NULL || temp == NULL)
-		return (free(cmd),cmd_err(node));
+		return (free(cmd), cmd_err(node));
 	return (free(node->arg), cmd);
 }

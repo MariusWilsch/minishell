@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/11 20:52:09 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/19 12:13:15 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   libft.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/10/11 20:52:09 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/24 13:59:48 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
-
 
 // Bonus Part
 t_list	*ft_lstnew(void *content);

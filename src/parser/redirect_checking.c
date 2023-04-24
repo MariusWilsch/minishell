@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   redirect_checking.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/18 12:31:04 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/19 15:00:24 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   redirect_checking.c                                :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/18 12:31:04 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/24 13:43:35 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,29 @@
 int	err_msg(t_err_tok err)
 {
 	if (err == NO_FILE_DIR)
-		return (ft_printf("minshell: : No such file or directory\n"));
+		return (ft_printf("minishell: : No such file or directory\n"));
 	if (err == TO_MANY)
-		return (ft_printf("minshell: parse error: To many consecutive redirects\n"));
+		return (ft_printf("minishell: To many consecutive redirects\n"));
 	if (err == NO_ALNUM_BETWEEN)
-		return (ft_printf("minshell: parse error: No alnum value between redirect\n"));
+		return (ft_printf("minishell: No alnum value between redirect\n"));
 	if (err == NEWLINE_ERR)
-		return (ft_printf("minshell: parse error: No alnum value after redirect\n"));
+		return (ft_printf("minishell: No alnum value after redirect\n"));
 	return (1);
 }
 
 int	env_var_case(char *str, int env_len, int cnt)
 {
-	char *env_var;
+	char	*env_var;
 	bool	flag;
-	
+
 	flag = false;
 	env_var = ft_substr(str, ft_strclen(str, '$'), env_len);
 	env_var = sub_env(env_var, env_len - 1);
 	if (!env_var)
 		return (1);
 	if (env_var[0] != '/' && !ft_strchr(str, '\"'))
-		flag = ft_printf("minishell: %s: ambiguous redirect\n", str + ft_strclen(str, '$'));
+		flag = ft_printf("minishell: %s: ambiguous redirect\n",
+				str + ft_strclen(str, '$'));
 	if (!ft_strchr(str, '\"') && access(env_var, F_OK) == 0)
 		flag = ft_printf("minishell: %s: Is a directory\n", env_var);
 	free(env_var);
@@ -82,7 +83,7 @@ int	check_redirect(char *str, char c, int cnt, t_args *node)
 	while (str[i])
 	{
 		if (ft_isalnum(str[i]))
-			break ; // could this be a return ;?
+			break ;
 		i++;
 		if (incl_char(str[i], ">|<"))
 			return (err_msg(NO_ALNUM_BETWEEN));

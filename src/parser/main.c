@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/04/24 10:16:43 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/24 14:26:14 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void	free_list(t_args *head)
 	free(head);
 }
 
-char *prompt(char *str)
+char	*prompt(char *str)
 {
-	char *input;
-	
+	char	*input;
+
 	input = NULL;
 	if (!str)
 		exit(1);
@@ -65,18 +65,23 @@ char *prompt(char *str)
 	return (input);
 }
 
-int minishell(t_args *head, char **envp)
+int	minishell(t_args *head, char **envp)
 {
 	char	*input;
 	t_env	*env_l;
-	
+
 	env_l = NULL;
 	while (1)
 	{
 		head = NULL;
 		input = prompt(readline("Minishell-1.0$ "));
 		if (!input)
-			continue;
+			continue ;
+		if (ft_strncmp(input, "$?", 2) == 0)
+		{
+			ft_printf("%d\n", g_status);
+			continue ;
+		}
 		head = create_tok_list(input, head);
 		head = process_tok(head);
 		if (head == NULL)
@@ -89,7 +94,7 @@ int minishell(t_args *head, char **envp)
 	return (EXIT_SUCCESS);
 }
 
-void signal_handler(int sig)
+void	signal_handler(int sig)
 {
 	ft_printf("\n");
 	rl_on_new_line();
@@ -98,8 +103,6 @@ void signal_handler(int sig)
 }
 
 /**
- * @brief 
- * 
  * @note Ctlr C in Parent is just reprompt (custome handler)
  * @note Ctlr C in child process is default behaviour (SIGDFL)
  * 
@@ -108,17 +111,10 @@ void signal_handler(int sig)
  */
 int	main(int argc, char **argv, char **envp)
 {
-	t_args *head;
+	t_args	*head;
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, signal_handler);
 	minishell(head, envp);
 	return (EXIT_SUCCESS);
-
 }
-
-
-
-
-
-

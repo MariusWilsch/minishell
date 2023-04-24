@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/19 14:19:08 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   tokenizer.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/24 10:20:45 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 	new = create_node(str, type);
 	if (!new)
 		return (-1);
-	if (!temp) // This marks the first node
+	if (!temp)
 	{
 		*head = new;
 		if (type == ARG)
@@ -99,7 +99,6 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 	temp->next = new;
 	return (0);
 }
-
 
 /**
  * @brief Adds all token to a linked list
@@ -131,17 +130,19 @@ t_args	*create_tok_list(char *input, t_args *head)
 */
 t_args	*process_tok(t_args *head)
 {
-	t_args *node = head;
+	t_args	*node;
 
+	node = head;
 	while (node != NULL)
 	{
 		if (node->type == CMD && !is_builtin(node))
 			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0], cnt_occur(node->arg, node->arg[0]), node) > 0)
+		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0],
+				cnt_occur(node->arg, node->arg[0]), node) > 0)
 		{
 			head->type = REPROMPT;
 			free_list(head);
-			return (NULL); // what if !str
+			return (NULL);
 		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{
