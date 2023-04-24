@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   shell_builtins.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/19 14:31:10 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   shell_builtins.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/04/24 10:14:08 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_env	*exisit_env(t_env **env_list, char *str)
 	temp = *env_list;
 	while (temp != NULL)
 	{
-		if (temp->key != NULL && ft_strcmp(key[0], temp->key) == 0)
+		if (temp->key != NULL && ft_strncmp(key[0], temp->key, ft_strlen(*key)) == 0)
 			return (temp);
 		temp = temp->next;
 	}

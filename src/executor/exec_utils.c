@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/24 09:59:38 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/24 10:16:16 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,4 @@ void	execute_command(t_cmds *cmd)
 	}
 	else
 		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
-	// free_command(cmd);
 }

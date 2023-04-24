@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/24 10:01:53 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/24 10:14:59 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,9 @@ int executor(t_args *head, t_env **env_l)
 			if (pid < 0)
 				p_error("fork", 1);
 			else if (pid == 0)
-			{
 				child_process(cmd, i, cmd_cnt, pipe_fd);
-			}
 			else
-			{
 				parent_process(pipe_fd, cmd_cnt, i, pid);
-			}
 		}
 		i++;
 	}
