@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_sub.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:33:01 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/19 15:58:53 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/04/19 15:01:04 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	get_env_len(char *str)
 		len++;
 	return (len - start);
 }
-
 
 /**
  * @brief Substitutes the environment variable inside of of the string

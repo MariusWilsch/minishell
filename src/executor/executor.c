@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/20 13:32:00 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/24 10:01:53 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void parent_process(int *pipe_fd, int cmd_cnt, int current_cmd, pid_t child_pid)
 /* EXECUTES THE ACTIONS THAT NEEDS TO BE PERFORMED FOR THE CHILD PROCESS. 
 	SETS UP THE IN- AND OUTPUT REDIRECTION BASED ON CMDS POSITION.
  */
-int child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
+int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
 	if (i > 0)
 	{
@@ -81,7 +81,7 @@ void shell_process(t_cmds *cmd, int cmd_cnt)
 	if (cmd_cnt > 1)
 		return ;
 	else
-		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv);
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
 }
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
 	AND MANAGING THE CHILD PROCESSES.
@@ -89,14 +89,14 @@ void shell_process(t_cmds *cmd, int cmd_cnt)
 	- PIPE_FD = ARRAY OF FILE DESCRIPTORS FOR THE PIPES
 	- BUILT-INS NEED TO BE EXECUTED IN THE PARENT PROCESS. SO WE DONT FORK THEM. 
  */
-int executor(t_args *head)
+int executor(t_args *head, t_env **env_l)
 {
 	t_cmds 		*cmd;
 	int			cmd_cnt;
 	int			i;
 
 	i = 0;
-	cmd = create_structs(head, &cmd_cnt);
+	cmd = create_structs(head, &cmd_cnt, env_l);
 	int		pipe_fd[2 * (cmd_cnt - 1)];
 	int j = 0;
 	while(j < cmd_cnt)

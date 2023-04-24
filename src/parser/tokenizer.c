@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/03 14:00:18 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/19 14:19:08 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ t_args	*process_tok(t_args *head)
 		if (node->type == REDIRECT && check_redirect(node->arg, node->arg[0], cnt_occur(node->arg, node->arg[0]), node) > 0)
 		{
 			head->type = REPROMPT;
-			return (head); // what if !str
+			free_list(head);
+			return (NULL); // what if !str
 		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{

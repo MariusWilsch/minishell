@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:28:28 by verdant           #+#    #+#             */
-/*   Updated: 2023/03/20 16:02:40 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/04/19 15:00:40 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_lstsize_shell(t_env *env)
+{
+	size_t	n;
+
+	n = 0;
+	while (env != NULL)
+	{
+		env = env->next;
+		n++;
+	}
+	return (n);
+}
 
 /**
  * @brief Checks if a char exits inside of a string
@@ -74,13 +87,6 @@ bool are_quotes_even(char *input)
  * @param start The starting index of str to delete from
  * @param len The amount of chars to delete
  * 
- * @note I could rewrite this function to be a bool and use a double ptr
- * for char *str so that I do not lose the changes outside local scope, however
- * this would entail that I have to rewrite my env_subsitution to accomodate
- * for that
- * 
- * @note Benefits: 1. I can check if del_substr went right or not 2. I can 
- * save lines
 */
 char	*del_substr(char *str, int start, int len)
 {

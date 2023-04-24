@@ -5,15 +5,15 @@ LIBFT     = libft/libft.a
 SRC_DIR   = src/
 OBJ_DIR   = obj/
 CC        = gcc
-CFLAGS    = -g # -Werror -Wall -Wextra
+CFLAGS    = # -Werror -Wall -Wextra
 INCFLAGS  = -I include -I $(LIBFT)
-LDFLAGS   = -lreadline
+LDFLAGS   = 
 
-export RL_LIB   := -L/Users/tklouwer/.brew/opt/readline/lib
-export RL_INC   := -I/Users/tklouwer/.brew/opt/readline/include
+RL_LIB   := -lreadline -L/opt/homebrew/opt/readline/lib
+RL_INC   := -I /opt/homebrew/opt/readline/include
 
 PRSR_DIR  = parser/
-PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking main
+PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking environment main
 
 XCTR_DIR  = executor/
 XCTR_SRCS = init_structs executor shell_builtins exec_utils redir_io exec_builtin
@@ -31,17 +31,17 @@ RED = \033[0;31m
 RESET = \033[0m
 
 ifdef DEBUG
-	CFLAGS += -g -fsanitize=address
+	CFLAGS += -g  -fsanitize=address 
 endif
 
 all: libft $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(OBJ) $(LIBFT) $(RL_LIB) $(RL_INC) $(INCFLAGS) $(LIBFT)  -o $(NAME) -lreadline
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT)  $(RL_LIB)  $(INCFLAGS) $(LIBFT)  -o $(NAME) 
 	@echo "$(GREEN)Minishell Compiled.$(RESET)"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)	
-	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@ 
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF) 
+	@$(CC) $(CFLAGS) $(INCFLAGS) $(RL_INC) -c $< -o $@ 
 
 $(OBJF):
 	@mkdir -p $(OBJ_DIR)

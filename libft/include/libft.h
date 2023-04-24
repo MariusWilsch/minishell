@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 20:52:09 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/15 18:27:28 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/04/19 12:13:15 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 size_t	ft_strlcpy(char *dst, char *src, size_t dstsize);
 int		ft_strlen(const char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *str1, const char *str2);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t n);
 char	*ft_strrchr(const char *s, int c);
 int		ft_tolower(int c);
@@ -57,6 +58,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+
 
 // Bonus Part
 t_list	*ft_lstnew(void *content);

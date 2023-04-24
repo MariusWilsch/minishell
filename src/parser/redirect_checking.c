@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   redirect_checking.c                                :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/18 12:31:04 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/03/29 11:45:30 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   redirect_checking.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/18 12:31:04 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/04/19 15:00:24 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,6 @@ int	env_var_case(char *str, int env_len, int cnt)
 	}
 	return (ENV_REDIRECT_ERR);
 }
-	
-
-
-
 
 /**
  * @brief Checking the syntax of the redirects
@@ -72,7 +68,6 @@ int	env_var_case(char *str, int env_len, int cnt)
  * 4. Special case: <> is valid but I will error
  * 5. redirect: >"" --> No such file or directory (Not implemented)
 */
-
 int	check_redirect(char *str, char c, int cnt, t_args *node)
 {
 	int	i;
@@ -99,7 +94,3 @@ int	check_redirect(char *str, char c, int cnt, t_args *node)
 	str = del_substr(str, cnt, cnt_occur(str + cnt, ' '));
 	return (0);
 }
-
-
-	// if (ft_strnstr(node->arg, "<>", ft_strlen(node->arg))); // Idk if I need that one
-	// 	return

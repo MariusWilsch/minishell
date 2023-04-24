@@ -6,24 +6,26 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/05 10:29:24 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/19 14:19:01 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
-# include <readline/readline.h>
-# include <stdbool.h>
 # include <stdio.h>
+# include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "../libft/include/libft.h"
 # include "../libft/include/ft_printf.h"
 # include "executor.h"
 
-extern char **environ;
+
+
 
 /**
  * @brief Gives high level meaning to the tokens
@@ -32,6 +34,7 @@ extern char **environ;
  * @param ARG a token which can be a command (if it's the first) or a argument
  * @param QUOTE_ARG Chained arguments. Special chars other than $ lose their meaning
 */
+
 typedef enum s_tokens {
 	OPERATOR,
 	ARG,
@@ -59,6 +62,17 @@ typedef struct t_args {
 	struct t_args	*next;
 }	t_args;
 
+typedef struct s_env {
+	char	*key;
+	char	*value;
+	bool	hidden;
+	struct s_env *next;
+	// struct s_env *prev;
+} t_env;
+
+
+void	free_list(t_args *head);
+
 /*			Helper_1			*/
 
 bool		incl_char(char c, char *search_str);
@@ -67,6 +81,7 @@ char		*del_substr(char *str, int start, int len);
 int			cnt_len_between(char *str, char c, int index);
 char		*del_quotes(char *str);
 int			cnt_occur(char *str, char c);
+int			ft_lstsize_shell(t_env *env);
 
 /*			Tokenizer			*/
 
@@ -95,6 +110,11 @@ int	err_msg(t_err_tok err);
 int	env_var_case(char *str, int env_len, int cnt);
 int	check_redirect(char *str, char c, int cnt, t_args *node);
 
-// int executor(t_args *head);
+
+/*			Environment			*/
+t_env	*get_key_value(t_env *node, char *str);
+t_env	*add_first_node(t_env *env_head, char *str);
+void	add_end(t_env **head, char *str);
+void	env_init(t_env **env, char **envp);
 
 #endif

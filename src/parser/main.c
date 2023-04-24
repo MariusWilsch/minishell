@@ -6,117 +6,115 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/12 15:23:41 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/19 14:59:25 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-
 
 // Delete when finished
-int	debug_msg(char *str)
-{
-	ft_printf("%s", str);
-	return (1);
-}
+// void print_list(t_args *head)
+// {
+// 	t_args *temp = head;
+// 	while (temp != NULL)
+// 	{
+// 		ft_printf("ARG TYPE: %d\t", temp->type);
+// 		ft_printf("ERR TOK: %d\n", temp->err_tok);
+// 		ft_printf("`%s`\n\n", temp->arg);
+// 		temp = temp->next;
+// 	}
+// 	ft_printf("-----------------------------\n");
+// }
 
 // Delete when finished
-void print_list(t_args *head)
-{
-	t_args *temp = head;
-	while (temp != NULL)
-	{
-		ft_printf("ARG TYPE: %d\t", temp->type);
-		ft_printf("ERR TOK: %d\n", temp->err_tok);
-		ft_printf("`%s`\n\n", temp->arg);
-		temp = temp->next;
-	}
-	ft_printf("-----------------------------\n");
-}
-
-// Delete when finished
-void	leaks(void)
-{
-	system("leaks -q minishell");
-}
+// void	leaks(void)
+// {
+// 	system("leaks -q minishell");
+// }
 
 void	free_list(t_args *head)
 {
-	while (head != NULL) // Freeing the list
+	while (head != NULL)
 	{
 		free(head->arg);
 		head = head->next;
 	}
 	free(head);
-	// atexit(leaks);
 }
 
-// Does readline cause the leak, like the subject says?
 char *prompt(char *str)
 {
 	char *input;
 	
 	input = NULL;
 	if (!str)
-		return (NULL);
+		exit(1);
 	if (!str[0])
 		return (str);
 	input = ft_strtrim(str, " ");
 	free(str);
 	if (!input)
 		return (NULL);
+	if (!input[0] || !are_quotes_even(input))
+	{
+		free(input);
+		return (NULL);
+	}
 	if (input[0] != '\0')
 		add_history(input);
 	return (input);
 }
 
-/**
- * @note Do I need the quotes or should I leave them already?
- * 
- * @note 
- * I should spent an hour or 2 on testing inputs
- * Do I want that free gets freed in sub_var
-
-*/
-int minishell(t_args *head)
+int minishell(t_args *head, char **envp)
 {
 	char	*input;
+	t_env	*env_l;
 	
+	env_l = NULL;
 	while (1)
 	{
 		head = NULL;
 		input = prompt(readline("Minishell-1.0$ "));
 		if (!input)
-			p_error("prompt failed", 1);
-		if (!input[0] || !are_quotes_even(input))
-		{
-			free(input);
-			continue ;
-		}
+			continue;
 		head = create_tok_list(input, head);
 		head = process_tok(head);
-		if (head->type == REPROMPT)
-		{
-			free_list(head);
+		if (head == NULL)
 			continue ;
-		}
-		executor(head);
+		env_init(&env_l, envp);
+		// executor(head, &env_l);
 		free_list(head);
 		free(input);
-		if (freopen("/dev/tty", "r", stdin) == NULL) { // m1 disassoicates stdin from terminal
-				perror("freopen");
-				return EXIT_FAILURE;
-		}
 	}
+	return (EXIT_SUCCESS);
 }
-int	main(void)
+
+void signal_handler(int sig)
+{
+	ft_printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+/**
+ * @brief 
+ * 
+ * @note Ctlr C in Parent is just reprompt (custome handler)
+ * @note Ctlr C in child process is default behaviour (SIGDFL)
+ * 
+ * @note Ctlr / can be ignored with SIGIGN
+ * @note Ctlr D sends a NULL to readline or EOF to heredoc
+ */
+int	main(int argc, char **argv, char **envp)
 {
 	t_args *head;
 
-	minishell(head);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, signal_handler);
+	minishell(head, envp);
 	return (EXIT_SUCCESS);
+
 }
 
 

@@ -6,20 +6,14 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/12 13:33:04 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/19 14:31:10 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <string.h>
 
 
-
-/**
- * @brief Echo command
- * 
- * @param argc 
- * @param argv 
- */
 int echo(int argc, char **argv)
 {
 		bool	flag;
@@ -44,7 +38,6 @@ int echo(int argc, char **argv)
 				ft_printf("\n");
 		return (i);
 }
-
 
 int cd(int argc, char *path)
 {
@@ -85,88 +78,110 @@ int sh_exit(int status)
 		exit(status);
 }
 
-int env()
-{    
-		extern char **environ;
-		char **envp;
+int env(t_env **env_list, bool export)
+{
+	t_env*	env;
 
-		envp = environ;
-		while (*envp != NULL) 
+	env = *env_list;
+	while (env != NULL)
+	{
+		if (env->key == NULL || env->value == NULL)
 		{
-				printf("%s\n", *envp);
-				envp++;
+			env = env->next;
+			continue;
 		}
-		envp = NULL;
-		return (EXIT_SUCCESS);
+		if (export == true)
+		{
+			ft_printf("declare -x %s=", env->key);
+			ft_printf("%s\n", env->value);
+			env = env->next;
+			continue;
+		}
+		if (env->hidden == false)
+		{
+			ft_printf("%s=", env->key);
+			ft_printf("%s\n", env->value);
+		}
+		env = env->next;
+	}
+	return (EXIT_SUCCESS);
 }
 
+
+t_env	*exisit_env(t_env **env_list, char *str)
+{
+	char **key;
+	t_env *temp;
+	int len;
+
+
+	key = ft_split(str, '=');
+	temp = *env_list;
+	while (temp != NULL)
+	{
+		if (temp->key != NULL && ft_strcmp(key[0], temp->key) == 0)
+			return (temp);
+		temp = temp->next;
+	}
+	free_split(key);
+	free(temp);
+	return (NULL);
+}
 
 /**
  * @brief 
  * 
  * @param argc 
  * @param argv 
- * @return int 
+ * @param env_list 
+ * 
+ * 
+ * @note REFACTOR IDEA: If I would have a circular list I could just check from the back to the front which would make it faster
  */
-
-// 1. Check if unset has arguments
-// 2. Count the env_vars in environ
-// 3. Check if argv[i] is in environ
-// 4. Check if argv[i] is in the the last element
-// 5. If not, move the rest of the elements up one
-
-
-bool pop_element(char **environ,const int env_cnt, char *str)
+int	export(int argc, char *argv[], t_env **env_list)
 {
-	int	i;
-	
-	i = 0;
-	if (environ[env_cnt] == str)
-	{
-		puts("I'm here");
-		environ[env_cnt] = NULL;
-		return (true);
-	}
-	// while (environ[i] != str)
-	// 	i++;
-	// while (i < env_cnt && environ[i + 1] != NULL)
-	// {
-	// 	environ[i] = environ[i + 1];
-	// 	i++;
-	// }
-	// environ[i] = NULL;
-	// for (i = 0; environ[i] != NULL; i++)
-	// 	ft_printf("%s", environ[i]);
-	return(true);
-}
-
-
-int	unset(int argc, char *argv[])
-{
-
-	int	i;
-	int	env_cnt;
+	int i;
+	t_env *temp;
 
 	i = 1;
-	env_cnt = 0;
 	if (argc == 1)
-		ft_printf("unset: not enough arguments\n");
-	while (environ[env_cnt] != NULL)
-		env_cnt++;
+		return (env(env_list, true));
 	while (i < argc)
 	{
-		if (ft_strchr(argv[i], ' ') != NULL)
-			ft_printf("unset: not a valid identifier: %s\n", argv[i++]);
-		if (getenv(argv[i]) != NULL && !pop_element(environ, env_cnt, argv[i]))
-			ft_printf("unset: pop_element error\n");
+		temp = exisit_env(env_list, argv[i]);
+		if (temp == NULL)
+			add_end(env_list, argv[i]);
+		else if (temp != NULL && temp->hidden == true)
+			temp->hidden = false;
 		i++;
 	}
 	return (EXIT_SUCCESS);
 }
 
-			// if (environ[env_cnt] == argv[i]) // If the last element of environ is the same as argv[i] then just set it to NULL
-			// 	environ[env_cnt] = NULL;
-			// else
-			// {
-				
-			// }
+/**
+ * @brief 
+ * 
+ * 
+ * 1. Check if the variable exists
+ * 2. If it does, change the env.hidden = true or delete the node
+ * 	2.1 It depends on if the hidden method works properly. It's kind of a hacky way to do it
+ * 
+ * The problem is that 
+ */
+int unset(int argc, char *argv[], t_env **env_list)
+{
+	int i;
+	t_env *temp;
+
+	i = 1;
+	if (argc == 1)
+		return (EXIT_SUCCESS);
+	if (i < argc)
+	{
+		temp = exisit_env(env_list, argv[i]);
+		if (temp)
+			temp->hidden = true;
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}

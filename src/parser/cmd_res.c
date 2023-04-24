@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/03 14:19:04 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/19 15:01:18 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 bool	is_builtin(t_args *node)
 {
+	if (node->arg[0] == '|')
+		del_substr(node->arg, 0, cnt_occur(node->arg + 1, ' ') + 1);
 	if (ft_strncmp("echo", node->arg, 4) == 0) // just add nums instead of strlen
 		return (node->type = BUILT_IN, true);
 	if (ft_strncmp("pwd", node->arg, 3) == 0)
@@ -26,6 +28,8 @@ bool	is_builtin(t_args *node)
 	if (ft_strncmp("env", node->arg, 3) == 0)
 		return (node->type = BUILT_IN, true);
 	if (ft_strncmp("unset", node->arg, 5) == 0)
+		return (node->type = BUILT_IN, true);
+	if (ft_strncmp("export", node->arg, 6) == 0)
 		return (node->type = BUILT_IN, true);
 	return (false);
 }
@@ -63,7 +67,6 @@ char	*cmd_err(t_args *node)
 		node->arg = del_substr(node->arg, start, cnt_occur(node->arg + start, ' '));
 	return (node->err_tok = NO_CMD, str);
 }
-
 
 /**
  * @brief Preparing the command to add it to the path directory

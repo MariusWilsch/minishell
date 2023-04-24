@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/20 13:28:56 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/24 09:59:38 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,15 @@ int		p_error(char *str, int status)
 	sh_exit(status);
 	return (EXIT_FAILURE);
 }
-void	execute_command(t_cmds *head)
+
+void	execute_command(t_cmds *cmd)
 {
-	if (head->cmd_type == CMD_EXE)
+	if (cmd->cmd_type == CMD_EXE)
 	{
-		if (execve(head->cmd_path, head->argv, NULL) == -1)
+		if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
 			p_error("Execve failed", 127);
 	}
 	else
-		exec_builtin(head->cmd_path, head->argc, head->argv);
-	free_command(head);
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+	// free_command(cmd);
 }
