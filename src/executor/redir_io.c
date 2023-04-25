@@ -6,17 +6,17 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/25 14:45:02 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:24:37 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include <readline/readline.h>
-#include <readline/history.h>
 
 int	handle_redirects(t_cmds *head)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (i < head->redir->redirc)
 	{
 		if (head->redir[i].type == TRUNC || head->redir[i].type == APPEND)

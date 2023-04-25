@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   environment.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 09:17:34 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   environment.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/17 17:43:37 by verdant       #+#    #+#                 */
+/*   Updated: 2023/04/25 15:20:45 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	add_end(t_env **head, char *str)
 void	env_init(t_env **env, char **envp)
 {
 	int		index;
-	
+
 	if (*env != NULL)
 		return ;
 	index = 0;

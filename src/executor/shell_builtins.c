@@ -6,11 +6,11 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/25 14:52:56 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:25:46 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "executor.h"
 
 int	echo(int argc, char **argv)
 {

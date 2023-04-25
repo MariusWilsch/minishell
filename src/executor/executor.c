@@ -6,37 +6,11 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/25 14:51:23 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:23:03 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "executor.h"
-
-
-void cleanup_redir(t_redir *redir, int redir_c)
-{
-	int i;
-
-	i = 0;
-	while (redir_c-- > 0)
-	{
-		free(redir[redir_c].filename);
-		free(redir[redir_c].redirect);
-	}
-	free(redir);
-}
-
-void cleanup(int cmd_cnt, t_cmds *cmd)
-{
-	while (cmd_cnt--)
-	{
-		free(cmd[cmd_cnt].argv);
-		if (cmd[cmd_cnt].redir)
-			cleanup_redir(cmd[cmd_cnt].redir, cmd[cmd_cnt].redir->redirc);
-	}
-	free(cmd);
-}
 
 /* EXECUTES THE ACTIONS THAT NEEDS TO BE PERFORMED FOR THE PARENT PROCESS. 
 	WAITS TILL THE CHILD PROCESS IS FINISHED EXECUTING, CLOSES THE FD'S.
@@ -59,7 +33,8 @@ int	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	i = 0;
 	while (i < cmd_cnt)
 	{
-		if (cmd[i].cmd_type == BUILT_IN_EXE && !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0))
+		if (cmd[i].cmd_type == BUILT_IN_EXE
+			&& !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0))
 			exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
 		else
 		{
@@ -84,7 +59,7 @@ int	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
  */
 int	executor(t_args *head, t_env **env_l)
 {
-	t_cmds		*cmd;
+	t_cmds			*cmd;
 	int				cmd_cnt;
 	int				i;
 	int				*pipe_fd;

@@ -6,12 +6,11 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/04/25 14:37:19 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:25:49 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <stdio.h>
+#include "executor.h"
 
 bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
 {

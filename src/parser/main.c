@@ -1,33 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 13:50:08 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
+/*   Updated: 2023/04/25 15:20:16 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-// Delete when finished
-// void print_list(t_args *head)
-// {
-// 	t_args *temp = head;
-// 	while (temp != NULL)
-// 	{
-// 		ft_printf("ARG TYPE: %d\t", temp->type);
-// 		ft_printf("ERR TOK: %d\n", temp->err_tok);
-// 		ft_printf("`%s`\n\n", temp->arg);
-// 		temp = temp->next;
-// 	}
-// 	ft_printf("-----------------------------\n");
-// }
-
-// Delete when finished
 // void	leaks(void)
 // {
 // 	system("leaks -q minishell");
@@ -35,9 +19,8 @@
 
 void	free_list(t_args *head)
 {
+	t_args	*temp;
 
-	t_args *temp;
-	
 	while (head != NULL)
 	{
 		free(head->arg);
@@ -109,8 +92,8 @@ void	signal_handler(int signum)
 	{
 		ft_printf("\n");
 		pid = waitpid(-1, &status, WNOHANG);
-		if (pid == 0) 
-			return;
+		if (pid == 0)
+			return ;
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();

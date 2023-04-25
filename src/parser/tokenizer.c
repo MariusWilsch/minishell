@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 13:28:29 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   tokenizer.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/25 15:19:30 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,8 @@ t_args	*process_tok(t_args *head)
 	{
 		if (node->type == CMD && !is_builtin(node))
 			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		if (node->type == REDIRECT && check_redirect(node->arg, cnt_occur(node->arg, node->arg[0]), node) > 0)
+		if (node->type == REDIRECT && check_redirect(node->arg,
+				cnt_occur(node->arg, node->arg[0]), node) > 0)
 		{
 			head->type = REPROMPT;
 			free_list(head);

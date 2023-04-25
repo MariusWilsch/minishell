@@ -18,7 +18,7 @@ PRSR_DIR  = parser/
 PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking environment parse_utils main
 
 XCTR_DIR  = executor/
-XCTR_SRCS = init_structs executor shell_builtins shell_builtins1 exec_utils redir_io exec_builtin child_process
+XCTR_SRCS = init_structs executor shell_builtins shell_builtins1 exec_utils redir_io child_process
 
 SRC_FILES += $(addprefix $(PRSR_DIR),$(PRSR_SRCS))
 SRC_FILES += $(addprefix $(XCTR_DIR),$(XCTR_SRCS))
