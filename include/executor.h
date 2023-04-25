@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 11:30:35 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   executor.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/04/25 14:44:15 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ typedef struct s_redir {
 	char			*redirect;
 	char			*filename;
 	t_redirect_type	type;
-	int redirc;
+	int 			redirc;
+	struct t_redir	*next;
 }	t_redir;
 
 typedef struct s_cmd {
@@ -80,7 +81,7 @@ int		handle_redirects(t_cmds *head);
 int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
 int		heredoc(const char *delimiter);
 
-int		redirect_input(t_cmds *head);
-int		redirect_output(t_cmds *head);
+int		redirect_input(t_redir *redir);
+int		redirect_output(t_redir *redir);
 
 #endif

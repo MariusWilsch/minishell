@@ -8,8 +8,8 @@ CC        = gcc
 CFLAGS    = -g # -Werror -Wall -Wextra
 INCFLAGS  = -I include -I $(LIBFT)
 
-# LDFLAGS		:=  -L /Users/$(USER)/.brew/opt/readline/lib
-# CPPFLAGS	:= -I /Users/$(USER)/.brew/opt/readline/include
+LDFLAGS		:=  -L /Users/$(USER)/.brew/opt/readline/lib
+CPPFLAGS	:= -I /Users/$(USER)/.brew/opt/readline/include
 
 RL_LIB   := -lreadline -L/opt/homebrew/opt/readline/lib
 RL_INC   := -I /opt/homebrew/opt/readline/include
@@ -40,21 +40,21 @@ all: libft $(NAME)
 
 # for intel mac
 
-# $(NAME): $(OBJ) $(LIBFT)
-# 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LDFLAGS) $(CPPFLAGS) $(INCFLAGS) $(LIBFT)  -o $(NAME) -lreadline
-# 	@echo "$(GREEN)Minishell Compiled.$(RESET)"
-
-# $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF) 
-# 	@$(CC) $(CFLAGS) $(INCFLAGS)  -c $< -o $@ 
-
-# for M1 mac
-
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT)  $(RL_LIB)  $(INCFLAGS) $(LIBFT)  -o $(NAME) 
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LDFLAGS) $(CPPFLAGS) $(INCFLAGS) $(LIBFT)  -o $(NAME) -lreadline
 	@echo "$(GREEN)Minishell Compiled.$(RESET)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF) 
-	@$(CC) $(CFLAGS) $(INCFLAGS) $(RL_INC) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCFLAGS)  -c $< -o $@ 
+
+# for M1 mac
+
+# $(NAME): $(OBJ) $(LIBFT)
+# 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT)  $(RL_LIB)  $(INCFLAGS) $(LIBFT)  -o $(NAME) 
+# 	@echo "$(GREEN)Minishell Compiled.$(RESET)"
+
+# $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF) 
+# 	@$(CC) $(CFLAGS) $(INCFLAGS) $(RL_INC) -c $< -o $@
 
 $(OBJF):
 	@mkdir -p $(OBJ_DIR)

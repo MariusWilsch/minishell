@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   shell_builtins.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 09:48:04 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   shell_builtins.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/04/25 14:52:56 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,7 @@ int	cd(int argc, char *path)
 		return (ft_printf("cd: no such file or directory: %s\n", path));
 	if (access(path, X_OK) == -1)
 		return (ft_printf("cd: permission denied: %s\n", path));
-
-
 	chdir(path);
-
-
-	// if (chdir(path) == -1)
-	// 	return (ft_printf("cd: error changing directory: %s\n", path));
-	
 	return (EXIT_SUCCESS);
 }
 
@@ -75,8 +68,6 @@ int	pwd(void)
 	ft_putendl_fd(cwd, 1);
 	return (EXIT_SUCCESS);
 }
-
-
 
 int	sh_exit(void)
 {

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 13:32:47 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   executor.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/04/25 14:51:23 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ void cleanup_redir(t_redir *redir, int redir_c)
 	int i;
 
 	i = 0;
-	while (i < redir_c)
+	while (redir_c-- > 0)
 	{
-		free(redir[i].filename);
-		free(redir[i].redirect);
-		i++;
+		free(redir[redir_c].filename);
+		free(redir[redir_c].redirect);
 	}
 	free(redir);
 }
