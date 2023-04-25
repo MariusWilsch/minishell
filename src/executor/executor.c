@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 11:55:14 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 12:16:20 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,25 @@
 
 void cleanup_redir(t_redir *redir, int redir_c)
 {
-	while (redir_c--)
+	int i;
+
+	i = 0;
+	while (i < redir_c)
 	{
-		free(redir[redir_c].filename);
-		free(redir[redir_c].redirect);
+		free(redir[i].filename);
+		free(redir[i].redirect);
+		i++;
 	}
 	free(redir);
 }
 
 void cleanup(int cmd_cnt, t_cmds *cmd)
 {
-	while (cmd_cnt)
+	while (cmd_cnt--)
 	{
 		free(cmd[cmd_cnt].argv);
 		if (cmd[cmd_cnt].redir)
 			cleanup_redir(cmd[cmd_cnt].redir, cmd[cmd_cnt].redir->redirc);
-		cmd_cnt--;
 	}
 	free(cmd);
 }
