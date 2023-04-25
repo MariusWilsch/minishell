@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   shell_builtins.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:25:46 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   shell_builtins.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/25 15:44:03 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,35 +69,15 @@ int	pwd(void)
 	return (EXIT_SUCCESS);
 }
 
-int	sh_exit(void)
-{
-	exit(0);
-}
-
-int	env(t_env **env_list, bool export)
+int	env(t_env **env_list)
 {
 	t_env	*env;
 
 	env = *env_list;
-	while (env != NULL)
+	while (env)
 	{
-		if (env->key == NULL || env->value == NULL)
-		{
-			env = env->next;
-			continue ;
-		}
-		if (export == true)
-		{
-			ft_printf("declare -x %s=", env->key);
-			ft_printf("%s\n", env->value);
-			env = env->next;
-			continue ;
-		}
-		if (env->hidden == false)
-		{
-			ft_printf("%s=", env->key);
-			ft_printf("%s\n", env->value);
-		}
+		ft_printf("%s=", env->key);
+		ft_printf("%s\n", env->value);
 		env = env->next;
 	}
 	return (EXIT_SUCCESS);

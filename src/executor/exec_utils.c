@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   exec_utils.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:26:34 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/25 17:01:28 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,15 @@ int	p_error(char *str, int status)
 
 void	execute_command(t_cmds *cmd)
 {
+	t_env *found; 
+
 	if (cmd->cmd_type == CMD_EXE)
 	{
+		if (exisit_env(cmd->env, "PATH", &found) == -1)
+		{
+			ft_printf("minishell: %s: No such file or directory\n", cmd->cmd_path);
+			exit(127);
+		}
 		if (execve(cmd->cmd_path, cmd->argv, convert_data(*cmd->env)) == -1)
 			p_error("Execve failed", 127);
 	}

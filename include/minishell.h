@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 09:16:38 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 15:39:57 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ typedef struct t_args {
 typedef struct s_env {
 	char			*key;
 	char			*value;
-	bool			hidden;
 	struct s_env	*next;
 }	t_env;
 

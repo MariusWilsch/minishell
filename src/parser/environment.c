@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   environment.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/04/17 17:43:37 by verdant       #+#    #+#                 */
-/*   Updated: 2023/04/25 15:20:45 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   environment.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
+/*   Updated: 2023/04/25 16:39:16 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	**convert_data(t_env *env)
 {
 	t_env		*next;
+	char		*temp;
 	char		**shell_envp;
 	int			i;
 
@@ -25,17 +26,16 @@ char	**convert_data(t_env *env)
 	shell_envp[i] = NULL;
 	while (env)
 	{
+		shell_envp[i] = ft_strjoin(env->key, "=");
+		temp = shell_envp[i];
+		shell_envp[i] = ft_strjoin(shell_envp[i], env->value);
 		next = env->next;
-		if (env->hidden == false)
-		{
-			shell_envp[i] = ft_strjoin(env->key, "=");
-			shell_envp[i] = ft_strjoin(shell_envp[i], env->value);
-			i++;
-		}
+		free(temp);
 		free(env->key);
 		free(env->value);
 		free(env);
 		env = next;
+		i++;
 	}
 	return (shell_envp);
 }
@@ -64,7 +64,6 @@ t_env	*get_key_value(t_env *node, char *str)
 	while (str[i] && str[i] != '\0')
 		node->value[j++] = str[i++];
 	node->value[j] = '\0';
-	node->hidden = false;
 	return (node);
 }
 
@@ -80,12 +79,6 @@ void	add_end(t_env **head, char *str)
 	new_node->next = NULL;
 	if (ft_strchr(str, '='))
 		new_node = get_key_value(new_node, str);
-	else
-	{
-		new_node->key = ft_strdup(str);
-		new_node->value = ft_strdup("");
-		new_node->hidden = true;
-	}
 	if (*head == NULL)
 	{
 		*head = new_node;
