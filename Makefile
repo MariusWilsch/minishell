@@ -38,12 +38,16 @@ endif
 
 all: libft $(NAME)
 
+# for intel mac
+
 # $(NAME): $(OBJ) $(LIBFT)
 # 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LDFLAGS) $(CPPFLAGS) $(INCFLAGS) $(LIBFT)  -o $(NAME) -lreadline
 # 	@echo "$(GREEN)Minishell Compiled.$(RESET)"
 
 # $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF) 
 # 	@$(CC) $(CFLAGS) $(INCFLAGS)  -c $< -o $@ 
+
+# for M1 mac
 
 $(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT)  $(RL_LIB)  $(INCFLAGS) $(LIBFT)  -o $(NAME) 
@@ -64,7 +68,7 @@ $(LIBFT):
 clean:
 	@rm -rf $(OBJ_DIR)
 	@rm -rf $(OBJF)
-	@$(MAKE) -C libft clean
+	@$(MAKE) -C libft fclean
 
 fclean: clean
 	@rm -rf $(NAME)
