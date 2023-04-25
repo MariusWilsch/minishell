@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   executor.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/04/24 14:22:06 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   executor.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/04/25 09:43:52 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		executor(t_args *head, t_env **env);
 int		echo(int argc, char **argv);
 int		cd(int argc, char *path);
 int		pwd(void);
-int		sh_exit(int status);
+int		sh_exit(void);
 int		env(t_env **env_list, bool export);
 int		export(int argc, char *argv[], t_env **env_list);
 int		unset(int argc, char *argv[], t_env **env_list);

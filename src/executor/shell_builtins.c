@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/24 18:19:22 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 09:48:04 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	cd(int argc, char *path)
 
 int	pwd(void)
 {
-	char	input[1024];
 	char	*cwd;
 
 	cwd = getcwd(NULL, 1024);
@@ -77,16 +76,16 @@ int	pwd(void)
 	return (EXIT_SUCCESS);
 }
 
-int	sh_exit(int status)
+
+
+int	sh_exit(void)
 {
-	exit(status);
+	exit(0);
 }
 
 int	env(t_env **env_list, bool export)
 {
 	t_env	*env;
-
-
 
 	env = *env_list;
 	while (env != NULL)

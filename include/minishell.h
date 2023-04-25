@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 08:38:13 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 09:16:38 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char		*sub_env(char *str, int env_len);
 /*			Redirect Checking			*/
 int			err_msg(t_err_tok err);
 int			env_var_case(char *str, int env_len, int cnt);
-int			check_redirect(char *str, char c, int cnt, t_args *node);
+int			check_redirect(char *str, int cnt, t_args *node);
 
 /*			Environment			*/
 char		**convert_data(t_env *env);

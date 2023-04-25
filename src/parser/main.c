@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/24 18:33:57 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 10:19:26 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,18 +89,21 @@ int	minishell(t_args *head, char **envp)
 			continue ;
 		env_init(&env_l, envp);
 		executor(head, &env_l);
-		free_list(head);
 		free(input);
+		free_list(head);
 	}
 	return (EXIT_SUCCESS);
 }
 
-void	signal_handler(int sig)
+void	signal_handler(int signum)
 {
-	ft_printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (signum == SIGINT)
+	{
+		ft_printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 /**
@@ -114,6 +117,9 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_args	*head;
 
+	head = NULL;
+	if (argc < 0)
+		argv[argc] = NULL;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, signal_handler);
 	minishell(head, envp);

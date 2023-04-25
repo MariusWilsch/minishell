@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   init_structs.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/04/24 10:56:09 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   init_structs.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/04/25 09:21:31 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ bool	redir_init(t_redir *redir, char *str, t_err_tok err_type)
 	int		file_length;
 	char	c;
 
+	cnt = 0;
 	c = str[0];
 	file_length = ft_strlen(str) - cnt;
 	cnt = cnt_occur(str, str[0]);

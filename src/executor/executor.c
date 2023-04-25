@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/24 18:39:39 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 10:17:32 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,29 @@ int	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	return (EXIT_SUCCESS);
 }
 
+
+void free_env_list(t_env *env_list) {
+    t_env *current = env_list;
+    t_env *temp;
+    while (current != NULL) {
+        temp = current;
+        current = current->next;
+        if (temp->key != NULL) {
+            free(temp->key);
+        }
+        if (temp->value != NULL) {
+            free(temp->value);
+        }
+        free(temp);
+    }
+}
+
+
+void	leaks(void)
+{
+	system("leaks -q minishell");
+}
+
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
 	AND MANAGING THE CHILD PROCESSES.
 	- CMND_CNT = NUMBER OF COMMANDS.
@@ -65,6 +88,11 @@ int	executor(t_args *head, t_env **env_l)
 	int			i;
 	int			*pipe_fd;
 
+	if (ft_strcmp("exit", head->arg) == 0)
+	{
+		atexit(leaks);
+		exit(0);
+	}
 	i = 0;
 	cmd = create_structs(head, &cmd_cnt, env_l);
 	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
@@ -75,5 +103,11 @@ int	executor(t_args *head, t_env **env_l)
 		i++;
 	}
 	shell_process(cmd, cmd_cnt, pipe_fd);
+	while (cmd_cnt--)
+	{
+		free(pipe_fd);
+		free(cmd[cmd_cnt].argv);
+		free(cmd);
+	}
 	return (EXIT_SUCCESS);
 }

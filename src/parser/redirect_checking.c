@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   redirect_checking.c                                :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/18 12:31:04 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/04/24 13:43:35 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   redirect_checking.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/18 12:31:04 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/04/25 09:16:21 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	env_var_case(char *str, int env_len, int cnt)
  * 4. Special case: <> is valid but I will error
  * 5. redirect: >"" --> No such file or directory (Not implemented)
 */
-int	check_redirect(char *str, char c, int cnt, t_args *node)
+int	check_redirect(char *str, int cnt, t_args *node)
 {
 	int	i;
 

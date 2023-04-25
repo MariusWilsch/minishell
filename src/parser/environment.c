@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 09:01:06 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 09:17:34 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ char	**convert_data(t_env *env)
 	char		**shell_envp;
 	int			i;
 
+	i = 0;
 	shell_envp = (char **)malloc(sizeof(char *) * (ft_lstsize_shell(env) + 1));
 	if (!shell_envp)
 		return (NULL);
 	shell_envp[i] = NULL;
-	i = 0;
 	while (env)
 	{
 		next = env->next;
@@ -99,15 +99,12 @@ void	add_end(t_env **head, char *str)
 void	env_init(t_env **env, char **envp)
 {
 	int		index;
-	t_env	*temp;
-
-
+	
 	if (*env != NULL)
 		return ;
 	index = 0;
 	while (envp[index])
 	{
-		temp = *env;
 		add_end(env, envp[index]);
 		index++;
 	}

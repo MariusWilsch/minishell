@@ -5,7 +5,7 @@ LIBFT     = libft/libft.a
 SRC_DIR   = src/
 OBJ_DIR   = obj/
 CC        = gcc
-CFLAGS    = # -Werror -Wall -Wextra
+CFLAGS    = -Werror -Wall -Wextra
 INCFLAGS  = -I include -I $(LIBFT)
 
 # LDFLAGS		:=  -L /Users/$(USER)/.brew/opt/readline/lib

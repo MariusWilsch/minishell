@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 08:54:42 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 09:21:45 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	unset(int argc, char *argv[], t_env **env_list)
 
 t_env	*exisit_env(t_env **env_list, char *str)
 {
-	int		len;
 	char	**key;
 	t_env	*temp;
 
