@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 09:43:52 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 11:30:35 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_redir {
 	char			*redirect;
 	char			*filename;
 	t_redirect_type	type;
+	int redirc;
 }	t_redir;
 
 typedef struct s_cmd {

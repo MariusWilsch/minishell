@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 08:39:36 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 10:25:51 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	wr_dup2(int fd1, int fd2)
 int	p_error(char *str, int status)
 {
 	perror(str);
-	sh_exit(status);
+	exit(status);
 	return (EXIT_FAILURE);
 }
 

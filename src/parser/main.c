@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 10:19:26 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 11:01:06 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 // }
 
 // Delete when finished
-// void	leaks(void)
+// void	leaks(void)d
 // {
 // 	system("leaks -q minishell");
 // }

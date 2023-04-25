@@ -6,13 +6,35 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 10:17:32 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 11:55:14 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "executor.h"
-#include <string.h>
+
+
+void cleanup_redir(t_redir *redir, int redir_c)
+{
+	while (redir_c--)
+	{
+		free(redir[redir_c].filename);
+		free(redir[redir_c].redirect);
+	}
+	free(redir);
+}
+
+void cleanup(int cmd_cnt, t_cmds *cmd)
+{
+	while (cmd_cnt)
+	{
+		free(cmd[cmd_cnt].argv);
+		if (cmd[cmd_cnt].redir)
+			cleanup_redir(cmd[cmd_cnt].redir, cmd[cmd_cnt].redir->redirc);
+		cmd_cnt--;
+	}
+	free(cmd);
+}
 
 /* EXECUTES THE ACTIONS THAT NEEDS TO BE PERFORMED FOR THE PARENT PROCESS. 
 	WAITS TILL THE CHILD PROCESS IS FINISHED EXECUTING, CLOSES THE FD'S.
@@ -52,24 +74,6 @@ int	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	return (EXIT_SUCCESS);
 }
 
-
-void free_env_list(t_env *env_list) {
-    t_env *current = env_list;
-    t_env *temp;
-    while (current != NULL) {
-        temp = current;
-        current = current->next;
-        if (temp->key != NULL) {
-            free(temp->key);
-        }
-        if (temp->value != NULL) {
-            free(temp->value);
-        }
-        free(temp);
-    }
-}
-
-
 void	leaks(void)
 {
 	system("leaks -q minishell");
@@ -84,16 +88,17 @@ void	leaks(void)
 int	executor(t_args *head, t_env **env_l)
 {
 	t_cmds		*cmd;
-	int			cmd_cnt;
-	int			i;
-	int			*pipe_fd;
+	int				cmd_cnt;
+	int				i;
+	int				*pipe_fd;
 
+	i = 0;
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
+		rl_clear_history();
 		atexit(leaks);
 		exit(0);
 	}
-	i = 0;
 	cmd = create_structs(head, &cmd_cnt, env_l);
 	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
 	while (i < cmd_cnt)
@@ -103,11 +108,7 @@ int	executor(t_args *head, t_env **env_l)
 		i++;
 	}
 	shell_process(cmd, cmd_cnt, pipe_fd);
-	while (cmd_cnt--)
-	{
-		free(pipe_fd);
-		free(cmd[cmd_cnt].argv);
-		free(cmd);
-	}
+	cleanup(cmd_cnt, cmd);
+	free(pipe_fd);
 	return (EXIT_SUCCESS);
 }

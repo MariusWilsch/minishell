@@ -6,14 +6,14 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 09:21:31 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 11:35:30 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 
-bool	redir_init(t_redir *redir, char *str, t_err_tok err_type)
+bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
 {
 	int		cnt;
 	int		file_length;
@@ -37,6 +37,7 @@ bool	redir_init(t_redir *redir, char *str, t_err_tok err_type)
 		redir->type = INPUT;
 	if (c == '<' && cnt == 2)
 		redir->type = INPUT_EOF;
+	redir->redirc = redirc;
 	return (true);
 }
 
@@ -76,7 +77,7 @@ t_args	*fill_struct(t_cmds *cmd, t_args *head, int argc, int redirc)
 		if (i < cmd->argc && (head->type == ARG || head->type == QUOTE_ARG))
 			cmd->argv[i++] = head->arg;
 		if (k < redirc && head->type == REDIRECT)
-			redir_init(&cmd->redir[k++], head->arg, head->err_tok);
+			redir_init(&cmd->redir[k++], head->arg, head->err_tok, redirc);
 		head = head->next;
 		if (i == cmd->argc && k == redirc)
 			break ;
