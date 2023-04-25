@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/04/24 15:10:36 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
+/*   Updated: 2023/04/25 08:38:13 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ typedef struct s_env {
 }	t_env;
 
 /*			Helper_1			*/
-int			rl_replace_line(void);
 void		free_list(t_args *head);
 bool		incl_char(char c, char *search_str);
 bool		are_quotes_even(char *input);
@@ -101,6 +100,7 @@ int			env_var_case(char *str, int env_len, int cnt);
 int			check_redirect(char *str, char c, int cnt, t_args *node);
 
 /*			Environment			*/
+char		**convert_data(t_env *env);
 t_env		*get_key_value(t_env *node, char *str);
 t_env		*add_first_node(t_env *env_head, char *str);
 void		add_end(t_env **head, char *str);

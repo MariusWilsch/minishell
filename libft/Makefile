@@ -6,7 +6,7 @@
 #    By: verdant <verdant@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/21 14:13:12 by verdant           #+#    #+#              #
-#    Updated: 2023/04/19 12:12:47 by verdant          ###   ########.fr        #
+#    Updated: 2023/04/24 17:54:35 by verdant          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ FT_TO					=	ft_atoi ft_itoa ft_tolower ft_toupper
 FT_STR_DIR		=	ft_str/
 FT_STR				=	ft_split ft_strchr ft_strclen ft_strdup ft_strjoin \
 								ft_strlcat ft_strlcpy ft_strlen  ft_strncmp\
-								ft_strnstr ft_strrchr ft_strtrim ft_substr ft_strcmp
+								ft_strnstr ft_strrchr ft_strtrim ft_strcmp ft_substr 
 
 FT_LST_DIR		=	ft_lst/
 FT_LST				=	ft_lstadd_back ft_lstadd_front ft_lstclear ft_lstdelone \

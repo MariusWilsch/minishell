@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   environment.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/04/17 17:43:37 by verdant       #+#    #+#                 */
-/*   Updated: 2023/04/24 13:43:01 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   environment.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
+/*   Updated: 2023/04/25 09:01:06 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ char	**convert_data(t_env *env)
 	char		**shell_envp;
 	int			i;
 
-	i = ft_lstsize_shell(env);
-	shell_envp = (char **)malloc(sizeof(char *) * (i + 1));
+	shell_envp = (char **)malloc(sizeof(char *) * (ft_lstsize_shell(env) + 1));
 	if (!shell_envp)
 		return (NULL);
 	shell_envp[i] = NULL;
@@ -27,13 +26,16 @@ char	**convert_data(t_env *env)
 	while (env)
 	{
 		next = env->next;
-		shell_envp[i] = ft_strjoin(env->key, "=");
-		shell_envp[i] = ft_strjoin(shell_envp[i], env->value);
+		if (env->hidden == false)
+		{
+			shell_envp[i] = ft_strjoin(env->key, "=");
+			shell_envp[i] = ft_strjoin(shell_envp[i], env->value);
+			i++;
+		}
 		free(env->key);
 		free(env->value);
 		free(env);
 		env = next;
-		i++;
 	}
 	return (shell_envp);
 }
@@ -99,7 +101,8 @@ void	env_init(t_env **env, char **envp)
 	int		index;
 	t_env	*temp;
 
-	if (*envp != NULL)
+
+	if (*env != NULL)
 		return ;
 	index = 0;
 	while (envp[index])

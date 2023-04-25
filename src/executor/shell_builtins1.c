@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   shell_builtins1.c                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/04/24 10:40:09 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/24 10:42:41 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   shell_builtins1.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/25 08:54:42 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ int	export(int argc, char *argv[], t_env **env_list)
 		temp = exisit_env(env_list, argv[i]);
 		if (temp == NULL)
 			add_end(env_list, argv[i]);
+		else if (temp != NULL && ft_strcmp(argv[i], temp->value) != 0)
+		{
+			temp->hidden = false;
+			free(temp->key);
+			free(temp->value);
+			get_key_value(temp, argv[i]);
+		}
 		else if (temp != NULL && temp->hidden == true)
 			temp->hidden = false;
 		i++;
@@ -43,12 +50,9 @@ int	export(int argc, char *argv[], t_env **env_list)
  * @brief 
  * 
  * 
- * 1. Check if the variable exists
- * 2. If it does, change the env.hidden = true or delete the node
- * 	2.1 It depends on if the hidden method works properly.
- *  It's kind of a hacky way to do it
- * 
- * The problem is that 
+ * 1. If key exists set value to new value
+ * 2. If key does not exist add new key value pair
+ * 3. If key exisit then delete the node
  */
 int	unset(int argc, char *argv[], t_env **env_list)
 {
@@ -58,7 +62,8 @@ int	unset(int argc, char *argv[], t_env **env_list)
 	i = 1;
 	if (argc == 1)
 		return (EXIT_SUCCESS);
-	if (i < argc)
+	
+	while (i < argc)
 	{
 		temp = exisit_env(env_list, argv[i]);
 		if (temp)

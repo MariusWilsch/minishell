@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   shell_builtins.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/24 10:47:05 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   shell_builtins.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/24 18:19:22 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	echo(int argc, char **argv)
 }
 
 int	cd(int argc, char *path)
-{
+{	
 	if (argc > 2)
 		return (ft_printf("cd: too many arguments\n", 2));
 	if (ft_strncmp(path, "..", 2) == 0 || ft_strncmp(path, ".", 1) == 0)
@@ -51,8 +51,14 @@ int	cd(int argc, char *path)
 		return (ft_printf("cd: no such file or directory: %s\n", path));
 	if (access(path, X_OK) == -1)
 		return (ft_printf("cd: permission denied: %s\n", path));
-	if (chdir(path) == -1)
-		return (ft_printf("cd: error changing directory: %s\n", path));
+
+
+	chdir(path);
+
+
+	// if (chdir(path) == -1)
+	// 	return (ft_printf("cd: error changing directory: %s\n", path));
+	
 	return (EXIT_SUCCESS);
 }
 
@@ -61,7 +67,7 @@ int	pwd(void)
 	char	input[1024];
 	char	*cwd;
 
-	cwd = getcwd(input, 1024);
+	cwd = getcwd(NULL, 1024);
 	if (!cwd)
 	{
 		perror("getcwd");
@@ -79,6 +85,8 @@ int	sh_exit(int status)
 int	env(t_env **env_list, bool export)
 {
 	t_env	*env;
+
+
 
 	env = *env_list;
 	while (env != NULL)

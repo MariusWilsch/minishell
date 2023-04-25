@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   executor.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/24 14:17:44 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/24 18:39:39 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ int	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	i = 0;
 	while (i < cmd_cnt)
 	{
-		if (cmd[i].cmd_type == BUILT_IN_EXE
-			&& !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0) && cmd_cnt == 0)
+		if (cmd[i].cmd_type == BUILT_IN_EXE && !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0))
 			exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
 		else
 		{

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   exec_utils.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/24 13:49:23 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/04/25 08:39:36 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	execute_command(t_cmds *cmd)
 {
 	if (cmd->cmd_type == CMD_EXE)
 	{
-		if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
+		if (execve(cmd->cmd_path, cmd->argv, convert_data(*cmd->env)) == -1)
 			p_error("Execve failed", 127);
 	}
 	else
