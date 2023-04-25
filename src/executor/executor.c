@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 12:16:20 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 13:32:47 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,6 @@ int	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	return (EXIT_SUCCESS);
 }
 
-void	leaks(void)
-{
-	system("leaks -q minishell");
-}
-
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
 	AND MANAGING THE CHILD PROCESSES.
 	- CMND_CNT = NUMBER OF COMMANDS.
@@ -99,7 +94,6 @@ int	executor(t_args *head, t_env **env_l)
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
 		rl_clear_history();
-		atexit(leaks);
 		exit(0);
 	}
 	cmd = create_structs(head, &cmd_cnt, env_l);

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 09:21:45 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 14:02:48 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	export(int argc, char *argv[], t_env **env_list)
 		return (env(env_list, true));
 	while (i < argc)
 	{
+		// if (ft_strchr(argv[i], ' ') != NULL)
+		// 	i++;
 		temp = exisit_env(env_list, argv[i]);
 		if (temp == NULL)
 			add_end(env_list, argv[i]);

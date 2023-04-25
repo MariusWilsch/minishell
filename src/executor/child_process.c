@@ -6,11 +6,12 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 11:45:38 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 11:11:08 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 13:56:10 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
 
 void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used)
 {

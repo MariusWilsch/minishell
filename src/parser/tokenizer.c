@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 10:57:42 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 13:28:29 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_args	*create_tok_list(char *input, t_args *head)
 	{
 		if (incl_char(input[i], ">|<"))
 			i = add_tok(get_tok(input, i, OPERATOR), &head, OPERATOR);
-		if (ft_isalnum(input[i]) || incl_char(input[i], ".$-"))
+		if (ft_isalnum(input[i]) || incl_char(input[i], ".$-/"))
 			i = add_tok(get_tok(input, i, ARG), &head, ARG);
 		if (incl_char(input[i], "\'\""))
 			i = add_tok(get_tok(input, i, QUOTE_ARG), &head, QUOTE_ARG);

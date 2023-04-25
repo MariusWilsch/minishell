@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 12:19:04 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/25 13:50:08 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 // }
 
 // Delete when finished
-// void	leaks(void)d
+// void	leaks(void)
 // {
 // 	system("leaks -q minishell");
 // }
@@ -102,9 +102,15 @@ int	minishell(t_args *head, char **envp)
 
 void	signal_handler(int signum)
 {
+	int		status;
+	pid_t	pid;
+
 	if (signum == SIGINT)
 	{
 		ft_printf("\n");
+		pid = waitpid(-1, &status, WNOHANG);
+		if (pid == 0) 
+			return;
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
