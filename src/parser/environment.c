@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 16:39:16 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/26 14:06:12 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ char	**convert_data(t_env *env)
 	shell_envp = (char **)malloc(sizeof(char *) * (ft_lstsize_shell(env) + 1));
 	if (!shell_envp)
 		return (NULL);
-	shell_envp[i] = NULL;
 	while (env)
 	{
 		shell_envp[i] = ft_strjoin(env->key, "=");
@@ -37,6 +36,7 @@ char	**convert_data(t_env *env)
 		env = next;
 		i++;
 	}
+	shell_envp[i] = NULL;
 	return (shell_envp);
 }
 

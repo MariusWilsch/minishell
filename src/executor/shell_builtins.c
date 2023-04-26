@@ -6,39 +6,65 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 15:44:03 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/26 13:48:51 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+
+bool check_flag(char *argv[])
+{
+	int i;
+
+	i = 1;
+	while (argv[i])
+	{
+		if (ft_strncmp(argv[i], "-n", 2) == 0 && ft_strlen(argv[i]) == 2)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 int	echo(int argc, char **argv)
 {
-	bool	flag;
 	int		i;
 
 	i = 1;
-	flag = true;
 	while (i < argc)
 	{
-		if (ft_strncmp(argv[i], "-n", 2) == 0 && ft_strlen(argv[i]) == 2)
+		if (ft_strcmp(argv[i], "$?") == 0)
+		{
+			ft_printf("%d", g_status);
+			i++;
+			continue;
+		}
+		if (ft_strcmp(argv[i], "-n") == 0)
 		{
 			i++;
-			flag = false;
-			continue ;
+			continue;
 		}
 		ft_printf("%s", argv[i]);
 		if (i != argc - 1)
 			ft_printf(" ");
 		i++;
 	}
-	if (flag)
+	if (check_flag(argv) == true)
 		ft_printf("\n");
 	return (i);
 }
 
-int	cd(int argc, char *path)
+int	cd(int argc, char *path, t_env *env_list)
 {	
+	t_env *temp;
+	
+	if (argc == 1)
+	{
+		if (exisit_env(&env_list, "HOME", &temp) == -1)
+			return (ft_printf("cd: HOME not set\n", 2));
+		return (chdir(temp->key));
+	}
 	if (argc > 2)
 		return (ft_printf("cd: too many arguments\n", 2));
 	if (ft_strncmp(path, "..", 2) == 0 || ft_strncmp(path, ".", 1) == 0)

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:33:01 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 10:55:05 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/26 13:33:19 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,9 @@ char	*sub_env(char *str, int env_len)
 	if (!env_var)
 		return (del_substr(str, start - 1, env_len + 1));
 	len = (ft_strlen(str) + ft_strlen(env_var)) - (env_len + 1);
-	new = malloc(sizeof(char) * (len + 1));
+	new = ft_calloc(sizeof(char), (len + 1));
 	if (!new)
 		return (NULL);
-	new[len] = '\0';
 	len = ft_strlcpy(new, str, ft_strclen(str, '$') + 1);
 	len = ft_strlcat(new, env_var, len + ft_strlen(env_var) + 1);
 	env_len += start;

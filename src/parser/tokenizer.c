@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 16:22:42 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/26 13:36:24 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,8 @@ t_args	*process_tok(t_args *head)
 		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{
-			while (ft_strchr(node->arg, '$') && node->type != REDIRECT)
+			while (ft_strcmp(node->arg, "$?") != 0 && ft_strchr(node->arg, '$') 
+			&& node->type != REDIRECT)
 				node->arg = sub_env(node->arg, get_env_len(node->arg));
 		}
 		del_quotes(node->arg);

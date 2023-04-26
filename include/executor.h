@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 16:11:47 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/26 13:09:33 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		executor(t_args *head, t_env **env);
 
 /* 			BUILT-INS			 */
 int		echo(int argc, char **argv);
-int		cd(int argc, char *path);
+int		cd(int argc, char *path, t_env *env_list);
 int		pwd(void);
 int		env(t_env **env_list);
 int		export(int argc, char *argv[], t_env **env_list);

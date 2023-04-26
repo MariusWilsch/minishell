@@ -6,18 +6,18 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/25 16:49:40 by verdant          ###   ########.fr       */
+/*   Updated: 2023/04/26 13:28:27 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 int	exec_builtin(char *func, int argc, char **argv, t_env **env_list)
-{
+{	
 	if (ft_strcmp("echo", func) == 0)
 		echo(argc, argv);
 	if (ft_strcmp("cd", func) == 0)
-		cd(argc, argv[1]);
+		cd(argc, argv[1], *env_list);
 	if (ft_strcmp("pwd", func) == 0)
 		pwd();
 	if (ft_strcmp("env", func) == 0)
@@ -65,6 +65,12 @@ int	export(int argc, char *argv[], t_env **env_list)
 		return (env(env_list));
 	while (i < argc)
 	{
+		if (ft_strchr(argv[i], '=') == NULL)
+		{
+			ft_printf("minishell: export: not a valid identifier\n", argv[i]);
+			i++;
+			continue ;
+		}
 		exisit_env(env_list, argv[i], &found);
 		if (found == NULL)
 			add_end(env_list, argv[i]);
