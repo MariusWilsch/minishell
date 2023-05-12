@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/26 14:08:27 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/12 12:47:34 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ int	p_error(char *str, int status)
 
 void	execute_command(t_cmds *cmd)
 {
-	t_env *found;
+	t_env	*found;
 
 	if (cmd->cmd_type == CMD_EXE)
 	{
 		if (exisit_env(cmd->env, "PATH", &found) == -1)
 		{
-			ft_printf("minishell: %s: No such file or directory\n", cmd->cmd_path);
+			ft_printf("minishell: %s: No such file or dir\n", cmd->cmd_path);
 			exit(127);
 		}
 		if (ft_strcmp(cmd->cmd_path, "./minishell") == 0)

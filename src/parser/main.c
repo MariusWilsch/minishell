@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/04/25 15:20:16 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
+/*   Updated: 2023/05/12 12:50:16 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ char	*prompt(char *str)
 	}
 	if (input[0] != '\0')
 		add_history(input);
+	if (ft_strncmp(input, "$?", 2) == 0)
+	{
+		ft_printf("%d\n", g_status);
+		free(input);
+		return (NULL);
+	}
 	return (input);
 }
 
@@ -66,11 +72,6 @@ int	minishell(t_args *head, char **envp)
 		input = prompt(readline("Minishell-1.0$ "));
 		if (!input)
 			continue ;
-		if (ft_strncmp(input, "$?", 2) == 0)
-		{
-			ft_printf("%d\n", g_status);
-			continue ;
-		}
 		head = create_tok_list(input, head);
 		head = process_tok(head);
 		if (head == NULL)

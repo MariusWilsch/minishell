@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 16:28:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2022/10/18 21:25:23 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/12 12:51:05 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,3 @@ size_t	ft_strlcpy(char *dst, char *src, size_t dstsize)
 		dst[i] = '\0';
 	return (ft_strlen(src));
 }
-
-// int main()
-// {
-// 	char dst[50];
-// 	char src[] = "Elon Musk";
-// 	size_t len = 0;
-
-// 	printf("%lu\t", strlcpy(dst, src, len));
-// 	printf("%s", dst);
-
-// 	// printf("%lu\t", ft_strlcpy(dst, src, len));
-// 	// printf("%s", dst);
-// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/26 13:36:24 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/12 12:50:50 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
  * @brief Cutting out the token out of the input string
  * 
  * @note I add 2 to len because of the quotes
- * Could I refactor get_tok?
 */
 char	*get_tok(char *input, int start, t_type_tok type)
 {
@@ -42,9 +41,6 @@ char	*get_tok(char *input, int start, t_type_tok type)
 	return (res);
 }
 
-/**
- * 
-*/
 t_args	*create_node(char *str, t_type_tok type)
 {
 	t_args	*new;
@@ -125,9 +121,6 @@ t_args	*create_tok_list(char *input, t_args *head)
 	return (head);
 }
 
-/**
- * 
-*/
 t_args	*process_tok(t_args *head)
 {
 	t_args	*node;
@@ -146,8 +139,8 @@ t_args	*process_tok(t_args *head)
 		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{
-			while (ft_strcmp(node->arg, "$?") != 0 && ft_strchr(node->arg, '$') 
-			&& node->type != REDIRECT)
+			while (ft_strcmp(node->arg, "$?") != 0 && ft_strchr(node->arg, '$')
+				&& node->type != REDIRECT)
 				node->arg = sub_env(node->arg, get_env_len(node->arg));
 		}
 		del_quotes(node->arg);

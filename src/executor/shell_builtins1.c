@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_builtins1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/26 13:28:27 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/12 12:49:49 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	exec_builtin(char *func, int argc, char **argv, t_env **env_list)
 		unset(argc, argv, env_list);
 	return (EXIT_SUCCESS);
 }
-
 
 int	exisit_env(t_env **env_list, char *str, t_env **found)
 {
@@ -84,20 +83,24 @@ int	export(int argc, char *argv[], t_env **env_list)
 	return (EXIT_SUCCESS);
 }
 
-
-void delete_node(t_env **env_list, int position, t_env *found)
+void	delete_node(t_env **env_list, int position, t_env *found)
 {
 	t_env	*temp;
 	int		i;
 
 	i = 0;
 	temp = *env_list;
-	while (i < position - 1 && temp != NULL	)
+	if (position != 0)
 	{
-		temp = temp->next;
-		i++;
+		while (i < position - 1 && temp != NULL)
+		{
+			temp = temp->next;
+			i++;
+		}
+		temp->next = found->next;
 	}
-	temp->next = found->next;
+	else
+		*env_list = found->next;
 	free(found->key);
 	free(found->value);
 	free(found);
@@ -115,21 +118,25 @@ int	unset(int argc, char *argv[], t_env **env_list)
 {
 	t_env	*found;
 	int		position;
-		
-	position = exisit_env(env_list, argv[1], &found);
-	if (position == -1)
-		return (EXIT_FAILURE);
-	if (position == 0)
-	{
-		*env_list = found->next;
-		free(found->key);
-		free(found->value);
-		free(found);
+
+	if (argc == 1)
 		return (EXIT_SUCCESS);
+	while (argc > 1)
+	{
+		if (ft_strchr(argv[argc - 1], '=') != NULL)
+		{
+			ft_printf("minishell: unset: inditfier unvalid\n", argv[argc - 1]);
+			argc--;
+			continue ;
+		}
+		position = exisit_env(env_list, argv[argc - 1], &found);
+		if (position == -1)
+		{
+			argc--;
+			continue ;
+		}
+		delete_node(env_list, position, found);
+		argc--;
 	}
-	delete_node(env_list, position, found);
 	return (EXIT_SUCCESS);
 }
-
-	// ft_printf("position: %d", position);
-

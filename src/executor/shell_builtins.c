@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   shell_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/04/26 13:48:51 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/12 12:48:36 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-
-bool check_flag(char *argv[])
+bool	check_flag(char *argv[])
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (argv[i])
@@ -38,12 +37,12 @@ int	echo(int argc, char **argv)
 		{
 			ft_printf("%d", g_status);
 			i++;
-			continue;
+			continue ;
 		}
 		if (ft_strcmp(argv[i], "-n") == 0)
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		ft_printf("%s", argv[i]);
 		if (i != argc - 1)
@@ -57,8 +56,8 @@ int	echo(int argc, char **argv)
 
 int	cd(int argc, char *path, t_env *env_list)
 {	
-	t_env *temp;
-	
+	t_env	*temp;
+
 	if (argc == 1)
 	{
 		if (exisit_env(&env_list, "HOME", &temp) == -1)
@@ -92,6 +91,7 @@ int	pwd(void)
 		return (1);
 	}
 	ft_putendl_fd(cwd, 1);
+	free(cwd);
 	return (EXIT_SUCCESS);
 }
 
