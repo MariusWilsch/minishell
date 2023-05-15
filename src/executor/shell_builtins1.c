@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   shell_builtins1.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/12 12:49:49 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   shell_builtins1.c                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/24 10:40:09 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/05/15 12:03:54 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	export(int argc, char *argv[], t_env **env_list)
 		return (env(env_list));
 	while (i < argc)
 	{
-		if (ft_strchr(argv[i], '=') == NULL)
+		if (ft_strchr(argv[i], '=') == NULL || ft_isdigit(argv[i][0]))
 		{
 			ft_printf("minishell: export: not a valid identifier\n", argv[i]);
 			i++;
