@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   child_process.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/24 11:45:38 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/12 11:28:37 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   child_process.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/24 11:45:38 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/05/15 17:05:41 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	heredoc(const char *delimiter)
 	}
 	while (1)
 	{
-		line = readline("");
+		line = readline("> ");
 		if (ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
 		{
 			free(line);
@@ -104,9 +104,9 @@ int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 		cmd[i].out_fd = pipe_fd[1];
 		handle_redirects(&cmd[i]);
 	}
-	else
-	{
+	else if (cmd->cmd_type == CMD_EXE)
 		execute_command(&cmd[i]);
-	}
+	else if (cmd->cmd_type == BUILT_IN_EXE)
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
 	exit(EXIT_SUCCESS);
 }

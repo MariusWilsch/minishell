@@ -6,14 +6,14 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/24 10:40:09 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/15 12:03:54 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/15 15:43:54 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 int	exec_builtin(char *func, int argc, char **argv, t_env **env_list)
-{	
+{
 	if (ft_strcmp("echo", func) == 0)
 		echo(argc, argv);
 	if (ft_strcmp("cd", func) == 0)
@@ -67,8 +67,7 @@ int	export(int argc, char *argv[], t_env **env_list)
 		if (ft_strchr(argv[i], '=') == NULL || ft_isdigit(argv[i][0]))
 		{
 			ft_printf("minishell: export: not a valid identifier\n", argv[i]);
-			i++;
-			continue ;
+			return(g_status = EXIT_FAILURE);
 		}
 		exisit_env(env_list, argv[i], &found);
 		if (found == NULL)
@@ -80,7 +79,7 @@ int	export(int argc, char *argv[], t_env **env_list)
 		}
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (g_status = EXIT_SUCCESS);
 }
 
 void	delete_node(t_env **env_list, int position, t_env *found)
@@ -120,23 +119,21 @@ int	unset(int argc, char *argv[], t_env **env_list)
 	int		position;
 
 	if (argc == 1)
-		return (EXIT_SUCCESS);
+		return (g_status = EXIT_SUCCESS);
 	while (argc > 1)
 	{
 		if (ft_strchr(argv[argc - 1], '=') != NULL)
 		{
-			ft_printf("minishell: unset: inditfier unvalid\n", argv[argc - 1]);
-			argc--;
-			continue ;
+			ft_printf("minishell: unset: identifier unvalid\n", argv[argc - 1]);
+			return (g_status = EXIT_FAILURE);
 		}
 		position = exisit_env(env_list, argv[argc - 1], &found);
 		if (position == -1)
 		{
-			argc--;
-			continue ;
+			return (g_status = EXIT_SUCCESS);
 		}
 		delete_node(env_list, position, found);
 		argc--;
 	}
-	return (EXIT_SUCCESS);
+	return (g_status = EXIT_SUCCESS);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_res.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/12 12:35:17 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cmd_res.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/17 19:32:28 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/05/15 15:44:35 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 
 bool	is_builtin(t_args *node)
 {
+	int i;
+
+	i = 0;
+	while (node->arg[i])
+	{
+		node->arg[i] = ft_tolower(node->arg[i]);
+		i++;
+	}
 	if (node->arg[0] == '|')
 		del_substr(node->arg, 0, cnt_occur(node->arg + 1, ' ') + 1);
 	if (ft_strncmp("echo", node->arg, 4) == 0)

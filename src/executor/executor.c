@@ -6,12 +6,12 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:23:03 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/15 16:57:30 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
+#include "errno.h"
 /* EXECUTES THE ACTIONS THAT NEEDS TO BE PERFORMED FOR THE PARENT PROCESS. 
 	WAITS TILL THE CHILD PROCESS IS FINISHED EXECUTING, CLOSES THE FD'S.
  */
@@ -22,33 +22,58 @@ void	parent_process(int *pipe_fd, int i, int curr, pid_t child_pid)
 	if (curr < i - 1)
 		close(pipe_fd[2 * curr + 1]);
 	if (waitpid(child_pid, &g_status, 0) == -1)
-		p_error("waitpid", 1);
+	{
+		if (errno != ECHILD)
+			p_error("waitpid", 1);
+		else 
+		{
+			g_status = EXIT_SUCCESS;
+			return ;
+		}
+	}
+	g_status = (((g_status) >> 8) & 0xFF);
 }
 
-int	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
+void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 {
-	pid_t	pid;
-	int		i;
+	int i;
 
 	i = 0;
 	while (i < cmd_cnt)
 	{
 		if (cmd[i].cmd_type == BUILT_IN_EXE
 			&& !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0))
+		{
 			exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+		}
 		else
 		{
-			pid = fork();
-			if (pid < 0)
+			pid[i] = fork();
+			if (pid[i] < 0)
 				p_error("fork", 1);
-			else if (pid == 0)
+			else if (pid[i] == 0)
+			{
 				child_process(cmd, i, cmd_cnt, pipe_fd);
-			else
-				parent_process(pipe_fd, cmd_cnt, i, pid);
+				exit(EXIT_SUCCESS);
+			}
 		}
 		i++;
 	}
-	return (EXIT_SUCCESS);
+}
+void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
+{
+	pid_t	*pid;
+	int		i;
+
+	i = 0;
+	pid = malloc(sizeof(pid_t) * cmd_cnt);
+	create_process(cmd, cmd_cnt, pipe_fd, pid);
+	while (i < cmd_cnt)
+	{
+		parent_process(pipe_fd, cmd_cnt, i, pid[i]);
+		i++;
+	}
+	free(pid);
 }
 
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
