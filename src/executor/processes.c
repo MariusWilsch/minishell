@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   processes.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 11:27:36 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   processes.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/05/16 11:03:49 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void child_signal_handler(int signum)
 {
     if (signum == SIGINT)
     {
-        exit(EXIT_FAILURE);
+        exit(g_status = 130);
     }
 }
 

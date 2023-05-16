@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/16 11:32:14 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
+/*   Updated: 2023/05/16 11:07:03 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,22 @@
 // {
 // 	system("leaks -q minishell");
 // }
+
+bool is_valid_pipe(char *input)
+{
+	int i;
+;
+	if (ft_strchr(input, '|') == NULL)
+		return (true);
+	i = ft_strclen(input, '|');
+	while (input[i])
+	{
+		if (ft_isalnum(input[i]) || incl_char(input[i], "><"))
+			return (true);
+		i++;
+	}
+	return (false);
+}
 
 void	free_list(t_args *head)
 {
@@ -44,19 +60,13 @@ char	*prompt(char *str)
 	free(str);
 	if (!input)
 		return (NULL);
-	if (!input[0] || !are_quotes_even(input))
+	if (!input[0] || !are_quotes_even(input) || !is_valid_pipe(input))
 	{
 		free(input);
 		return (NULL);
 	}
 	if (input[0] != '\0')
 		add_history(input);
-	if (ft_strncmp(input, "$?", 2) == 0)
-	{
-		ft_printf("%d\n", g_status);
-		free(input);
-		return (NULL);
-	}
 	return (input);
 }
 
@@ -72,6 +82,11 @@ int	minishell(t_args *head, char **envp)
 		input = prompt(readline("Minishell-1.0$ "));
 		if (!input)
 			continue ;
+		if (ft_strncmp(input, "$?", 2) == 0)
+		{
+			ft_printf("%d\n", g_status);
+			continue ;
+		}
 		head = create_tok_list(input, head);
 		head = process_tok(head);
 		if (head == NULL)
@@ -87,15 +102,14 @@ int	minishell(t_args *head, char **envp)
 void	signal_handler(int signum)
 {
 	int		status;
-	pid_t	pid;
 
 	if (signum == SIGINT)
 	{
 		ft_printf("\n");
-		rl_replace_line("", 0);
 		rl_on_new_line();
-		while (waitpid(-1, &status, WNOHANG) != -1);
-		rl_redisplay();
+		rl_replace_line("", 0);
+		if (wait(&g_status) == -1)
+			rl_redisplay();
 	}
 }
 
@@ -110,6 +124,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_args	*head;
 
+	// atexit(leaks)
 	head = NULL;
 	if (argc < 0)
 		argv[argc] = NULL;
