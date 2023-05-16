@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/15 15:27:10 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 15:05:54 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	echo(int argc, char **argv)
 	{
 		if (ft_strcmp(argv[i], "$?") == 0)
 		{
-			ft_printf("%d", g_status);
+			ft_putnbr(g_status);
 			i++;
 			continue ;
 		}
@@ -51,7 +51,7 @@ int	echo(int argc, char **argv)
 	}
 	if (check_flag(argv) == true)
 		ft_printf("\n");
-	return (i);
+	return (g_status = EXIT_SUCCESS);
 }
 
 int	cd(int argc, char *path, t_env *env_list)
@@ -69,11 +69,13 @@ int	cd(int argc, char *path, t_env *env_list)
 	if (ft_strncmp(path, "..", 2) == 0 || ft_strncmp(path, ".", 1) == 0)
 	{
 		if (chdir(path) == -1)
-			return (g_status = 1, ft_printf("cd: error changing directory: %s\n", path));
+			return (g_status = 1,
+				ft_printf("cd: error changing directory: %s\n", path));
 		return (g_status = EXIT_SUCCESS);
 	}
 	if (access(path, F_OK) == -1)
-		return (g_status = 1, ft_printf("cd: no such file or directory: %s\n", path));
+		return (g_status = 1,
+			ft_printf("cd: no such file or directory: %s\n", path));
 	if (access(path, X_OK) == -1)
 		return (g_status = 1, ft_printf("cd: permission denied: %s\n", path));
 	chdir(path);

@@ -3,8 +3,8 @@ LIBFT = libft/libft.a
 LIBFT_CMD = $(MAKE) -C libft WITH_BONUS=1
 CC = gcc
 INCFLAGS = -I include -I $(LIBFT)
-# RL_PATH = /Users/$(USER)/.brew/Cellar/readline/8.2.1
-RL_PATH = /opt/homebrew/opt/readline
+RL_PATH = /Users/$(USER)/.brew/Cellar/readline/8.2.1
+# RL_PATH = /opt/homebrew/opt/readline
 RL_LIB = -lreadline -L$(RL_PATH)/lib
 RL_INC = -I $(RL_PATH)/include
 
@@ -14,7 +14,7 @@ SRC_DIR = src/
 OBJ_DIR = obj/
 
 PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking environment parse_utils main
-XCTR_SRCS = init_structs shell_builtins shell_builtins1 exec_utils redir_io heredoc processes
+XCTR_SRCS = init_structs shell_builtins shell_builtins1 exec_utils redir_io heredoc processes redir_utils
 
 SRC_FILES = $(addprefix $(PRSR_DIR),$(PRSR_SRCS)) $(addprefix $(XCTR_DIR),$(XCTR_SRCS))
 SRC = $(addprefix $(SRC_DIR),$(addsuffix .c,$(SRC_FILES)))

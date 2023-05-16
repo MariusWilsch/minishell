@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/16 11:07:03 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
+/*   Updated: 2023/05/16 15:00:19 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,6 @@
 // {
 // 	system("leaks -q minishell");
 // }
-
-bool is_valid_pipe(char *input)
-{
-	int i;
-;
-	if (ft_strchr(input, '|') == NULL)
-		return (true);
-	i = ft_strclen(input, '|');
-	while (input[i])
-	{
-		if (ft_isalnum(input[i]) || incl_char(input[i], "><"))
-			return (true);
-		i++;
-	}
-	return (false);
-}
 
 void	free_list(t_args *head)
 {
@@ -124,7 +108,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_args	*head;
 
-	// atexit(leaks)
 	head = NULL;
 	if (argc < 0)
 		argv[argc] = NULL;

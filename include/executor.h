@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/16 10:35:21 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 15:14:37 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct s_cmd {
 t_cmds	*create_structs(t_args *head, int *cmd_cnt, t_env **env);
 
 /* 			EXECUTOR			 */
-int		executor(t_args *head, t_env **env);
 
 /* 			BUILT-INS			 */
 int		echo(int argc, char **argv);
@@ -76,17 +75,22 @@ int		p_error(char *str, int status);
 int		wr_dup2(int fd1, int fd2);
 void	cleanup(int cmd_cnt, t_cmds *cmd);
 
-/* 				CHILD PROCESS	 */
+/* 				PROCESSES	 */
 int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
+int		executor(t_args *head, t_env **env);
 
-void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used);
+/* 				HEREDOC			 */
 void	handle_heredoc(t_cmds *cmd, int *heredoc_fd);
-void	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd, int heredoc_fd);
+int		heredoc(const char *delimiter);
 
 /* 				REDIR IO		 */
-int		heredoc(const char *delimiter);
+int		redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd, int heredoc_fd);
 int		redirect_command_fd(t_cmds *head);
 int		redirect_input(t_redir *redir);
 int		redirect_output(t_redir *redir);
+
+/* 				REDIR_UTILS		 */
+void	child_signal_handler(int signum);
+void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used);
 
 #endif

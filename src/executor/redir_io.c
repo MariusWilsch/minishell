@@ -6,26 +6,37 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 10:35:09 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 15:06:33 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-
-void	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd, int heredoc_fd)
+int	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd, int heredoc_fd)
 {
-	if (i > 0 && heredoc_fd < 0)
+	if (i == 0)
 	{
-		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) < 0)
-			perror("dup2");
+		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
+			p_error("dup2", EXIT_FAILURE);
+		return (close(pipe_fd[2 * i + 1]));
 	}
-	if (i < cmd_cnt - 1)
+	else if (i < cmd_cnt - 1)
 	{
-		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) < 0)
-			perror("dup2");
+		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
+			p_error("dup2", EXIT_FAILURE);
+		close(pipe_fd[2 * (i - 1)]);
+		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
+			p_error("dup2", EXIT_FAILURE);
+		return (close(pipe_fd[2 * i + 1]));
+	}
+	else
+	{
+		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
+			p_error("dup2", EXIT_FAILURE);
+		return (close(pipe_fd[2 * (i - 1)]));
 	}
 }
+
 int	redirect_command_fd(t_cmds *head)
 {
 	int	i;

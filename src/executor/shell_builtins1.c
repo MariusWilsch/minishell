@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/24 10:40:09 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/15 15:43:54 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 15:00:46 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	export(int argc, char *argv[], t_env **env_list)
 		if (ft_strchr(argv[i], '=') == NULL || ft_isdigit(argv[i][0]))
 		{
 			ft_printf("minishell: export: not a valid identifier\n", argv[i]);
-			return(g_status = EXIT_FAILURE);
+			return (g_status = EXIT_FAILURE);
 		}
 		exisit_env(env_list, argv[i], &found);
 		if (found == NULL)

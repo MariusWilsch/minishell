@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/24 10:25:25 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/24 10:26:54 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 15:00:08 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,20 @@ char	*del_substr(char *str, int start, int len)
 		str[start++] = str[copy_from++];
 	str[start] = '\0';
 	return (str);
+}
+
+bool	is_valid_pipe(char *input)
+{
+	int	i;
+
+	if (ft_strchr(input, '|') == NULL)
+		return (true);
+	i = ft_strclen(input, '|');
+	while (input[i])
+	{
+		if (ft_isalnum(input[i]) || incl_char(input[i], "><"))
+			return (true);
+		i++;
+	}
+	return (false);
 }
