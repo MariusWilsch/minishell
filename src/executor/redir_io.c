@@ -6,13 +6,27 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:24:37 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 10:35:09 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int	handle_redirects(t_cmds *head)
+
+void	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd, int heredoc_fd)
+{
+	if (i > 0 && heredoc_fd < 0)
+	{
+		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) < 0)
+			perror("dup2");
+	}
+	if (i < cmd_cnt - 1)
+	{
+		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) < 0)
+			perror("dup2");
+	}
+}
+int	redirect_command_fd(t_cmds *head)
 {
 	int	i;
 

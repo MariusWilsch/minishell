@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/15 15:01:13 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 10:35:21 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,13 @@ void	cleanup(int cmd_cnt, t_cmds *cmd);
 /* 				CHILD PROCESS	 */
 int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
 
+void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used);
+void	handle_heredoc(t_cmds *cmd, int *heredoc_fd);
+void	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd, int heredoc_fd);
+
 /* 				REDIR IO		 */
 int		heredoc(const char *delimiter);
-int		handle_redirects(t_cmds *head);
+int		redirect_command_fd(t_cmds *head);
 int		redirect_input(t_redir *redir);
 int		redirect_output(t_redir *redir);
 

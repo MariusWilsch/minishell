@@ -13,7 +13,7 @@ SRC_DIR = src/
 OBJ_DIR = obj/
 
 PRSR_SRCS = tokenizer env_sub cmd_res helper redirect_checking environment parse_utils main
-XCTR_SRCS = init_structs executor shell_builtins shell_builtins1 exec_utils redir_io child_process
+XCTR_SRCS = init_structs shell_builtins shell_builtins1 exec_utils redir_io heredoc processes
 
 SRC_FILES = $(addprefix $(PRSR_DIR),$(PRSR_SRCS)) $(addprefix $(XCTR_DIR),$(XCTR_SRCS))
 SRC = $(addprefix $(SRC_DIR),$(addsuffix .c,$(SRC_FILES)))

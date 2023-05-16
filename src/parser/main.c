@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/15 17:02:42 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 11:32:14 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,9 @@ void	signal_handler(int signum)
 	if (signum == SIGINT)
 	{
 		ft_printf("\n");
-		pid = waitpid(-1, &status, WNOHANG);
-		if (pid == 0)
-			return ;
-		rl_on_new_line();
 		rl_replace_line("", 0);
+		rl_on_new_line();
+		while (waitpid(-1, &status, WNOHANG) != -1);
 		rl_redisplay();
 	}
 }

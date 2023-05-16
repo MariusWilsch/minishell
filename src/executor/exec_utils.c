@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/15 15:06:56 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 10:27:53 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,31 @@ int	p_error(char *str, int status)
 	perror(str);
 	exit(status);
 	return (g_status);
+}
+
+
+static void	cleanup_redir(t_redir *redir, int redir_c)
+{
+	int	i;
+
+	i = 0;
+	while (redir_c-- > 0)
+	{
+		free(redir[redir_c].filename);
+		free(redir[redir_c].redirect);
+	}
+	free(redir);
+}
+
+void	cleanup(int cmd_cnt, t_cmds *cmd)
+{
+	while (cmd_cnt--)
+	{
+		free(cmd[cmd_cnt].argv);
+		if (cmd[cmd_cnt].redir)
+			cleanup_redir(cmd[cmd_cnt].redir, cmd[cmd_cnt].redir->redirc);
+	}
+	free(cmd);
 }
 
 void	execute_command(t_cmds *cmd)
@@ -54,28 +79,4 @@ void	execute_command(t_cmds *cmd)
 		else if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
 			exit(127);
 	}
-}
-
-static void	cleanup_redir(t_redir *redir, int redir_c)
-{
-	int	i;
-
-	i = 0;
-	while (redir_c-- > 0)
-	{
-		free(redir[redir_c].filename);
-		free(redir[redir_c].redirect);
-	}
-	free(redir);
-}
-
-void	cleanup(int cmd_cnt, t_cmds *cmd)
-{
-	while (cmd_cnt--)
-	{
-		free(cmd[cmd_cnt].argv);
-		if (cmd[cmd_cnt].redir)
-			cleanup_redir(cmd[cmd_cnt].redir, cmd[cmd_cnt].redir->redirc);
-	}
-	free(cmd);
 }

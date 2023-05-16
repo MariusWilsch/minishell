@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   child_process.c                                    :+:    :+:            */
+/*   heredoc.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/24 11:45:38 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/15 17:05:41 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/16 10:29:28 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,20 @@ void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used)
 				close(pipe_fd[i]);
 		}
 		i++;
+	}
+}
+
+
+void	handle_heredoc(t_cmds *cmd, int *heredoc_fd)
+{
+	if (cmd->redir && cmd->redir->type == INPUT_EOF)
+	{
+		*heredoc_fd = heredoc(cmd->redir->filename);
+		if (*heredoc_fd >= 0)
+		{
+			if (dup2(*heredoc_fd, STDIN_FILENO) < 0)
+				perror("dup2 heredoc");
+		}
 	}
 }
 
@@ -58,55 +72,4 @@ int	heredoc(const char *delimiter)
 	}
 	close(pipefd[1]);
 	return (pipefd[0]);
-}
-
-void	handle_heredoc(t_cmds *cmd, int *heredoc_fd)
-{
-	if (cmd->redir && cmd->redir->type == INPUT_EOF)
-	{
-		*heredoc_fd = heredoc(cmd->redir->filename);
-		if (*heredoc_fd >= 0)
-		{
-			if (dup2(*heredoc_fd, STDIN_FILENO) < 0)
-				perror("dup2 heredoc");
-		}
-	}
-}
-
-void	handle_redirections(int i, int cmd_cnt, int *pipe_fd, int heredoc_fd)
-{
-	if (i > 0 && heredoc_fd < 0)
-	{
-		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) < 0)
-			perror("dup2");
-	}
-	if (i < cmd_cnt - 1)
-	{
-		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) < 0)
-			perror("dup2");
-	}
-}
-
-int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
-{
-	int	heredoc_fd;
-
-	heredoc_fd = -1;
-	handle_heredoc(cmd + i, &heredoc_fd);
-	handle_redirections(i, cmd_cnt, pipe_fd, heredoc_fd);
-	close_pipes(pipe_fd, cmd_cnt, i, 0);
-	if (heredoc_fd >= 0)
-		close(heredoc_fd);
-	if (cmd[i].redir)
-	{
-		if (!heredoc_fd)
-			cmd[i].in_fd = pipe_fd[0];
-		cmd[i].out_fd = pipe_fd[1];
-		handle_redirects(&cmd[i]);
-	}
-	else if (cmd->cmd_type == CMD_EXE)
-		execute_command(&cmd[i]);
-	else if (cmd->cmd_type == BUILT_IN_EXE)
-		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
-	exit(EXIT_SUCCESS);
 }
