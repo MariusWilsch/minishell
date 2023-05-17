@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   init_structs.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/15 15:01:23 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   init_structs.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/05/17 16:17:33 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_args	*fill_struct(t_cmds *cmd, t_args *head, int argc, int redirc)
 	{
 		if (i < cmd->argc && (head->type == ARG || head->type == QUOTE_ARG))
 			cmd->argv[i++] = head->arg;
-		if (k < redirc && head->type == REDIRECT)
+		if (k < redirc && head->type == REDIR)
 			redir_init(&cmd->redir[k++], head->arg, head->err_tok, redirc);
 		head = head->next;
 		if (i == cmd->argc && k == redirc)
@@ -105,7 +105,7 @@ static void	arg_counter(t_args *node, t_cmds *cmd, t_args *head, int cmd_cnt)
 		{
 			if ((node->type == ARG || node->type == QUOTE_ARG))
 				arg_cnt++;
-			if (node->type == REDIRECT)
+			if (node->type == REDIR)
 				redir_i++;
 			node = node->next;
 		}
@@ -129,7 +129,7 @@ t_cmds	*create_structs(t_args *head, int *cmd_cnt, t_env **env)
 
 	node = head;
 	cmd_count = 0;
-	if (head->type == REDIRECT)
+	if (head->type == REDIR)
 			cmd_count++;
 	while (node != NULL)
 	{

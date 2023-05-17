@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 12:31:04 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/25 09:16:21 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/17 16:19:25 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	env_var_case(char *str, int env_len, int cnt)
  * 4. Special case: <> is valid but I will error
  * 5. redirect: >"" --> No such file or directory (Not implemented)
 */
-int	check_redirect(char *str, int cnt, t_args *node)
+int	c_red(char *str, int cnt, t_args *node)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/17 15:21:51 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/17 16:25:48 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_args	*create_node(char *str, t_type_tok type)
 	new->arg = str;
 	new->err_tok = OK;
 	new->next = NULL;
+	new->prev = NULL;
 	new->type = type;
 	if (type == OPERATOR && incl_char(str[0], "|."))
 	{
@@ -58,11 +59,11 @@ t_args	*create_node(char *str, t_type_tok type)
 		if (ft_strchr(str, '>') || ft_strchr(str, '<'))
 		{
 			str = del_substr(str, 0, cnt_occur(str + 1, ' ') + 1);
-			new->type = REDIRECT;
+			new->type = REDIR;
 		}
 	}
 	if (incl_char(str[0], "><") && type == OPERATOR)
-		new->type = REDIRECT;
+		new->type = REDIR;
 	return (new);
 }
 
@@ -90,15 +91,10 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 		new->next = NULL;
 		return (0);
 	}
-	if (temp->next == NULL && temp->type == REDIRECT)
-		new->type = CMD;
 	while (temp->next != NULL)
-	{
-		if (temp->next == NULL && temp->type == REDIRECT)
-			new->type = CMD;
 		temp = temp->next;
-	}
 	temp->next = new;
+	new->prev = temp;
 	return (0);
 }
 
@@ -127,31 +123,38 @@ t_args	*create_tok_list(char *input, t_args *head)
 	return (head);
 }
 
+bool	cmd_after_redirect(t_args *node)
+{
+	if (node->prev == NULL)
+		return (false);
+	if (node->prev->type == REDIR && node->type == ARG)
+		return (true);
+	return (false);
+}
+
 t_args	*process_tok(t_args *head, char *input)
 {
-	t_args	*node;
+	t_args	*n;
 
-	node = head;
-	while (node != NULL)
+	n = head;
+	while (n != NULL)
 	{
-		if (node->type == CMD && !is_builtin(node))
-			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		if (node->type == REDIRECT && check_redirect(node->arg,
-				cnt_occur(node->arg, node->arg[0]), node) > 0)
+		if ((n->type == CMD || cmd_after_redirect(n)) && !is_builtin(n))
 		{
-			head->type = REPROMPT;
-			free_list(head);
-			free(input);
-			return (NULL);
+			n->arg = resolute_cmd(n, ft_strdup(n->arg));
+			n->type = CMD;
 		}
-		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
+		if (n->type == REDIR
+			&& c_red(n->arg, cnt_occur(n->arg, n->arg[0]), n) > 0)
+			return (head->type = REPROMPT, free_list(head), free(input), NULL);
+		if (ft_strchr(n->arg, '$') && n->arg[0] != '\'')
 		{
-			while (ft_strcmp(node->arg, "$?") != 0 && ft_strchr(node->arg, '$')
-				&& node->type != REDIRECT)
-				node->arg = sub_env(node->arg, get_env_len(node->arg));
+			while (ft_strcmp(n->arg, "$?") != 0 && ft_strchr(n->arg, '$')
+				&& n->type != REDIR)
+				n->arg = sub_env(n->arg, get_env_len(n->arg));
 		}
-		del_quotes(node->arg);
-		node = node->next;
+		del_quotes(n->arg);
+		n = n->next;
 	}
 	return (head);
 }

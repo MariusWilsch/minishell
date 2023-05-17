@@ -7,7 +7,7 @@ INCFLAGS = -I include -I $(LIBFT)
 RL_PATH = /opt/homebrew/opt/readline
 RL_LIB = -lreadline -L$(RL_PATH)/lib
 RL_INC = -I $(RL_PATH)/include
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -g -Wall -Werror -Wextra
 PRSR_DIR = parser/
 XCTR_DIR = executor/
 SRC_DIR = src/
@@ -25,7 +25,7 @@ RED = \033[0;31m
 RESET = \033[0m
 
 ifdef DEBUG
-	CFLAGS += -g  -fsanitize=address 
+	CFLAGS += -fsanitize=address 
 endif
 
 all: libft $(NAME)

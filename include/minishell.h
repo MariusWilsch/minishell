@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/17 14:20:49 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/17 16:19:25 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef enum s_tokens {
 	QUOTE_ARG,
 	CMD,
 	BUILT_IN,
-	REDIRECT,
+	REDIR,
 	REPROMPT,
 }	t_type_tok;
 
@@ -58,7 +58,9 @@ typedef struct t_args {
 	t_type_tok		type;
 	t_err_tok		err_tok;
 	struct t_args	*next;
+	struct t_args	*prev;
 }	t_args;
+
 
 typedef struct s_env {
 	char			*key;
@@ -98,7 +100,7 @@ char		*sub_env(char *str, int env_len);
 /*			Redirect Checking			*/
 int			err_msg(t_err_tok err);
 int			env_var_case(char *str, int env_len, int cnt);
-int			check_redirect(char *str, int cnt, t_args *node);
+int			c_red(char *str, int cnt, t_args *node);
 
 /*			Environment			*/
 char		**convert_data(t_env *env);
