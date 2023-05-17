@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/12 12:50:50 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/17 15:21:51 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,14 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 		new->next = NULL;
 		return (0);
 	}
+	if (temp->next == NULL && temp->type == REDIRECT)
+		new->type = CMD;
 	while (temp->next != NULL)
+	{
+		if (temp->next == NULL && temp->type == REDIRECT)
+			new->type = CMD;
 		temp = temp->next;
+	}
 	temp->next = new;
 	return (0);
 }
@@ -110,7 +116,7 @@ t_args	*create_tok_list(char *input, t_args *head)
 	{
 		if (incl_char(input[i], ">|<"))
 			i = add_tok(get_tok(input, i, OPERATOR), &head, OPERATOR);
-		if (ft_isalnum(input[i]) || incl_char(input[i], ".$-/_"))
+		if (ft_isalnum(input[i]) || incl_char(input[i], ".$-/_+-*"))
 			i = add_tok(get_tok(input, i, ARG), &head, ARG);
 		if (incl_char(input[i], "\'\""))
 			i = add_tok(get_tok(input, i, QUOTE_ARG), &head, QUOTE_ARG);
@@ -121,7 +127,7 @@ t_args	*create_tok_list(char *input, t_args *head)
 	return (head);
 }
 
-t_args	*process_tok(t_args *head)
+t_args	*process_tok(t_args *head, char *input)
 {
 	t_args	*node;
 
@@ -135,6 +141,7 @@ t_args	*process_tok(t_args *head)
 		{
 			head->type = REPROMPT;
 			free_list(head);
+			free(input);
 			return (NULL);
 		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')

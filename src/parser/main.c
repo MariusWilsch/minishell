@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/17 09:50:45 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
+/*   Updated: 2023/05/17 15:21:08 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	minishell(t_args *head, char **envp)
 			continue ;
 		}
 		head = create_tok_list(input, head);
-		head = process_tok(head);
+		head = process_tok(head, input);
 		if (head == NULL)
 			continue ;
 		env_init(&env_l, envp);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/16 14:59:47 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
+/*   Updated: 2023/05/17 14:20:49 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char		*get_tok(char *input, int start, t_type_tok type);
 t_args		*create_node(char *str, t_type_tok type);
 int			add_tok(char *str, t_args **head, t_type_tok type);
 t_args		*create_tok_list(char *input, t_args *head);
-t_args		*process_tok(t_args *head);
+t_args		*process_tok(t_args *head, char *input);
 
 /*			Command Resolution			*/
 bool		is_builtin(t_args *node);
