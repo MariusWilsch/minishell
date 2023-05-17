@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/16 15:00:19 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/17 09:50:45 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,6 @@ int	minishell(t_args *head, char **envp)
 
 void	signal_handler(int signum)
 {
-	int		status;
-
 	if (signum == SIGINT)
 	{
 		ft_printf("\n");

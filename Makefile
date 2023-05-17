@@ -7,7 +7,7 @@ RL_PATH = /Users/$(USER)/.brew/Cellar/readline/8.2.1
 # RL_PATH = /opt/homebrew/opt/readline
 RL_LIB = -lreadline -L$(RL_PATH)/lib
 RL_INC = -I $(RL_PATH)/include
-
+CFLAGS = -Wall -Werror -Wextra
 PRSR_DIR = parser/
 XCTR_DIR = executor/
 SRC_DIR = src/

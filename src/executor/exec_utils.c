@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:15:58 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/17 10:43:01 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	p_error(char *str, int status)
 {
 	perror(str);
 	exit(status);
-	return (g_status);
 }
 
 static void	cleanup_redir(t_redir *redir, int redir_c)
