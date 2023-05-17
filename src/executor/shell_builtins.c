@@ -6,25 +6,11 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:05:54 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/17 16:21:56 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-bool	check_flag(char *argv[])
-{
-	int	i;
-
-	i = 1;
-	while (argv[i])
-	{
-		if (ft_strncmp(argv[i], "-n", 2) == 0 && ft_strlen(argv[i]) == 2)
-			return (false);
-		i++;
-	}
-	return (true);
-}
 
 int	echo(int argc, char **argv)
 {

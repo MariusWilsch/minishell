@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/17 10:21:13 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/17 16:17:11 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,10 @@ int		export(int argc, char *argv[], t_env **env_list);
 int		unset(int argc, char *argv[], t_env **env_list);
 int		exec_builtin(char *func, int argc, char **argv, t_env **env_list);
 int		exisit_env(t_env **env_list, char *str, t_env **found);
+void	shell_exit(t_cmds *cmd);
 
 /* 				UTILS			 */
+int		count_args(char **argv);
 void	execute_command(t_cmds *head);
 int		p_error(char *str, int status);
 int		wr_dup2(int fd1, int fd2);

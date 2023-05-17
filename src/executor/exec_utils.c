@@ -6,11 +6,22 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/17 10:43:01 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/17 16:16:53 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+int count_args(char **argv) 
+{
+    int count = 0;
+
+    while (argv[count] != NULL) {
+        count++;
+    }
+
+    return count;
+}
 
 int	wr_dup2(int fd1, int fd2)
 {
@@ -60,7 +71,8 @@ void	execute_command(t_cmds *cmd)
 	{
 		if (exisit_env(cmd->env, "PATH", &found) == -1)
 		{
-			ft_printf("minishell: %s: No such file or dir\n", cmd->cmd_path);
+			ft_printf("minishell: %s: No such file or directory\n",
+				cmd->cmd_path);
 			exit(127);
 		}
 		if (ft_strcmp(cmd->cmd_path, "./minishell") == 0)

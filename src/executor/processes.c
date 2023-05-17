@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/17 11:26:21 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/17 16:16:41 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,9 @@ int	executor(t_args *head, t_env **env_l)
 	int				i;
 
 	i = 0;
-	if (ft_strcmp("exit", head->arg) == 0)
-	{
-		rl_clear_history();
-		exit(0);
-	}
 	cmd = create_structs(head, &cmd_cnt, env_l);
+	if (ft_strcmp("exit", head->arg) == 0)
+		shell_exit(cmd);
 	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
 	while (i < cmd_cnt)
 	{
