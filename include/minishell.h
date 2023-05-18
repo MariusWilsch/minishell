@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/17 16:19:25 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/17 17:51:09 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,38 +34,38 @@
 */
 
 typedef enum s_tokens {
-	OPERATOR,
-	ARG,
-	QUOTE_ARG,
-	CMD,
-	BUILT_IN,
-	REDIR,
-	REPROMPT,
+OPERATOR,
+ARG,
+QUOTE_ARG,
+CMD,
+BUILT_IN,
+REDIR,
+REPROMPT,
 }	t_type_tok;
 
 typedef enum s_err_toks {
-	OK,
-	NO_CMD,
-	NO_FILE_DIR,
-	TO_MANY,
-	NO_ALNUM_BETWEEN,
-	NEWLINE_ERR,
-	ENV_REDIRECT_ERR,
+OK,
+NO_CMD,
+NO_FILE_DIR,
+TO_MANY,
+NO_ALNUM_BETWEEN,
+NEWLINE_ERR,
+ENV_REDIRECT_ERR,
 }	t_err_tok;
 
 typedef struct t_args {
-	char			*arg;
-	t_type_tok		type;
-	t_err_tok		err_tok;
-	struct t_args	*next;
-	struct t_args	*prev;
+char			*arg;
+t_type_tok		type;
+t_err_tok		err_tok;
+struct t_args	*next;
+struct t_args	*prev;
 }	t_args;
 
 
 typedef struct s_env {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
+char			*key;
+char			*value;
+struct s_env	*next;
 }	t_env;
 
 /*			Helper_1			*/

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_structs.c                                     :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/18 09:39:25 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/17 18:11:19 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
 {
-	const char	c = str[0];
-	const int		cnt = cnt_occur(str, str[0]);
-	int					file_length;
+	int		cnt;
+	int		file_length;
+	char	c;
 
+	cnt = 0;
+	c = str[0];
 	file_length = ft_strlen(str) - cnt;
+	cnt = cnt_occur(str, str[0]);
 	if (err_type == ENV_REDIRECT_ERR)
 		return (redir->type = ERR, true);
+	redir->redirect = ft_substr(str, 0, cnt);
 	redir->filename = ft_substr(str, cnt, file_length);
-	if (!redir->filename)
+	if (!redir->redirect || !redir->filename)
 		return (false);
 	if (c == '>' && cnt == 1)
 		redir->type = TRUNC;
