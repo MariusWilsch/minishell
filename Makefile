@@ -3,8 +3,8 @@ LIBFT = libft/libft.a
 LIBFT_CMD = $(MAKE) -C libft WITH_BONUS=1
 CC = gcc
 INCFLAGS = -I include -I $(LIBFT)
-# RL_PATH = /Users/$(USER)/.brew/Cellar/readline/8.2.1
-RL_PATH = /opt/homebrew/opt/readline
+RL_PATH = /Users/$(USER)/.brew/Cellar/readline/8.2.1
+# RL_PATH = /opt/homebrew/opt/readline
 RL_LIB = -lreadline -L$(RL_PATH)/lib
 RL_INC = -I $(RL_PATH)/include
 CFLAGS = -g # -Wall -Werror -Wextra

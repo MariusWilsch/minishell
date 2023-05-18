@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/18 14:37:48 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 16:10:33 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,30 @@
 // 	free(pid);
 // }
 
+
+
+void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
+{
+	int	red_cnt;
+	
+	while (cmd_cnt--)
+	{
+		free(cmd[cmd_cnt].argv);
+		red_cnt = cmd[cmd_cnt].redircnt;
+		if (red_cnt > 0)
+		{
+			while (red_cnt--)
+				free(cmd[cmd_cnt].redir[red_cnt].filename);
+			free(cmd[cmd_cnt].redir);
+		}
+	}
+	free(pipe_fd);
+	free(cmd);
+}
+
+
+
+
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
 	AND MANAGING THE CHILD PROCESSES.
 	- CMND_CNT = NUMBER OF COMMANDS.
@@ -132,7 +156,7 @@ int	executor(t_args *head, t_env **env_l)
 		exit(0);
 	}
 	cmd = create_structs(head, &cmd_cnt, env_l);
-	// pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
+	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
 	// while (i < cmd_cnt)
 	// {
 	// 	if (pipe(pipe_fd + 2 * i) < 0)
@@ -140,7 +164,6 @@ int	executor(t_args *head, t_env **env_l)
 	// 	i++;
 	// }
 	// shell_process(cmd, cmd_cnt, pipe_fd);
-	// cleanup(cmd_cnt, cmd);
-	// free(pipe_fd);
+	cleanup(cmd_cnt, cmd, pipe_fd);
 	return (EXIT_SUCCESS);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/18 11:03:26 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 15:39:13 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,25 @@ int	wr_dup2(int fd1, int fd2)
 	exit (g_status);
 }
 
-int	p_error(char *str, int status)
-{
-	perror(str);
-	exit(status);
-}
+// int	p_error(char *str, int status)
+// {
+// 	perror(str);
+// 	exit(status);
+// }
 
-static void	cleanup_redir(t_redir *redir, int redir_c)
-{
-	while (redir_c-- > 0)
-	{
-		free(redir[redir_c].filename);
-	}
-	free(redir);
-}
-
-void	cleanup(int cmd_cnt, t_cmds *cmd)
+void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
 {
 	while (cmd_cnt--)
 	{
 		free(cmd[cmd_cnt].argv);
 		if (cmd[cmd_cnt].redir)
-			cleanup_redir(cmd[cmd_cnt].redir, cmd[cmd_cnt].redir->redirc);
+		{
+			while (cmd[cmd_cnt].redircnt--)
+				free(cmd[cmd_cnt].redir[cmd_cnt].filename);
+			free(cmd->redir);
+		}
 	}
+	free(pipe_fd);
 	free(cmd);
 }
 

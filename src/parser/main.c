@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/18 14:58:48 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 16:03:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	leaks(void)
-// {
-// 	system("leaks -q minishell");
-// }
+void	leaks(void)
+{
+	system("leaks -q minishell");
+}
 
 void	print_list(t_args *head)
 {
@@ -93,6 +93,7 @@ int	minishell(t_args *head, char **envp)
 		executor(head, &env_l);
 		free(input);
 		free_list(head);
+		atexit(leaks);
 	}
 	return (EXIT_SUCCESS);
 }

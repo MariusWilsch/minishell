@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/18 14:52:44 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 15:37:59 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_cmds {
 	int			out_fd;
 	int			status;
 	t_env 		**env;
-	t_redir		redir;
+	t_redir		*redir;
 	t_cmd_type	cmd_type;
 }	t_cmds;
 
@@ -72,7 +72,7 @@ int		exisit_env(t_env **env_list, char *str, t_env **found);
 void	execute_command(t_cmds *head);
 int		p_error(char *str, int status);
 int		wr_dup2(int fd1, int fd2);
-void	cleanup(int cmd_cnt, t_cmds *cmd);
+void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd);
 
 /* 				PROCESSES	 */
 int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
