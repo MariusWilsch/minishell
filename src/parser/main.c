@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/17 16:30:45 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 14:58:48 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@
 // {
 // 	system("leaks -q minishell");
 // }
+
+void	print_list(t_args *head)
+{
+	t_args *tmp;
+
+	tmp = head;
+	while (tmp)
+	{
+		printf("%s\t", tmp->arg);
+		printf("%d\n", tmp->type);
+		tmp = tmp->next;
+	}
+}
 
 void	free_list(t_args *head)
 {
@@ -75,6 +88,7 @@ int	minishell(t_args *head, char **envp)
 		head = process_tok(head, input);
 		if (head == NULL)
 			continue ;
+		// print_list(head);
 		env_init(&env_l, envp);
 		executor(head, &env_l);
 		free(input);

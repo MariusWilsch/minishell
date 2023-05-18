@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/17 10:40:14 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 11:03:26 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static void	cleanup_redir(t_redir *redir, int redir_c)
 	while (redir_c-- > 0)
 	{
 		free(redir[redir_c].filename);
-		free(redir[redir_c].redirect);
 	}
 	free(redir);
 }

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/18 09:35:11 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 14:52:44 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,22 @@ typedef enum e_redirect_type {
 }	t_redirect_type;
 
 typedef struct s_redir {
-	char			*redirect;
 	char			*filename;
-	t_redirect_type	type;
 	int				redirc;
-	struct t_redir	*next;
+	t_redirect_type	type;
 }	t_redir;
 
-typedef struct s_cmd {
+typedef struct s_cmds {
 	char		*cmd_path;
 	char		**argv;
 	int			argc;
+	int			redircnt;
 	int			in_fd;
 	int			out_fd;
 	int			status;
-	t_env		**env;
+	t_env 		**env;
+	t_redir		redir;
 	t_cmd_type	cmd_type;
-	t_redir		*redir;
 }	t_cmds;
 
 /* 			INIT_STRUCTS		 */

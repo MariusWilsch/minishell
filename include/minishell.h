@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/17 17:51:09 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 14:20:03 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,12 @@
 typedef enum s_tokens {
 OPERATOR,
 ARG,
+PIPE,
 QUOTE_ARG,
 CMD,
 BUILT_IN,
 REDIR,
+// ENV,
 REPROMPT,
 }	t_type_tok;
 

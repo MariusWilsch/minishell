@@ -1,32 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/17 18:11:19 by verdant          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "executor.h"
-
 bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
 {
-	int		cnt;
-	int		file_length;
-	char	c;
+	const char	c = str[0];
+	const int		cnt = cnt_occur(str, str[0]);
+	int					file_length;
+	// t_redirect_type type[4] = [TRUNC, APPEND, INPUT, INPUT_EOF];
 
-	cnt = 0;
-	c = str[0];
 	file_length = ft_strlen(str) - cnt;
-	cnt = cnt_occur(str, str[0]);
 	if (err_type == ENV_REDIRECT_ERR)
 		return (redir->type = ERR, true);
-	redir->redirect = ft_substr(str, 0, cnt);
 	redir->filename = ft_substr(str, cnt, file_length);
-	if (!redir->redirect || !redir->filename)
+	if (!redir->filename)
 		return (false);
 	if (c == '>' && cnt == 1)
 		redir->type = TRUNC;
@@ -39,6 +22,7 @@ bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
 	redir->redirc = redirc;
 	return (true);
 }
+
 
 void	init_members(t_cmds *cmd, t_args *head, int redirc)
 {

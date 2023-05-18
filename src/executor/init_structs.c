@@ -6,142 +6,93 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/18 09:39:25 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 15:05:20 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
+void print_structs(t_cmds *cmd, int cmd_cnt)
 {
-	const char	c = str[0];
-	const int		cnt = cnt_occur(str, str[0]);
-	int					file_length;
-
-	file_length = ft_strlen(str) - cnt;
-	if (err_type == ENV_REDIRECT_ERR)
-		return (redir->type = ERR, true);
-	redir->filename = ft_substr(str, cnt, file_length);
-	if (!redir->filename)
-		return (false);
-	if (c == '>' && cnt == 1)
-		redir->type = TRUNC;
-	if (c == '>' && cnt == 2)
-		redir->type = APPEND;
-	if (c == '<' && cnt == 1)
-		redir->type = INPUT;
-	if (c == '<' && cnt == 2)
-		redir->type = INPUT_EOF;
-	redir->redirc = redirc;
-	return (true);
-}
-
-void	init_members(t_cmds *cmd, t_args *head, int redirc)
-{
-	cmd->cmd_path = head->arg;
-	cmd->cmd_type = CMD_EXE;
-	if (head->type == BUILT_IN && cmd->cmd_type == CMD_EXE)
-		cmd->cmd_type = BUILT_IN_EXE;
-	if (incl_char(head->arg[0], "<>"))
-	{
-		cmd->cmd_path = NULL;
-		cmd->cmd_type = NO_CMD_EXE;
-	}
-	cmd->redir = NULL;
-	cmd->argv = ft_calloc(sizeof(char *), (cmd->argc + 1));
-	if (redirc > 0)
-		cmd->redir = ft_calloc(sizeof(t_redir), redirc);
-	if (!cmd->argv || (redirc > 0 && !cmd->redir))
-		return ;
-	cmd->argv[0] = head->arg;
-}
-
-t_args	*fill_struct(t_cmds *cmd, t_args *head, int argc, int redirc)
-{
-	int	i;
-	int	k;
-
-	i = 1;
-	k = 0;
-	cmd->argc = argc;
-	init_members(cmd, head, redirc);
-	if (cmd->argc == 0 && redirc == 0)
-		return (head->next);
-	while (true)
-	{
-		if (i < cmd->argc && (head->type == ARG || head->type == QUOTE_ARG))
-			cmd->argv[i++] = head->arg;
-		if (k < redirc && head->type == REDIR)
-			redir_init(&cmd->redir[k++], head->arg, head->err_tok, redirc);
-		head = head->next;
-		if (i == cmd->argc && k == redirc)
-			break ;
-	}
-	return (head);
-}
-
-/**
- * @note ARGUMENTS ARE BEING COUNTED. 
-*/
-static void	arg_counter(t_args *node, t_cmds *cmd, t_args *head, int cmd_cnt)
-{
-	int	i;
-	int	redir_i;
-	int	arg_cnt;
+	int i;
 
 	i = 0;
-	arg_cnt = 0;
-	if (node->type == CMD || node->type == BUILT_IN)
-		node = node->next;
 	while (i < cmd_cnt)
 	{
-		arg_cnt = 1;
-		redir_i = 0;
-		while (node != NULL && node->type != CMD && node->type != BUILT_IN)
-		{
-			if ((node->type == ARG || node->type == QUOTE_ARG))
-				arg_cnt++;
-			if (node->type == REDIR)
-				redir_i++;
-			node = node->next;
-		}
-		head = fill_struct(&cmd[i++], head, arg_cnt, redir_i);
-		if (node != NULL)
-			node = node->next;
+		printf("cmd_path: %s\n", cmd[i].cmd_path);
+		printf("argc: %d\n", cmd[i].argc);
+		printf("redircnt: %d\n", cmd[i].redircnt);
+		// printf("in_fd: %d\n", cmd[i].in_fd);
+		// printf("out_fd: %d\n", cmd[i].out_fd);
+		// printf("status: %d\n", cmd[i].status);
+		// printf("cmd_type: %d\n", cmd[i].cmd_type);
+		i++;
 	}
 }
 
-/**
- * 
- * @note What if there there is no cmd but a redirect as the first string
- * i = number of commmands.
- * 
-*/
-t_cmds	*create_structs(t_args *head, int *cmd_cnt, t_env **env)
+//Write a funtion which will print t_args *head list
+
+void	init_members(t_cmds *cmd)
 {
-	t_args		*node;
-	t_cmds		*cmds;
-	int			cmd_count;
+	cmd->cmd_path = NULL;
+	cmd->argv = NULL;
+	cmd->argc = 1;
+	cmd->redircnt = 0;
+	cmd->in_fd = 0;
+	cmd->out_fd = 0;
+	cmd->status = 0;
+	// cmd->env = env;
+	// cmd->redir.filename = NULL;
+	// cmd->redir.redirc = 0;
+	// cmd->redir.type = 0;
+	// cmd->cmd_type = 0;
+}
+
+void	arg_counter(t_args *head, t_cmds *cmd, int cmd_cnt)
+{
+	t_args *node;
 
 	node = head;
-	cmd_count = 0;
-	if (head->type == REDIR)
-			cmd_count++;
-	while (node != NULL)
+	init_members(cmd);
+	while (node && node->type != PIPE)
 	{
-		if (node->type == CMD || node->type == BUILT_IN)
-			cmd_count++;
+		if (node->type == CMD && node->err_tok == OK)
+			cmd->cmd_path = node->arg;
+		if (node->type == ARG)
+			cmd->argc++;
+		if (node->type == REDIR)
+			cmd->redircnt++;
 		node = node->next;
 	}
-	cmds = ft_calloc(sizeof(t_cmds), cmd_count);
+}
+
+
+
+
+t_cmds *create_structs(t_args *head, int *cmd_cnt, t_env **env)
+{
+	t_args	*tmp;
+	t_cmds	*cmds;
+	int			i;
+
+	tmp = head;
+	i = 0;
+	while (tmp)
+	{
+		if (tmp->type == PIPE)
+			(*cmd_cnt)++;
+		tmp = tmp->next;
+	}
+	cmds = (t_cmds *)malloc(sizeof(t_cmds) * (*cmd_cnt));
 	if (!cmds)
 		return (NULL);
-	node = head;
-	arg_counter(node, cmds, head, cmd_count);
-	*cmd_cnt = cmd_count;
-	if (head->type == REDIR)
-		cmd_cnt--;
-	while (cmd_count--)
-		cmds[cmd_count].env = env;
+	while (i < (*cmd_cnt))
+	{
+		arg_counter(head, &cmds[i], i);
+		i++;
+	}
+	print_structs(cmds, *cmd_cnt);
 	return (cmds);
 }
+
+
