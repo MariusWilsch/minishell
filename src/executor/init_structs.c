@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init_structs.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:27:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/18 16:18:07 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   init_structs.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/05/20 12:28:10 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,6 @@ t_cmds *create_structs(t_args *head, int *cmd_cnt, t_env **env)
 		cmds[i].env = env;
 		i++;
 	}
-	print_structs(cmds, *cmd_cnt);
+	// print_structs(cmds, *cmd_cnt);
 	return (cmds);
 }

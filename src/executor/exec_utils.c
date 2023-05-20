@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/18 15:39:13 by mwilsch          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   exec_utils.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/05/20 12:30:52 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,27 @@ int	wr_dup2(int fd1, int fd2)
 	exit (g_status);
 }
 
-// int	p_error(char *str, int status)
-// {
-// 	perror(str);
-// 	exit(status);
-// }
-
-void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
+int	p_error(char *str, int status)
 {
-	while (cmd_cnt--)
-	{
-		free(cmd[cmd_cnt].argv);
-		if (cmd[cmd_cnt].redir)
-		{
-			while (cmd[cmd_cnt].redircnt--)
-				free(cmd[cmd_cnt].redir[cmd_cnt].filename);
-			free(cmd->redir);
-		}
-	}
-	free(pipe_fd);
-	free(cmd);
+	perror(str);
+	exit(status);
 }
+
+// void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
+// {
+// 	while (cmd_cnt--)
+// 	{
+// 		free(cmd[cmd_cnt].argv);
+// 		if (cmd[cmd_cnt].redir)
+// 		{
+// 			while (cmd[cmd_cnt].redircnt--)
+// 				free(cmd[cmd_cnt].redir[cmd_cnt].filename);
+// 			free(cmd->redir);
+// 		}
+// 	}
+// 	free(pipe_fd);
+// 	free(cmd);
+// }
 
 void	execute_command(t_cmds *cmd)
 {

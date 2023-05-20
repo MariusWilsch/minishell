@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/17 10:47:33 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/20 12:38:35 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	redirect_command_fd(t_cmds *head)
 	int	i;
 
 	i = 0;
-	while (i < head->redir->redirc)
+	while (i < head->redircnt)
 	{
 		if (head->redir[i].type == TRUNC || head->redir[i].type == APPEND)
 		{
