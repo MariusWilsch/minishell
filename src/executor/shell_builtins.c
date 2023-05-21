@@ -6,24 +6,21 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:05:54 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/21 11:10:41 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-bool	check_flag(char *argv[])
+void mini_exit(t_cmds *cmd) 
 {
-	int	i;
-
-	i = 1;
-	while (argv[i])
+	if (count_args(cmd->argv) > 2)
 	{
-		if (ft_strncmp(argv[i], "-n", 2) == 0 && ft_strlen(argv[i]) == 2)
-			return (false);
-		i++;
+		ft_printf("exit: too many arguments\n");
+		exit(1);
 	}
-	return (true);
+	rl_clear_history();
+	exit(ft_atoi(cmd->argv[1]));
 }
 
 int	echo(int argc, char **argv)

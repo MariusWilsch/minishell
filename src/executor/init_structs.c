@@ -6,44 +6,11 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/20 12:28:10 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/21 10:35:29 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-void print_structs(t_cmds *cmd, int cmd_cnt)
-{
-	int i;
-
-	i = 0;
-	printf("cmd_cnt: %d\n\n", cmd_cnt);
-	while (i < cmd_cnt)
-	{
-		printf("cmd_type %d\n", cmd[i].cmd_type);
-		printf("cmd_path: %s\n", cmd[i].cmd_path);
-		printf("argc: %d\n", cmd[i].argc);
-		printf("redircnt: %d\n", cmd[i].redircnt);
-		printf("argv: ");
-		int j = 0;
-		while (cmd[i].argv[j])
-		{
-			printf("%s ", cmd[i].argv[j]);
-			j++;
-		}
-		printf("\n");
-		printf("redir: ");
-		j = 0;
-		while (j < cmd[i].redircnt)
-		{
-			printf("%s ", cmd[i].redir[j].filename);
-			printf("%d ", cmd[i].redir[j].type);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-}
 
 void	init_members(t_cmds *cmd)
 {
@@ -159,6 +126,5 @@ t_cmds *create_structs(t_args *head, int *cmd_cnt, t_env **env)
 		cmds[i].env = env;
 		i++;
 	}
-	// print_structs(cmds, *cmd_cnt);
 	return (cmds);
 }

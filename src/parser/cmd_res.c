@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_res.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/18 14:16:58 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cmd_res.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/17 19:32:28 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/05/21 11:04:29 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*cmd_err(t_args *node)
 	str = node->arg;
 	if (str != NULL || str[0] == '.')
 	{
-		ft_printf("minishell: %s: No such file or Directory\n", str);
+		ft_printf("minishell: %s: command not found\n", str);
 		node->err_tok = NO_FILE_DIR;
 		return (str);
 	}

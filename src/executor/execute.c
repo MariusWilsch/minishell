@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   processes.c                                        :+:    :+:            */
+/*   execute.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/20 12:41:50 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/21 11:09:06 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,6 @@ void	parent_process(int *pipe_fd, int i, int curr, pid_t child_pid)
 {
 	int	status;
 
-	if (curr > 0 && close(pipe_fd[2 * (curr - 1)]))
-		p_error("close", EXIT_FAILURE);
-	if (curr < i - 1 && close(pipe_fd[2 * curr + 1]) == -1)
-		p_error("close", EXIT_FAILURE);
 	if (waitpid(child_pid, &status, 0) < 0)
 	{
 		if (errno != ECHILD)
@@ -100,36 +96,16 @@ void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	if (pid == NULL)
 		p_error("malloc", EXIT_FAILURE);
 	create_process(cmd, cmd_cnt, pipe_fd, pid);
+	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	while (i < cmd_cnt)
 	{
 		parent_process(pipe_fd, cmd_cnt, i, pid[i]);
 		i++;
 	}
-	while ((waitpid(-1, &g_status, 0)) != -1)
-	{
-	}
+	while (1)
+		if (wait(NULL) == -1)
+			break ;
 	free(pid);
-}
-
-
-
-void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
-{
-	int	red_cnt;
-	
-	while (cmd_cnt--)
-	{
-		free(cmd[cmd_cnt].argv);
-		red_cnt = cmd[cmd_cnt].redircnt;
-		if (red_cnt > 0)
-		{
-			while (red_cnt--)
-				free(cmd[cmd_cnt].redir[red_cnt].filename);
-			free(cmd[cmd_cnt].redir);
-		}
-	}
-	free(pipe_fd);
-	free(cmd);
 }
 
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
@@ -147,12 +123,12 @@ int	executor(t_args *head, t_env **env_l)
 
 	i = 0;
 	cmd_cnt = 1;
+	cmd = create_structs(head, &cmd_cnt, env_l);
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
 		rl_clear_history();
-		exit(0);
+		mini_exit(cmd);
 	}
-	cmd = create_structs(head, &cmd_cnt, env_l);
 	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
 	while (i < cmd_cnt)
 	{
@@ -162,8 +138,8 @@ int	executor(t_args *head, t_env **env_l)
 	}
 	shell_process(cmd, cmd_cnt, pipe_fd);
 	cleanup(cmd_cnt, cmd, pipe_fd);
-	while (1)
-		if (wait(NULL) == -1)
-			break ;
+	// while (1)
+	// 	if (wait(NULL) == -1)
+	// 		break ;
 	return (EXIT_SUCCESS);
 }
