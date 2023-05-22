@@ -6,23 +6,23 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 11:09:26 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 11:48:27 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int	mini_exit(t_cmds *cmd) 
+int	mini_exit(t_cmds *cmd)
 {
-	if (count_args(cmd->argv) == 1)
-	{
-		rl_clear_history();
-		exit(EXIT_SUCCESS);
-	}
 	if (count_args(cmd->argv) > 2)
 	{
 		ft_printf("exit: too many arguments\n");
 		return (g_status = EXIT_FAILURE);
+	}
+	if (count_args(cmd->argv) == 1)
+	{
+		rl_clear_history();
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{

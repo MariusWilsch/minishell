@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/21 10:35:29 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/22 11:52:28 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	arg_counter(t_args *head, t_cmds *cmd, int cmd_cnt)
 	cmd->cmd_type = CMD_EXE;
 	while (head && head->type != PIPE)
 	{
-		if ((head->type == CMD || head->type == BUILT_IN) && head->err_tok == OK)
+		if ((head->type == CMD || head->type == BUILT_IN)
+			&& head->err_tok == OK)
 		{
 			cmd->cmd_path = head->arg;
 			if (head->type == BUILT_IN)
@@ -53,12 +54,11 @@ void	arg_counter(t_args *head, t_cmds *cmd, int cmd_cnt)
 	init_members(cmd);
 }
 
-
 bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
 {
 	const char	c = str[0];
-	const int		cnt = cnt_occur(str, str[0]);
-	int					file_length;
+	const int	cnt = cnt_occur(str, str[0]);
+	int			file_length;
 
 	redir->filename = NULL;
 	file_length = ft_strlen(str) - cnt;
@@ -78,7 +78,7 @@ bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
 	return (true);
 }
 
-t_args *fill_struct(t_cmds *cmd, t_args *head)
+t_args	*fill_struct(t_cmds *cmd, t_args *head)
 {
 	int	i;
 	int	k;
@@ -92,7 +92,8 @@ t_args *fill_struct(t_cmds *cmd, t_args *head)
 		if (i < cmd->argc && (head->type == ARG || head->type == QUOTE_ARG))
 			cmd->argv[i++] = head->arg;
 		if (k < cmd->redircnt && head->type == REDIR)
-			redir_init(&cmd->redir[k++], head->arg, head->err_tok, cmd->redircnt);
+			redir_init(&cmd->redir[k++], head->arg,
+				head->err_tok, cmd->redircnt);
 		head = head->next;
 		if (i == cmd->argc && k == cmd->redircnt)
 			break ;
@@ -102,11 +103,11 @@ t_args *fill_struct(t_cmds *cmd, t_args *head)
 	return (head);
 }
 
-t_cmds *create_structs(t_args *head, int *cmd_cnt, t_env **env)
+t_cmds	*create_structs(t_args *head, int *cmd_cnt, t_env **env)
 {
 	t_args	*tmp;
 	t_cmds	*cmds;
-	int			i;
+	int		i;
 
 	tmp = head;
 	i = 0;

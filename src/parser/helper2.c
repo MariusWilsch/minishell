@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   helper2.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/19 16:59:02 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/18 13:28:29 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   helper2.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/19 16:59:02 by verdant       #+#    #+#                 */
+/*   Updated: 2023/05/22 11:45:02 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ bool	incl_char(char c, char *search_str)
 // void create_delimiter_node(t_args *temp)
 // {
 // 	t_args *new;
-	
+
 // 	new = malloc(sizeof(t_args));
 // 	if (!new)
 // 		return ;

@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 11:33:03 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 11:52:43 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,8 @@ void	parent_process(int *pipe_fd, int i, int curr, pid_t child_pid)
 int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
 	int	heredoc_fd;
-	
-	heredoc_fd = -1;
 
+	heredoc_fd = -1;
 	signal(SIGINT, child_signal_handler);
 	handle_heredoc(cmd + i, &heredoc_fd);
 	close_pipes(pipe_fd, cmd_cnt, i, 0);

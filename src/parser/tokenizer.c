@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/22 10:09:13 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 11:47:20 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_args	*create_node(char *str, t_type_tok type)
 	{
 		new->type = CMD;
 		if (ft_strchr(str, '>') || ft_strchr(str, '<'))
-	
 		new->type = REDIR;
 	}
 	if (incl_char(str[0], "><") && type == OPERATOR)
@@ -67,10 +66,10 @@ t_args	*create_node(char *str, t_type_tok type)
 	return (new);
 }
 
-t_args* create_delimiter_node(t_args *temp, char *str)
+t_args*	create_delimiter_node(t_args *temp, char *str)
 {
 	t_args *new;
-	
+
 	new = malloc(sizeof(t_args));
 	if (!new)
 		return (NULL);

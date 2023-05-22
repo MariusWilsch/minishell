@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 11:32:56 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 11:56:39 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,45 +32,43 @@ void	execute_command(t_cmds *cmd)
 	int		shlvl;
 
 	shlvl = 1;
-	if (cmd->cmd_type == CMD_EXE)
+	if (exisit_env(cmd->env, "PATH", &found) == -1)
 	{
-		if (exisit_env(cmd->env, "PATH", &found) == -1)
+		ft_printf("minishell: %s: No such file or directory\n",
+			cmd->cmd_path);
+		exit(127);
+	}
+	if (ft_strcmp(cmd->cmd_path, "./minishell") == 0)
+	{
+		if (exisit_env(cmd->env, "SHLVL", &found) > 0)
 		{
-			ft_printf("minishell: %s: No such file or directory\n",
-			 cmd->cmd_path);
-			exit(127);
+			shlvl = ft_atoi(found->value) + 1;
+			free(found->value);
+			found->value = ft_itoa(shlvl);
 		}
-		if (ft_strcmp(cmd->cmd_path, "./minishell") == 0)
-		{
-			if (exisit_env(cmd->env, "SHLVL", &found) > 0)
-			{
-				shlvl = ft_atoi(found->value) + 1;
-				free(found->value);
-				found->value = ft_itoa(shlvl);
-			}
-			if (execve(cmd->cmd_path, cmd->argv, convert_data(*cmd->env)) == -1)
-				exit(127);
-		}
-		else if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
+		if (execve(cmd->cmd_path, cmd->argv, convert_data(*cmd->env)) == -1)
 			exit(127);
 	}
+	else if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
+		exit(127);
 }
 
-int count_args(char **argv) 
+int	count_args(char **argv)
 {
-    int count = 0;
+	int	count;
 
-    while (argv[count] != NULL) 
+	count = 0;
+	while (argv[count] != NULL)
 	{
-        count++;
-    }
-    return count;
+		count++;
+	}
+	return (count);
 }
 
 void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
 {
 	int	red_cnt;
-	
+
 	while (cmd_cnt--)
 	{
 		free(cmd[cmd_cnt].argv);

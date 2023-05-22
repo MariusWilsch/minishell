@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/18 14:20:03 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
+/*   Updated: 2023/05/22 11:58:40 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,40 +34,38 @@
 */
 
 typedef enum s_tokens {
-OPERATOR,
-ARG,
-PIPE,
-QUOTE_ARG,
-CMD,
-BUILT_IN,
-REDIR,
-// ENV,
-REPROMPT,
+	OPERATOR,
+	ARG,
+	PIPE,
+	QUOTE_ARG,
+	CMD,
+	BUILT_IN,
+	REDIR,
+	REPROMPT,
 }	t_type_tok;
 
 typedef enum s_err_toks {
-OK,
-NO_CMD,
-NO_FILE_DIR,
-TO_MANY,
-NO_ALNUM_BETWEEN,
-NEWLINE_ERR,
-ENV_REDIRECT_ERR,
+	OK,
+	NO_CMD,
+	NO_FILE_DIR,
+	TO_MANY,
+	NO_ALNUM_BETWEEN,
+	NEWLINE_ERR,
+	ENV_REDIRECT_ERR,
 }	t_err_tok;
 
 typedef struct t_args {
-char			*arg;
-t_type_tok		type;
-t_err_tok		err_tok;
-struct t_args	*next;
-struct t_args	*prev;
+	char			*arg;
+	t_type_tok		type;
+	t_err_tok		err_tok;
+	struct t_args	*next;
+	struct t_args	*prev;
 }	t_args;
 
-
 typedef struct s_env {
-char			*key;
-char			*value;
-struct s_env	*next;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
 }	t_env;
 
 /*			Helper_1			*/
@@ -82,7 +80,6 @@ int			ft_lstsize_shell(t_env *env);
 bool		is_valid_pipe(char *input);
 
 /*			Tokenizer			*/
-
 char		*get_tok(char *input, int start, t_type_tok type);
 t_args		*create_node(char *str, t_type_tok type);
 int			add_tok(char *str, t_args **head, t_type_tok type);
