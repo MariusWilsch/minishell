@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 16:59:02 by verdant           #+#    #+#             */
-/*   Updated: 2023/04/25 16:03:50 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/18 13:28:29 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,6 @@ int	ft_lstsize_shell(t_env *env)
 		n++;
 	}
 	return (n);
-}
-
-void	free_list(t_args *head)
-{
-	while (head != NULL)
-	{
-		free(head->arg);
-		head = head->next;
-	}
-	free(head);
 }
 
 /**
@@ -56,3 +46,19 @@ bool	incl_char(char c, char *search_str)
 	}
 	return (false);
 }
+
+// void create_delimiter_node(t_args *temp)
+// {
+// 	t_args *new;
+	
+// 	new = malloc(sizeof(t_args));
+// 	if (!new)
+// 		return ;
+// 	new->arg = "|";
+// 	new->err_tok = OK;
+// 	new->next = NULL;
+// 	new->prev = NULL;
+// 	temp->next = new;
+// 	new->prev = temp;
+// 	temp = temp->next;
+// }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/17 10:40:14 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   exec_utils.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/05/22 09:37:48 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,6 @@ int	p_error(char *str, int status)
 	exit(status);
 }
 
-static void	cleanup_redir(t_redir *redir, int redir_c)
-{
-	while (redir_c-- > 0)
-	{
-		free(redir[redir_c].filename);
-		free(redir[redir_c].redirect);
-	}
-	free(redir);
-}
-
-void	cleanup(int cmd_cnt, t_cmds *cmd)
-{
-	while (cmd_cnt--)
-	{
-		free(cmd[cmd_cnt].argv);
-		if (cmd[cmd_cnt].redir)
-			cleanup_redir(cmd[cmd_cnt].redir, cmd[cmd_cnt].redir->redirc);
-	}
-	free(cmd);
-}
-
 void	execute_command(t_cmds *cmd)
 {
 	t_env	*found;
@@ -57,7 +36,8 @@ void	execute_command(t_cmds *cmd)
 	{
 		if (exisit_env(cmd->env, "PATH", &found) == -1)
 		{
-			ft_printf("minishell: %s: No such file or dir\n", cmd->cmd_path);
+			ft_printf("minishell: %s: No such file or directory\n",
+			 cmd->cmd_path);
 			exit(127);
 		}
 		if (ft_strcmp(cmd->cmd_path, "./minishell") == 0)
@@ -74,4 +54,34 @@ void	execute_command(t_cmds *cmd)
 		else if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
 			exit(127);
 	}
+}
+
+int count_args(char **argv) 
+{
+    int count = 0;
+
+    while (argv[count] != NULL) 
+	{
+        count++;
+    }
+    return count;
+}
+
+void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
+{
+	int	red_cnt;
+	
+	while (cmd_cnt--)
+	{
+		free(cmd[cmd_cnt].argv);
+		red_cnt = cmd[cmd_cnt].redircnt;
+		if (red_cnt > 0)
+		{
+			while (red_cnt--)
+				free(cmd[cmd_cnt].redir[red_cnt].filename);
+			free(cmd[cmd_cnt].redir);
+		}
+	}
+	free(pipe_fd);
+	free(cmd);
 }

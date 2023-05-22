@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   executor.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/17 10:21:13 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 09:32:31 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,26 @@ typedef enum e_redirect_type {
 }	t_redirect_type;
 
 typedef struct s_redir {
-	char			*redirect;
 	char			*filename;
-	t_redirect_type	type;
 	int				redirc;
-	struct t_redir	*next;
+	t_redirect_type	type;
 }	t_redir;
 
-typedef struct s_cmd {
+typedef struct s_cmds {
 	char		*cmd_path;
 	char		**argv;
 	int			argc;
+	int			redircnt;
 	int			in_fd;
 	int			out_fd;
 	int			status;
-	t_env		**env;
-	t_cmd_type	cmd_type;
+	t_env 		**env;
 	t_redir		*redir;
+	t_cmd_type	cmd_type;
 }	t_cmds;
 
 /* 			INIT_STRUCTS		 */
 t_cmds	*create_structs(t_args *head, int *cmd_cnt, t_env **env);
-
-/* 			EXECUTOR			 */
 
 /* 			BUILT-INS			 */
 int		echo(int argc, char **argv);
@@ -68,14 +65,17 @@ int		export(int argc, char *argv[], t_env **env_list);
 int		unset(int argc, char *argv[], t_env **env_list);
 int		exec_builtin(char *func, int argc, char **argv, t_env **env_list);
 int		exisit_env(t_env **env_list, char *str, t_env **found);
+int		mini_exit(t_cmds *cmd);
 
 /* 				UTILS			 */
+int		count_args(char **argv);
 void	execute_command(t_cmds *head);
 int		p_error(char *str, int status);
 int		wr_dup2(int fd1, int fd2);
-void	cleanup(int cmd_cnt, t_cmds *cmd);
+void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd);
+bool	check_flag(char *argv[]);
 
-/* 				PROCESSES	 */
+/* 				EXECUTE	 */
 int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
 int		executor(t_args *head, t_env **env);
 void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid);

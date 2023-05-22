@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   processes.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/17 16:32:44 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   execute.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/05/22 09:36:19 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,6 @@ void	parent_process(int *pipe_fd, int i, int curr, pid_t child_pid)
 {
 	int	status;
 
-	if (curr > 0 && close(pipe_fd[2 * (curr - 1)]))
-		p_error("close", EXIT_FAILURE);
-	if (curr < i - 1 && close(pipe_fd[2 * curr + 1]) == -1)
-		p_error("close", EXIT_FAILURE);
 	if (waitpid(child_pid, &status, 0) < 0)
 	{
 		if (errno != ECHILD)
@@ -100,14 +96,15 @@ void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	if (pid == NULL)
 		p_error("malloc", EXIT_FAILURE);
 	create_process(cmd, cmd_cnt, pipe_fd, pid);
+	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	while (i < cmd_cnt)
 	{
 		parent_process(pipe_fd, cmd_cnt, i, pid[i]);
 		i++;
 	}
-	while ((waitpid(-1, &g_status, 0)) != -1)
-	{
-	}
+	while (1)
+		if (wait(NULL) == -1)
+			break ;
 	free(pid);
 }
 
@@ -125,13 +122,16 @@ int	executor(t_args *head, t_env **env_l)
 	int				i;
 
 	i = 0;
+	cmd_cnt = 1;
+	cmd = create_structs(head, &cmd_cnt, env_l);
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
-		rl_clear_history();
-		exit(0);
+		if (mini_exit(cmd))
+			return (EXIT_FAILURE);
 	}
-	cmd = create_structs(head, &cmd_cnt, env_l);
 	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
+	if (pipe_fd == NULL)
+		p_error("ft_calloc", EXIT_FAILURE);
 	while (i < cmd_cnt)
 	{
 		if (pipe(pipe_fd + 2 * i) < 0)
@@ -139,7 +139,6 @@ int	executor(t_args *head, t_env **env_l)
 		i++;
 	}
 	shell_process(cmd, cmd_cnt, pipe_fd);
-	cleanup(cmd_cnt, cmd);
-	free(pipe_fd);
+	cleanup(cmd_cnt, cmd, pipe_fd);
 	return (EXIT_SUCCESS);
 }
