@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/21 11:12:23 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/22 09:32:31 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int		export(int argc, char *argv[], t_env **env_list);
 int		unset(int argc, char *argv[], t_env **env_list);
 int		exec_builtin(char *func, int argc, char **argv, t_env **env_list);
 int		exisit_env(t_env **env_list, char *str, t_env **found);
-void	mini_exit(t_cmds *cmd);
+int		mini_exit(t_cmds *cmd);
 
 /* 				UTILS			 */
 int		count_args(char **argv);

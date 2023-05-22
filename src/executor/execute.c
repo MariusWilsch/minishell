@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/21 11:09:06 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/22 09:36:19 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
  */
 int	executor(t_args *head, t_env **env_l)
 {
-	t_cmds		*cmd;
+	t_cmds			*cmd;
 	int				cmd_cnt;
 	int				*pipe_fd;
 	int				i;
@@ -126,10 +126,12 @@ int	executor(t_args *head, t_env **env_l)
 	cmd = create_structs(head, &cmd_cnt, env_l);
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
-		rl_clear_history();
-		mini_exit(cmd);
+		if (mini_exit(cmd))
+			return (EXIT_FAILURE);
 	}
 	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
+	if (pipe_fd == NULL)
+		p_error("ft_calloc", EXIT_FAILURE);
 	while (i < cmd_cnt)
 	{
 		if (pipe(pipe_fd + 2 * i) < 0)
@@ -138,8 +140,5 @@ int	executor(t_args *head, t_env **env_l)
 	}
 	shell_process(cmd, cmd_cnt, pipe_fd);
 	cleanup(cmd_cnt, cmd, pipe_fd);
-	// while (1)
-	// 	if (wait(NULL) == -1)
-	// 		break ;
 	return (EXIT_SUCCESS);
 }

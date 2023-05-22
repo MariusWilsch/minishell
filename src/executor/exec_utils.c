@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/21 11:09:14 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/22 09:37:48 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ int count_args(char **argv)
 {
     int count = 0;
 
-    while (argv[count] != NULL) {
+    while (argv[count] != NULL) 
+	{
         count++;
     }
-
     return count;
 }
 

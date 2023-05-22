@@ -6,21 +6,24 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/21 11:10:41 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/22 09:58:58 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-void mini_exit(t_cmds *cmd) 
+int	mini_exit(t_cmds *cmd) 
 {
+	rl_clear_history();
+	if (count_args(cmd->argv) == 1)
+		exit(EXIT_SUCCESS);
 	if (count_args(cmd->argv) > 2)
 	{
 		ft_printf("exit: too many arguments\n");
-		exit(1);
+		return (g_status = EXIT_FAILURE);
 	}
-	rl_clear_history();
-	exit(ft_atoi(cmd->argv[1]));
+	else
+		exit(ft_atoi(cmd->argv[1]));
 }
 
 int	echo(int argc, char **argv)
@@ -36,17 +39,20 @@ int	echo(int argc, char **argv)
 			i++;
 			continue ;
 		}
-		if (ft_strcmp(argv[i], "-n") == 0)
+		else if (i == 1 && ft_strcmp(argv[i], "-n") == 0)
 		{
 			i++;
 			continue ;
 		}
-		ft_printf("%s", argv[i]);
-		if (i != argc - 1)
-			ft_printf(" ");
+		else
+		{
+			ft_printf("%s", argv[i]);
+			if (i != argc - 1)
+				ft_printf(" ");
+		}
 		i++;
 	}
-	if (check_flag(argv) == true)
+	if (check_flag(argv))
 		ft_printf("\n");
 	return (g_status = EXIT_SUCCESS);
 }
