@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/22 11:59:22 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 12:17:05 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ bool	check_flag(char *argv[]);
 int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
 int		executor(t_args *head, t_env **env);
 void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid);
-void	parent_process(int *pipe_fd, int i, int curr, pid_t child_pid);
+void	parent_process(pid_t child_pid);
 
 /* 				HEREDOC			 */
 void	handle_heredoc(t_cmds *cmd, int *heredoc_fd);

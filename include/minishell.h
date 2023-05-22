@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/22 11:58:40 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 12:12:19 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char		*del_quotes(char *str);
 int			cnt_occur(char *str, char c);
 int			ft_lstsize_shell(t_env *env);
 bool		is_valid_pipe(char *input);
+t_args		*create_delimiter_node(t_args *temp, char *str);
 
 /*			Tokenizer			*/
 char		*get_tok(char *input, int start, t_type_tok type);

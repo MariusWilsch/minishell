@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/22 11:47:20 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 12:15:11 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,33 +61,8 @@ t_args	*create_node(char *str, t_type_tok type)
 	}
 	if (incl_char(str[0], "><") && type == OPERATOR)
 		new->type = REDIR;
-	// if (type == ARG && str[0] == '$')
-	// 	new->type = ENV;
 	return (new);
 }
-
-t_args*	create_delimiter_node(t_args *temp, char *str)
-{
-	t_args *new;
-
-	new = malloc(sizeof(t_args));
-	if (!new)
-		return (NULL);
-	new->arg = ft_calloc(sizeof(char), 2);
-	if (!new->arg)
-		return (NULL);
-	new->arg[0] = '|';
-	new->type = PIPE;
-	new->err_tok = OK;
-	new->next = NULL;
-	new->prev = NULL;
-	temp->next = new;
-	new->prev = temp;
-	temp = temp->next;
-	del_substr(str, 0, cnt_occur(str + 1, ' ') + 1);
-	return (temp);
-}
-
 
 /**
  * @brief Creating a node & adding it to the list
@@ -122,6 +97,7 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 	new->prev = temp;
 	return (0);
 }
+
 /**
  * @brief Adds all token to a linked list
  * 
@@ -156,11 +132,18 @@ t_args	*process_tok(t_args *head, char *input)
 	{
 		if (node->type == CMD && !is_builtin(node))
 			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		if (node->type == REDIR && c_red(node->arg, cnt_occur(node->arg, node->arg[0]), node) > 0)
+		if (node->type == REDIR && c_red(node->arg,
+				cnt_occur(node->arg, node->arg[0]), node) > 0)
 			return (head->type = REPROMPT, free_list(head), free(input), NULL);
+		if (ft_strcmp(node->arg, "$?") == 0)
+		{
+			free(node->arg);
+			node->arg = ft_itoa(g_status);
+		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{
-			while (ft_strcmp(node->arg, "$?") != 0 && ft_strchr(node->arg, '$') && node->type != REDIR)
+			while (ft_strcmp(node->arg, "$?") != 0
+				&& ft_strchr(node->arg, '$') && node->type != REDIR)
 				node->arg = sub_env(node->arg, get_env_len(node->arg));
 		}
 		del_quotes(node->arg);

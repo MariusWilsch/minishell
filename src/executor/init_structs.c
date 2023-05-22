@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:27:54 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/22 11:52:28 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 12:16:01 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	init_members(t_cmds *cmd)
 	cmd->argv[cmd->argc] = NULL;
 }
 
-void	arg_counter(t_args *head, t_cmds *cmd, int cmd_cnt)
+void	arg_counter(t_args *head, t_cmds *cmd)
 {
 	cmd->cmd_path = NULL;
 	cmd->argc = 1;
@@ -54,7 +54,7 @@ void	arg_counter(t_args *head, t_cmds *cmd, int cmd_cnt)
 	init_members(cmd);
 }
 
-bool	redir_init(t_redir *redir, char *str, t_err_tok err_type, int redirc)
+bool	redir_init(t_redir *redir, char *str, t_err_tok err_type)
 {
 	const char	c = str[0];
 	const int	cnt = cnt_occur(str, str[0]);
@@ -92,8 +92,7 @@ t_args	*fill_struct(t_cmds *cmd, t_args *head)
 		if (i < cmd->argc && (head->type == ARG || head->type == QUOTE_ARG))
 			cmd->argv[i++] = head->arg;
 		if (k < cmd->redircnt && head->type == REDIR)
-			redir_init(&cmd->redir[k++], head->arg,
-				head->err_tok, cmd->redircnt);
+			redir_init(&cmd->redir[k++], head->arg, head->err_tok);
 		head = head->next;
 		if (i == cmd->argc && k == cmd->redircnt)
 			break ;
@@ -122,7 +121,7 @@ t_cmds	*create_structs(t_args *head, int *cmd_cnt, t_env **env)
 		return (NULL);
 	while (i < (*cmd_cnt))
 	{
-		arg_counter(head, &cmds[i], i);
+		arg_counter(head, &cmds[i]);
 		head = fill_struct(&cmds[i], head);
 		cmds[i].env = env;
 		i++;

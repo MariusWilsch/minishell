@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 11:52:43 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 12:17:15 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 /* EXECUTES THE ACTIONS THAT NEEDS TO BE PERFORMED FOR THE PARENT PROCESS. 
 	WAITS TILL THE CHILD PROCESS IS FINISHED EXECUTING, CLOSES THE FD'S.
  */
-void	parent_process(int *pipe_fd, int i, int curr, pid_t child_pid)
+void	parent_process(pid_t child_pid)
 {
 	int	status;
 
@@ -88,7 +88,7 @@ void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	while (i < cmd_cnt)
 	{
-		parent_process(pipe_fd, cmd_cnt, i, pid[i]);
+		parent_process(pid[i]);
 		i++;
 	}
 	while (1)
