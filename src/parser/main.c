@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/20 12:28:54 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/22 11:39:51 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ char	*prompt(char *str)
 
 	input = NULL;
 	if (!str)
-		exit(1);
-	if (!str[0])
-		return (str);
+	{
+		free(str);
+		exit(0);
+	}
 	input = ft_strtrim(str, " ");
 	free(str);
 	if (!input)

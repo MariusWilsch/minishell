@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 09:36:19 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 11:33:03 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,26 +63,16 @@ void	parent_process(int *pipe_fd, int i, int curr, pid_t child_pid)
 int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
 	int	heredoc_fd;
-
+	
 	heredoc_fd = -1;
+
 	signal(SIGINT, child_signal_handler);
 	handle_heredoc(cmd + i, &heredoc_fd);
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	if (cmd_cnt != 1 && !cmd->redir)
 		redirect_pipe_fd(i, cmd_cnt, pipe_fd);
-	if (heredoc_fd >= 0)
-		close(heredoc_fd);
-	if (cmd[i].redir)
-	{
-		if (!heredoc_fd)
-			cmd[i].in_fd = pipe_fd[0];
-		cmd[i].out_fd = pipe_fd[1];
-		redirect_command_fd(&cmd[i]);
-	}
-	if (cmd->cmd_type == CMD_EXE)
-		execute_command(&cmd[i]);
-	else if (cmd->cmd_type == BUILT_IN_EXE)
-		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+	process_redirection(cmd, i, heredoc_fd, pipe_fd);
+	execute_cmd_or_builtin(cmd, i);
 	exit(EXIT_SUCCESS);
 }
 
@@ -129,15 +119,7 @@ int	executor(t_args *head, t_env **env_l)
 		if (mini_exit(cmd))
 			return (EXIT_FAILURE);
 	}
-	pipe_fd = (int *)ft_calloc(2 * (cmd_cnt), sizeof(int));
-	if (pipe_fd == NULL)
-		p_error("ft_calloc", EXIT_FAILURE);
-	while (i < cmd_cnt)
-	{
-		if (pipe(pipe_fd + 2 * i) < 0)
-			p_error("pipe", EXIT_FAILURE);
-		i++;
-	}
+	pipe_fd = create_pipes(cmd_cnt);
 	shell_process(cmd, cmd_cnt, pipe_fd);
 	cleanup(cmd_cnt, cmd, pipe_fd);
 	return (EXIT_SUCCESS);
