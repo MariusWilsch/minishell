@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 11:48:27 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 13:55:27 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,29 @@
 
 int	mini_exit(t_cmds *cmd)
 {
+	int j;
+
+	j = 0;
 	if (count_args(cmd->argv) > 2)
 	{
 		ft_printf("exit: too many arguments\n");
 		return (g_status = EXIT_FAILURE);
 	}
+	rl_clear_history();
 	if (count_args(cmd->argv) == 1)
-	{
-		rl_clear_history();
 		exit(EXIT_SUCCESS);
-	}
-	else
+	while (cmd->argv[1][j])
 	{
-		rl_clear_history();
-		exit(ft_atoi(cmd->argv[1]));
+		if (ft_isdigit(cmd->argv[1][j]) == 0)
+		{
+			ft_printf("exit: %s: numeric argument required\n", cmd->argv[1]);
+			exit(255);
+		}
+		j++;
 	}
+	if (count_args(cmd->argv) == 2)
+		exit(ft_atoi(cmd->argv[1]));
+	exit(EXIT_SUCCESS);
 }
 
 int	echo(int argc, char **argv)

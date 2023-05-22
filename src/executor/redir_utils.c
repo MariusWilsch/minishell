@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/16 15:12:25 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 09:42:56 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 14:53:41 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used)
 
 void	child_signal_handler(int signum)
 {
+	if (signum == SIGQUIT)
+		exit(3);
 	if (signum == SIGINT)
-	{
-		exit(130);
-	}
+		exit(2);
 }

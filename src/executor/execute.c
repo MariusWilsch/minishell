@@ -6,12 +6,34 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 12:17:15 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 15:11:27 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include <sys/wait.h>
+#include <signal.h>
+
+
+void sigquit_handler(int signum)
+{
+	signum++;
+    exit(3);  // Exit with a specific status to signify SIGQUIT was caught
+}
+
+void install_signal_handlers()
+{
+    struct sigaction sa;
+
+    sa.sa_handler = sigquit_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    if (sigaction(SIGQUIT, &sa, NULL) == -1)
+    {
+        perror("sigaction");
+        exit(EXIT_FAILURE);
+    }
+}
 
 void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 {
@@ -29,7 +51,10 @@ void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 			if (pid[i] < 0)
 				p_error("fork", 1);
 			else if (pid[i] == 0)
+			{
+				install_signal_handlers();
 				child_process(cmd, i, cmd_cnt, pipe_fd);
+			}
 		}
 		i++;
 	}
@@ -38,26 +63,29 @@ void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 /* EXECUTES THE ACTIONS THAT NEEDS TO BE PERFORMED FOR THE PARENT PROCESS. 
 	WAITS TILL THE CHILD PROCESS IS FINISHED EXECUTING, CLOSES THE FD'S.
  */
-void	parent_process(pid_t child_pid)
+void  parent_process(pid_t child_pid)
 {
-	int	status;
+	int status;
 
 	if (waitpid(child_pid, &status, 0) < 0)
 	{
 		if (errno != ECHILD)
-			p_error("waitpid", 1);
+		p_error("waitpid", 1);
 	}
 	if (WIFEXITED(status))
 		g_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
+	if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGINT)
-			g_status = 130;
-		else
-			g_status = 128 + SIGINT;
+		g_status = 130;
 	}
-	else
-		g_status = 1;
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			ft_putstr_fd("Quit: 3\n", 1);
+			g_status = 131;
+		}
+	}
 }
 
 int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
@@ -65,6 +93,7 @@ int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 	int	heredoc_fd;
 
 	heredoc_fd = -1;
+	signal(SIGQUIT, child_signal_handler);
 	signal(SIGINT, child_signal_handler);
 	handle_heredoc(cmd + i, &heredoc_fd);
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
@@ -108,9 +137,7 @@ int	executor(t_args *head, t_env **env_l)
 	t_cmds			*cmd;
 	int				cmd_cnt;
 	int				*pipe_fd;
-	int				i;
 
-	i = 0;
 	cmd_cnt = 1;
 	cmd = create_structs(head, &cmd_cnt, env_l);
 	if (ft_strcmp("exit", head->arg) == 0)

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 09:41:58 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/22 14:52:07 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	redirect_command_fd(t_cmds *head)
 			redirect_input(&head->redir[i]);
 		i++;
 	}
-	signal(SIGINT, child_signal_handler);
 	execute_command(head);
 	return (EXIT_SUCCESS);
 }

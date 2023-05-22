@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/17 19:32:28 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/21 11:04:29 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/22 13:03:40 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ char	*cmd_err(t_args *node)
 	str = node->arg;
 	if (str != NULL || str[0] == '.')
 	{
+		g_status = 1;
 		ft_printf("minishell: %s: command not found\n", str);
 		node->err_tok = NO_FILE_DIR;
 		return (str);
@@ -66,6 +67,7 @@ char	*cmd_err(t_args *node)
 		return (node->err_tok = NO_FILE_DIR, str);
 	}
 	ft_printf("minishell: %s: command not found\n", del_quotes(str));
+	g_status = 1;
 	s = cnt_occur(node->arg, node->arg[0]);
 	if (incl_char(node->arg[0], "><"))
 		node->arg = del_substr(node->arg, s, cnt_occur(node->arg + s, ' '));
@@ -78,9 +80,7 @@ char	*cmd_err(t_args *node)
 char	*prep_cmd(char *str)
 {
 	char	*temp;
-	int		i;
 
-	i = 1;
 	temp = NULL;
 	if (str[0] == '.')
 		return (temp);
