@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/23 12:54:55 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/23 12:56:52 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 	if (cmd_cnt != 1 && !cmd->redir)
 		redirect_pipe_fd(i, cmd_cnt, pipe_fd);
 	process_redirection(cmd, i, pipe_fd);
-	execute_cmd_or_builtin(cmd, i);
+	execute_cmd_or_builtin(cmd);
 	exit(EXIT_SUCCESS);
 }
 
