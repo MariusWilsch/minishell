@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/23 12:56:45 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/23 14:40:31 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd)
 			p_error("dup2", EXIT_FAILURE);
 		return (close(pipe_fd[2 * i + 1]));
 	}
-	else if (i < cmd_cnt - 1)
+	if (i < cmd_cnt - 1)
 	{
 		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
 			p_error("dup2", EXIT_FAILURE);
