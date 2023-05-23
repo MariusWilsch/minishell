@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/24 11:45:38 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:12:43 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/23 08:41:23 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	heredoc(const char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
 		{
 			free(line);
 			break ;
