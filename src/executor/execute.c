@@ -6,34 +6,12 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 15:11:27 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/23 07:48:55 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include <sys/wait.h>
-#include <signal.h>
-
-
-void sigquit_handler(int signum)
-{
-	signum++;
-    exit(3);  // Exit with a specific status to signify SIGQUIT was caught
-}
-
-void install_signal_handlers()
-{
-    struct sigaction sa;
-
-    sa.sa_handler = sigquit_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    if (sigaction(SIGQUIT, &sa, NULL) == -1)
-    {
-        perror("sigaction");
-        exit(EXIT_FAILURE);
-    }
-}
 
 void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 {
@@ -52,7 +30,6 @@ void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 				p_error("fork", 1);
 			else if (pid[i] == 0)
 			{
-				install_signal_handlers();
 				child_process(cmd, i, cmd_cnt, pipe_fd);
 			}
 		}
