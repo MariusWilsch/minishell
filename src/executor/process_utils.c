@@ -6,14 +6,17 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 11:12:21 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 14:22:58 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/23 12:55:30 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-void	process_redirection(t_cmds *cmd, int i, int heredoc_fd, int *pipe_fd)
+void	process_redirection(t_cmds *cmd, int i, int *pipe_fd)
 {
+	int heredoc_fd = -1;
+	
+	handle_heredoc(cmd, &heredoc_fd);
 	if (heredoc_fd >= 0)
 	{
 		if (close(heredoc_fd) < 0)
@@ -28,12 +31,12 @@ void	process_redirection(t_cmds *cmd, int i, int heredoc_fd, int *pipe_fd)
 	}
 }
 
-void  execute_cmd_or_builtin(t_cmds *cmd, int i)
+void  execute_cmd_or_builtin(t_cmds *cmd)
 {
   if (cmd->cmd_type == BUILT_IN_EXE)
     exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
   else
-    execute_command(&cmd[i]);
+    execute_command(cmd);
 }
 
 int	*create_pipes(int cmd_cnt)
