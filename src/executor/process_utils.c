@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 11:12:21 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/23 12:56:36 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/23 16:05:35 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,24 @@ void	process_redirection(t_cmds *cmd, int i, int *pipe_fd)
 
 void  execute_cmd_or_builtin(t_cmds *cmd)
 {
-  if (cmd->cmd_type == BUILT_IN_EXE)
-    exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
-  else
-    execute_command(cmd);
+	if (cmd->cmd_type == BUILT_IN_EXE)
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+	else
+		execute_command(cmd);
 }
 
-int	*create_pipes(int cmd_cnt)
+void	open_pipes(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 {
-	int	*pipe_fd;
 	int	i;
 
 	i = 0;
-	pipe_fd = (int *)calloc(2 * cmd_cnt, sizeof(int));
-	if (pipe_fd == NULL)
-		p_error("calloc", EXIT_FAILURE);
+	cmd[0].in_fd = -1;
 	while (i < cmd_cnt)
 	{
-		if (pipe(pipe_fd + 2 * i) < 0)
-			p_error("pipe", EXIT_FAILURE);
+		if (pipe(pipe_fd + i * 2))
+			p_error("pipe", 1);
+		cmd[i + 1].in_fd = pipe_fd[2 * i];
+		cmd[i].out_fd = pipe_fd[2 * i + 1];
 		i++;
 	}
-	return (pipe_fd);
 }

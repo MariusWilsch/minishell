@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 14:32:53 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/23 16:20:11 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void  execute_command(t_cmds *cmd)
 			free(found->value);
 			found->value = ft_itoa(shlvl);
 		}
-    if (execve(cmd->cmd_path, cmd->argv, convert_data(*cmd->env)) == -1)
-      exit(127);
+		if (execve(cmd->cmd_path, cmd->argv, convert_data(*cmd->env)) == -1)
+			exit(127);
 	}
 	else if (execve(cmd->cmd_path, cmd->argv, NULL) == -1)
 		exit(127);
@@ -82,6 +82,7 @@ void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
 			free(cmd[cmd_cnt].redir);
 		}
 	}
-	free(pipe_fd);
+	if (cmd_cnt > 1)
+		free(pipe_fd);
 	free(cmd);
 }

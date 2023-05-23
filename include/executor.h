@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/23 14:23:26 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/23 16:02:42 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int		redirect_output(t_redir *redir);
 
 void	process_redirection(t_cmds *cmd, int i, int *pipe_fd);
 void	execute_cmd_or_builtin(t_cmds *cmd);
-int		*create_pipes(int cmd_cnt);
+void	open_pipes(t_cmds *cmd, int cmd_cnt, int *pipe_fd);
 
 /* 				REDIR_UTILS		 */
 void	child_signal_handler(int signum);

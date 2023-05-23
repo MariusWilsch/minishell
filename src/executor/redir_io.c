@@ -6,34 +6,51 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/23 14:40:31 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/23 15:19:14 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd)
+int redirect_first_command(int i, int *pipe_fd)
+{
+	close(pipe_fd[2 * i]); // Close unused read end of the pipe
+	if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1) // Redirect stdout to the write end of the pipe
+		p_error("dup2", EXIT_FAILURE);
+	return close(pipe_fd[2 * i + 1]); // Close write end after redirection
+}
+
+int redirect_middle_command(int i, int *pipe_fd)
+{
+	if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1) // Redirect stdin from the read end of the previous pipe
+		p_error("dup2", EXIT_FAILURE);
+	close(pipe_fd[2 * (i - 1)]); // Close read end of the previous pipe after redirection
+	if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1) // Redirect stdout to the write end of the current pipe
+		p_error("dup2", EXIT_FAILURE);
+	return close(pipe_fd[2 * i + 1]); // Close write end of the current pipe after redirection
+}
+
+int redirect_last_command(int i, int *pipe_fd)
+{
+	if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1) // Redirect stdin from the read end of the previous pipe
+		p_error("dup2", EXIT_FAILURE);
+	return close(pipe_fd[2 * (i - 1)]); // Close read end of the previous pipe after redirection
+}
+
+
+int redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd)
 {
 	if (i == 0)
 	{
-		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		return (close(pipe_fd[2 * i + 1]));
+		return redirect_first_command(i, pipe_fd);
 	}
-	if (i < cmd_cnt - 1)
+	else if (i < cmd_cnt - 1)
 	{
-		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		close(pipe_fd[2 * (i - 1)]);
-		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		return (close(pipe_fd[2 * i + 1]));
+		return redirect_middle_command(i, pipe_fd);
 	}
 	else
 	{
-		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		return (close(pipe_fd[2 * (i - 1)]));
+		return redirect_last_command(i, pipe_fd);
 	}
 }
 
