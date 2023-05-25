@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/23 08:39:27 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/25 17:21:07 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,13 @@ void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	if (pid == NULL)
 		p_error("malloc", EXIT_FAILURE);
 	create_process(cmd, cmd_cnt, pipe_fd, pid);
+	close_pipes(pipe_fd, cmd_cnt, i, 1);
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	while (i < cmd_cnt)
 	{
 		parent_process(pid[i]);
 		i++;
 	}
-	while (1)
-		if (wait(NULL) == -1)
-			break ;
 	free(pid);
 }
 

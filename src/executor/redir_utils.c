@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/16 15:12:25 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 14:53:41 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/25 16:56:51 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used)
 	{
 		if (used)
 		{
-			if (i == 2 * (current_cmd - 1) || i == 2 * current_cmd + 1)
+			if (i == (2 * (current_cmd - 1)) || i == (2 * current_cmd + 1))
 				if (close(pipe_fd[i]) < 0)
 					p_error("close", EXIT_FAILURE);
 		}
 		else
 		{
-			if (i != 2 * (current_cmd - 1) && i != 2 * current_cmd + 1)
+			if (i != (2 * (current_cmd - 1)) && i != (2 * current_cmd + 1))
 				if (close(pipe_fd[i]) < 0)
 					p_error("close", EXIT_FAILURE);
 		}
