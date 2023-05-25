@@ -6,13 +6,52 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/25 17:21:07 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/25 17:28:08 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include <sys/wait.h>
 
+
+void close_pipes_new(int *pipe_fd, int cmd_cnt, int current_cmd)
+{
+    int i;
+
+    i = 0;
+    while (i < 2 * cmd_cnt)
+    {
+        // Close read end of the current pipe and write end of the next pipe
+        if (i != 2 * current_cmd && i != 2 * current_cmd + 1)
+            if (close(pipe_fd[i]) < 0)
+                p_error("close", EXIT_FAILURE);
+        i++;
+    }
+}
+
+void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd_cnt)
+	{
+		if (cmd[i].cmd_type == BUILT_IN_EXE
+			&& !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0))
+			exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+		else
+		{
+			pid[i] = fork();
+			if (pid[i] < 0)
+				p_error("fork", 1);
+			else if (pid[i] == 0)
+			{
+				child_process(cmd, i, cmd_cnt, pipe_fd);
+			}
+		}
+		i++;
+	}
+}
 
 /* EXECUTES THE ACTIONS THAT NEEDS TO BE PERFORMED FOR THE PARENT PROCESS. 
 	WAITS TILL THE CHILD PROCESS IS FINISHED EXECUTING, CLOSES THE FD'S.
@@ -44,42 +83,15 @@ void  parent_process(pid_t child_pid)
 
 int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
-	int	heredoc_fd;
-
-	heredoc_fd = -1;
 	signal(SIGQUIT, child_signal_handler);
 	signal(SIGINT, child_signal_handler);
-	handle_heredoc(cmd, &heredoc_fd);
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	if (cmd_cnt != 1 && !cmd->redir)
 		redirect_pipe_fd(i, cmd_cnt, pipe_fd);
-	process_redirection(cmd, i, heredoc_fd, pipe_fd);
-	execute_cmd_or_builtin(cmd, i);
+	if (cmd->redir)
+		process_redirection(cmd, i, pipe_fd);
+	execute_cmd_or_builtin(cmd);
 	exit(EXIT_SUCCESS);
-}
-
-void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
-{
-	int	i;
-
-	i = 0;
-	while (i < cmd_cnt)
-	{
-		if (cmd[i].cmd_type == BUILT_IN_EXE
-			&& !(ft_strncmp("echo", cmd[i].cmd_path, 4) == 0))
-			exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
-		else
-		{
-			pid[i] = fork();
-			if (pid[i] < 0)
-				p_error("fork", 1);
-			else if (pid[i] == 0)
-			{
-				child_process(cmd, i, cmd_cnt, pipe_fd);
-			}
-		}
-		i++;
-	}
 }
 
 void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)

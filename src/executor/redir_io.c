@@ -6,7 +6,11 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2023/05/25 17:21:26 by dickklouwer   ########   odam.nl         */
+=======
+/*   Updated: 2023/05/23 14:40:31 by tklouwer      ########   odam.nl         */
+>>>>>>> refs/remotes/origin/master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +24,7 @@ int	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd)
 			p_error("dup2", EXIT_FAILURE);
 		return (close(pipe_fd[2 * i + 1]));
 	}
-	else if (i < cmd_cnt - 1)
+	if (i < cmd_cnt - 1)
 	{
 		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
 			p_error("dup2", EXIT_FAILURE);
@@ -50,8 +54,8 @@ int	redirect_command_fd(t_cmds *head)
 			redirect_input(&head->redir[i]);
 		i++;
 	}
-	execute_cmd_or_builtin(head, i);
-	return (EXIT_SUCCESS);
+	execute_cmd_or_builtin(head);
+	exit (EXIT_SUCCESS);
 }
 
 int	redirect_input(t_redir *redir)
