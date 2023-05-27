@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 11:12:21 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/27 10:16:50 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/27 10:19:36 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	process_redirection(t_cmds *cmd, int i, int *pipe_fd)
 {
-	int heredoc_fd = -1;
-	
+	int	heredoc_fd;
+
+	heredoc_fd = -1;
 	handle_heredoc(cmd, &heredoc_fd);
 	if (heredoc_fd >= 0)
 	{
@@ -31,7 +32,7 @@ void	process_redirection(t_cmds *cmd, int i, int *pipe_fd)
 	}
 }
 
-void  execute_cmd_or_builtin(t_cmds *cmd, int i)
+void	execute_cmd_or_builtin(t_cmds *cmd, int i)
 {
 	if (cmd->cmd_type == BUILT_IN_EXE)
 		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);

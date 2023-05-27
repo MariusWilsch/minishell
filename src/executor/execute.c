@@ -6,21 +6,21 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/27 10:16:46 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/27 10:35:00 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include <sys/wait.h>
 
-void  parent_process(pid_t child_pid)
+void	parent_process(pid_t child_pid)
 {
-	int status;
+	int	status;
 
 	if (waitpid(child_pid, &status, 0) < 0)
 	{
 		if (errno != ECHILD)
-		p_error("waitpid", 1);
+			p_error("waitpid", 1);
 	}
 	if (WIFEXITED(status))
 		g_status = WEXITSTATUS(status);
@@ -38,21 +38,17 @@ void  parent_process(pid_t child_pid)
 	}
 }
 
-int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
+void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
 	int	heredoc_fd;
 
 	heredoc_fd = -1;
-	signal(SIGQUIT, child_signal_handler);
-	signal(SIGINT, child_signal_handler);
-	handle_heredoc(cmd, &heredoc_fd);
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	if (cmd_cnt != 1 && !cmd->redir)
 		redirect_pipe_fd(i, cmd_cnt, pipe_fd);
 	if (cmd->redir)
 		process_redirection(cmd, i, pipe_fd);
 	execute_cmd_or_builtin(cmd, i);
-	exit(EXIT_SUCCESS);
 }
 
 void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
@@ -67,6 +63,8 @@ void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 			p_error("fork", 1);
 		else if (pid[i] == 0)
 		{
+			signal(SIGQUIT, child_signal_handler);
+			signal(SIGINT, child_signal_handler);
 			child_process(cmd, i, cmd_cnt, pipe_fd);
 		}
 		i++;
@@ -111,12 +109,15 @@ int	executor(t_args *head, t_env **env_l)
 		if (mini_exit(cmd))
 			return (EXIT_FAILURE);
 	}
-	if (cmd->cmd_type == BUILT_IN_EXE && cmd_cnt == 1 &&
-		ft_strcmp("echo", head->arg) != 0)
-		return (exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env));
-	if (cmd_cnt > 1)
-		pipe_fd = create_pipes(cmd_cnt);
-	shell_process(cmd, cmd_cnt, pipe_fd);
+	if (cmd->cmd_type == BUILT_IN_EXE && cmd_cnt == 1
+		&& ft_strcmp("echo", head->arg) != 0)
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+	else
+	{
+		if (cmd_cnt > 1)
+			pipe_fd = create_pipes(cmd_cnt);
+		shell_process(cmd, cmd_cnt, pipe_fd);	
+	}
 	cleanup(cmd_cnt, cmd, pipe_fd);
 	return (EXIT_SUCCESS);
 }

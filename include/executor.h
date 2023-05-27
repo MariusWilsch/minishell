@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/27 10:16:35 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/27 10:25:11 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,13 @@ int		p_error(char *str, int status);
 int		wr_dup2(int fd1, int fd2);
 void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd);
 bool	check_flag(char *argv[]);
+void	execute_cmd_or_builtin(t_cmds *cmd, int i);
 
 /* 				EXECUTE	 */
-int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
 int		executor(t_args *head, t_env **env);
-void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid);
+void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
 void	parent_process(pid_t child_pid);
+void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid);
 
 /* 				HEREDOC			 */
 void	handle_heredoc(t_cmds *cmd, int *heredoc_fd);
@@ -90,10 +91,8 @@ int		redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd);
 int		redirect_command_fd(t_cmds *head);
 int		redirect_input(t_redir *redir);
 int		redirect_output(t_redir *redir);
-
-void	process_redirection(t_cmds *cmd, int i, int *pipe_fd);
-void  	execute_cmd_or_builtin(t_cmds *cmd, int i);
 int		*create_pipes(int cmd_cnt);
+void	process_redirection(t_cmds *cmd, int i, int *pipe_fd);
 
 /* 				REDIR_UTILS		 */
 void	child_signal_handler(int signum);

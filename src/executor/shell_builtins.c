@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/22 13:55:27 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/27 10:17:40 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	mini_exit(t_cmds *cmd)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	if (count_args(cmd->argv) > 2)
