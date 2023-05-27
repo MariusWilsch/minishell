@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/27 10:35:00 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/27 10:38:11 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	executor(t_args *head, t_env **env_l)
 	{
 		if (cmd_cnt > 1)
 			pipe_fd = create_pipes(cmd_cnt);
-		shell_process(cmd, cmd_cnt, pipe_fd);	
+		shell_process(cmd, cmd_cnt, pipe_fd);
 	}
 	cleanup(cmd_cnt, cmd, pipe_fd);
 	return (EXIT_SUCCESS);
