@@ -6,13 +6,24 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/23 16:23:36 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/27 08:31:01 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include <sys/wait.h>
 
+void	close_file_descriptors(int *pipe_fd, int cmd_cnt)
+{
+	int	i;
+
+	i = 0;
+	while (i < 2 * cmd_cnt)
+	{
+		close(pipe_fd[i]);
+		i++;
+	}
+}
 void	execute_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 {
 	int	i;
@@ -27,42 +38,24 @@ void	execute_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 			p_error("fork", EXIT_FAILURE);
 		i++;
 	}
-	parent_process(*pid);
+	close_file_descriptors(pipe_fd, i);
 	if (*pid != -1)
 	{
 		waitpid(*pid, &g_status, 0);
 		if (WIFEXITED(g_status))
 			g_status = WEXITSTATUS(g_status);
 	}
+	parent_process(*pid);
 }
 
-void	close_file_descriptors(int *pipe_fd, int cmd_cnt)
-{
-	int	i;
-
-	i = 0;
-	while (i < 2 * cmd_cnt)
-	{
-		close(pipe_fd[i]);
-		i++;
-	}
-}
 
 int	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
 	signal(SIGQUIT, child_signal_handler);
 	signal(SIGINT, child_signal_handler);
-	if (i > 0)
-	{
-		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-	}
-	if (i < cmd_cnt - 1)
-	{
-		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-	}
-	close_file_descriptors(pipe_fd, cmd_cnt);
+	if (cmd_cnt > 1)
+		redirect_pipe_fd(i, cmd_cnt, pipe_fd);
+	close_file_descriptors(pipe_fd, i);
 	if (cmd->redir)
 		process_redirection(cmd, i, pipe_fd);
 	if (cmd->cmd_type == BUILT_IN_EXE)
@@ -108,10 +101,6 @@ void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	i = 0;
 	pid = -1;
 	execute_pipeline(cmd, cmd_cnt, pipe_fd, &pid);
-	close_file_descriptors(pipe_fd, cmd_cnt);
-	while (1)
-		if (wait(NULL) == -1)
-			break ;
 }
 
 /* RESPONSIBLE FOR SETTING UP THE NECESSARY STRUCTURES FOR HANDLING COMMANDS
