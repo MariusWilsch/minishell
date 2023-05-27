@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cmd_res.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/17 19:32:28 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/22 13:03:40 by dickklouwer   ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cmd_res.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/05/27 18:02:03 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*cmd_err(t_args *node)
 	char	*str;
 
 	str = node->arg;
-	if (str != NULL || str[0] == '.')
+	if (str != NULL && str[0] == '.')
 	{
 		g_status = 1;
 		ft_printf("minishell: %s: command not found\n", str);

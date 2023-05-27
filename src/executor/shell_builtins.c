@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   shell_builtins.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/02/07 14:05:40 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/27 10:17:40 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   shell_builtins.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/05/27 17:55:23 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ int	mini_exit(t_cmds *cmd)
 int	echo(int argc, char **argv)
 {
 	int		i;
+	bool	flag;
 
 	i = 1;
+	flag = check_flag(argv, &i);
 	while (i < argc)
 	{
 		if (ft_strcmp(argv[i], "$?") == 0)
@@ -52,20 +54,42 @@ int	echo(int argc, char **argv)
 			i++;
 			continue ;
 		}
-		else if (i == 1 && ft_strcmp(argv[i], "-n") == 0)
-		{
-			i++;
-			continue ;
-		}
 		ft_printf("%s", argv[i]);
 		if (i != argc - 1)
 			ft_printf(" ");
 		i++;
 	}
-	if (check_flag(argv))
+	if (flag == true)
 		ft_printf("\n");
 	return (g_status = EXIT_SUCCESS);
 }
+// int	echo(int argc, char **argv)
+// {
+// 	int		i;
+
+// 	i = 1;
+// 	while (i < argc)
+// 	{
+// 		if (ft_strcmp(argv[i], "$?") == 0)
+// 		{
+// 			ft_putnbr(g_status);
+// 			i++;
+// 			continue ;
+// 		}
+// 		if (ft_strcmp(argv[i], "-n") == 0)
+// 		{
+// 			i++;
+// 			continue ;
+// 		}
+// 		ft_printf("%s", argv[i]);
+// 		if (i != argc - 1)
+// 			ft_printf(" ");
+// 		i++;
+// 	}
+// 	if (check_flag(argv))
+// 		ft_printf("\n");
+// 	return (g_status = EXIT_SUCCESS);
+// }
 
 int	cd(int argc, char *path, t_env *env_list)
 {	

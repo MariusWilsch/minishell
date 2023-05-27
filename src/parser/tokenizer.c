@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   tokenizer.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/22 12:15:11 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/05/27 18:06:01 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@ char	*get_tok(char *input, int start, t_type_tok type)
 	}
 	len -= start;
 	if (type == QUOTE_ARG)
+	{
 		len = cnt_len_between(input, input[start], start + 1) + 2;
+		while (input[len] && !incl_char(input[len], " >|<"))
+			len++;
+	}
 	res = ft_substr(input, start, len);
 	input = del_substr(input, start, len);
 	if (!res || !input)
@@ -83,8 +87,10 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 	if (!temp)
 	{
 		*head = new;
-		if (type == ARG)
+		if (type == ARG || type == QUOTE_ARG)
 			new->type = CMD;
+		if (type == QUOTE_ARG)
+			new->arg = del_quotes(new->arg);
 		return (0);
 	}
 	while (temp->next != NULL)

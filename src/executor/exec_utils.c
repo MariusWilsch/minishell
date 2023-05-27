@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   exec_utils.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/29 16:21:11 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/27 10:21:05 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/05/27 15:31:38 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd)
 {
 	int	red_cnt;
 
-	if (cmd_cnt > 1)
-		free(pipe_fd);
+	free(pipe_fd);
 	while (cmd_cnt--)
 	{
 		free(cmd[cmd_cnt].argv);
