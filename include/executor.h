@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/23 14:23:26 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/27 09:13:09 by tklouwer      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ bool	check_flag(char *argv[]);
 /* 				EXECUTE	 */
 int		child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd);
 int		executor(t_args *head, t_env **env);
-void	create_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid);
+void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid);
 void	parent_process(pid_t child_pid);
 
 /* 				HEREDOC			 */
@@ -92,7 +92,7 @@ int		redirect_input(t_redir *redir);
 int		redirect_output(t_redir *redir);
 
 void	process_redirection(t_cmds *cmd, int i, int *pipe_fd);
-void	execute_cmd_or_builtin(t_cmds *cmd);
+void  	execute_cmd_or_builtin(t_cmds *cmd, int i);
 int		*create_pipes(int cmd_cnt);
 
 /* 				REDIR_UTILS		 */
