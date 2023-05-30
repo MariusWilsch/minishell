@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/27 17:57:35 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/30 13:51:28 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_cmds	*create_structs(t_args *head, int *cmd_cnt, t_env **env);
 int		echo(int argc, char **argv);
 int		cd(int argc, char *path, t_env *env_list);
 int		pwd(void);
-int		env(t_env **env_list);
+int		env(t_env **env_list, bool export);
 int		export(int argc, char *argv[], t_env **env_list);
 int		unset(int argc, char *argv[], t_env **env_list);
 int		exec_builtin(char *func, int argc, char **argv, t_env **env_list);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   environment.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/04/17 17:43:37 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/15 15:01:29 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   environment.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
+/*   Updated: 2023/05/30 15:36:42 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,22 @@ t_env	*get_key_value(t_env *node, char *str)
 	return (node);
 }
 
-void	add_end(t_env **head, char *str)
+void	add_end(t_env **head, char *str, bool export_only)
 {
 	t_env	*temp;
 	t_env	*new_node;
 
 	temp = *head;
 	new_node = (t_env *)malloc(sizeof(t_env));
+	new_node->key = NULL;
+	new_node->value = NULL;
 	if (!new_node)
 		return ;
 	new_node->next = NULL;
 	if (ft_strchr(str, '='))
 		new_node = get_key_value(new_node, str);
+	else if (export_only == true)
+		new_node->key = ft_strdup(str);
 	if (*head == NULL)
 	{
 		*head = new_node;
@@ -87,18 +91,34 @@ void	add_end(t_env **head, char *str)
 	while (temp->next != NULL)
 		temp = temp->next;
 	temp->next = new_node;
+	new_node->export_only = export_only;
 }
 
 void	env_init(t_env **env, char **envp)
 {
 	int		index;
+	int		lvl;
+	char *lvl_str;
 
 	if (*env != NULL)
 		return ;
 	index = 0;
+	lvl = 0;
+	lvl_str = NULL;
+	char *shlvl = getenv("SHLVL");
+	if (shlvl)
+	{
+		lvl = ft_atoi(shlvl);
+		lvl_str = ft_itoa(lvl + 1);
+		shlvl = ft_strjoin("SHLVL=", lvl_str);
+	}
 	while (envp[index])
 	{
-		add_end(env, envp[index]);
+		if (ft_strncmp(envp[index], "SHLVL", 5) != 0)
+			add_end(env, envp[index], false);
+		else
+			add_end(env, shlvl, false);
 		index++;
 	}
+	return (free(shlvl), free(lvl_str), (void)0);
 }

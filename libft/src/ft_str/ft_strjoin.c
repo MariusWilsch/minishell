@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 15:03:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/03/10 10:34:34 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/30 15:31:21 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	ft_strlcpy(target, (char *)s1, ft_strlen(s1) + 1);
 	ft_strlcat(target, (char *)s2, size + 1);
+	
 	return (target);
 }

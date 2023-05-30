@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:21:11 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/27 15:31:38 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/30 15:39:46 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 void	execute_command(t_cmds *cmd)
 {
 	t_env	*found;
-	int		shlvl;
 
-	shlvl = 1;
+	found = NULL;
 	if (cmd->cmd_path == NULL)
 		exit(127);
 	if (exisit_env(cmd->env, "PATH", &found) == -1)
@@ -28,12 +27,6 @@ void	execute_command(t_cmds *cmd)
 	}
 	if (ft_strcmp(cmd->cmd_path, "./minishell") == 0)
 	{
-		if (exisit_env(cmd->env, "SHLVL", &found) > 0)
-		{
-			shlvl = ft_atoi(found->value) + 1;
-			free(found->value);
-			found->value = ft_itoa(shlvl);
-		}
 		if (execve(cmd->cmd_path, cmd->argv, convert_data(*cmd->env)) == -1)
 			exit(127);
 	}

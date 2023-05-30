@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_res.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/27 18:02:03 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/30 13:17:24 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*cmd_err(t_args *node)
 		node->err_tok = NO_FILE_DIR;
 		return (str);
 	}
-	if (ft_strchr(str, '$'))
+	if (ft_strchr(str, '$') && str[1] != '\0')
 	{
 		str = sub_env(str, get_env_len(str));
 		if (!ft_strchr(str, '/'))

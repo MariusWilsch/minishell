@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/27 15:37:42 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/30 13:38:41 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@ void	parent_process(pid_t child_pid)
 
 void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
-	int	heredoc_fd;
-
-	heredoc_fd = -1;
 	close_pipes(pipe_fd, cmd_cnt, i, 0);
 	if (cmd_cnt != 1 && !cmd->redir)
 		redirect_pipe_fd(i, cmd_cnt, pipe_fd);
@@ -105,6 +102,7 @@ int	executor(t_args *head, t_env **env_l)
 	cmd_cnt = 1;
 	pipe_fd = malloc(1 * sizeof(pipe_fd));
 	cmd = create_structs(head, &cmd_cnt, env_l);
+	// printf("redir: %d\n", cmd->redir->type);
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
 		if (mini_exit(cmd))

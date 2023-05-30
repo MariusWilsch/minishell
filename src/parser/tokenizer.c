@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/27 18:06:01 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/30 13:38:45 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 /**
  * @brief Cutting out the token out of the input string
@@ -84,6 +84,7 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 	new = create_node(str, type);
 	if (!new)
 		return (-1);
+
 	if (!temp)
 	{
 		*head = new;
@@ -91,6 +92,7 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 			new->type = CMD;
 		if (type == QUOTE_ARG)
 			new->arg = del_quotes(new->arg);
+
 		return (0);
 	}
 	while (temp->next != NULL)
@@ -101,6 +103,7 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 		new->type = CMD;
 	temp->next = new;
 	new->prev = temp;
+
 	return (0);
 }
 
@@ -124,6 +127,7 @@ t_args	*create_tok_list(char *input, t_args *head)
 			i = add_tok(get_tok(input, i, QUOTE_ARG), &head, QUOTE_ARG);
 		if (i == -1)
 			return (NULL);
+
 		i++;
 	}
 	return (head);

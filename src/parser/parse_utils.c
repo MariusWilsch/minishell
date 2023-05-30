@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parse_utils.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/04/24 10:25:25 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:00:08 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/24 10:25:25 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/05/30 13:11:46 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ char	*del_substr(char *str, int start, int len)
 		return (NULL);
 	if (len == 0 || len > ft_strlen(str))
 		return (str);
+	if (str[len] == '\0')
+	{
+		str[start] = '\0';
+		return (str);
+	}
 	copy_from = start + len;
 	while (str[copy_from])
 		str[start++] = str[copy_from++];

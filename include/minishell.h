@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:38:21 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/22 12:12:19 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
+/*   Updated: 2023/05/30 14:23:55 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct t_args {
 typedef struct s_env {
 	char			*key;
 	char			*value;
+	bool			export_only;
 	struct s_env	*next;
 }	t_env;
 
@@ -106,7 +107,7 @@ int			c_red(char *str, int cnt, t_args *node);
 char		**convert_data(t_env *env);
 t_env		*get_key_value(t_env *node, char *str);
 t_env		*add_first_node(t_env *env_head, char *str);
-void		add_end(t_env **head, char *str);
+void		add_end(t_env **head, char *str, bool export_only);
 void		env_init(t_env **env, char **envp);
 
 #endif

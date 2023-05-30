@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/27 17:55:23 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/30 15:10:00 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,33 +63,6 @@ int	echo(int argc, char **argv)
 		ft_printf("\n");
 	return (g_status = EXIT_SUCCESS);
 }
-// int	echo(int argc, char **argv)
-// {
-// 	int		i;
-
-// 	i = 1;
-// 	while (i < argc)
-// 	{
-// 		if (ft_strcmp(argv[i], "$?") == 0)
-// 		{
-// 			ft_putnbr(g_status);
-// 			i++;
-// 			continue ;
-// 		}
-// 		if (ft_strcmp(argv[i], "-n") == 0)
-// 		{
-// 			i++;
-// 			continue ;
-// 		}
-// 		ft_printf("%s", argv[i]);
-// 		if (i != argc - 1)
-// 			ft_printf(" ");
-// 		i++;
-// 	}
-// 	if (check_flag(argv))
-// 		ft_printf("\n");
-// 	return (g_status = EXIT_SUCCESS);
-// }
 
 int	cd(int argc, char *path, t_env *env_list)
 {	
@@ -99,17 +72,17 @@ int	cd(int argc, char *path, t_env *env_list)
 	{
 		if (exisit_env(&env_list, "HOME", &temp) == -1)
 			return (g_status = 1, ft_printf("cd: HOME not set\n", 2));
-		return (chdir(temp->key));
+		return (chdir(getenv(temp->key)));
 	}
-	if (argc > 2)
-		return (g_status = 1, ft_printf("cd: too many arguments\n", 2));
 	if (ft_strncmp(path, "..", 2) == 0 || ft_strncmp(path, ".", 1) == 0)
 	{
 		if (chdir(path) == -1)
 			return (g_status = 1,
-				ft_printf("cd: error changing directory: %s\n", path));
+		ft_printf("cd: error changing directory: %s\n", path));
 		return (g_status = EXIT_SUCCESS);
 	}
+	if (argc > 2)
+		return (g_status = 1, ft_printf("cd: too many arguments\n", 2));
 	if (access(path, F_OK) == -1)
 		return (g_status = 1,
 			ft_printf("cd: no such file or directory: %s\n", path));
@@ -134,15 +107,25 @@ int	pwd(void)
 	return (g_status = EXIT_SUCCESS);
 }
 
-int	env(t_env **env_list)
+int	env(t_env **env_list, bool export)
 {
 	t_env	*env;
 
 	env = *env_list;
 	while (env)
 	{
-		ft_printf("%s=", env->key);
-		ft_printf("%s\n", env->value);
+		if (export == true)
+		{
+			ft_printf("declare -x %s", env->key);
+			if (env->value)
+				ft_printf("=\"%s\"", env->value);
+			ft_printf("\n");
+		}
+		else if (env->export_only == false)
+		{
+			ft_printf("%s=", env->key);
+			ft_printf("%s\n", env->value);
+		}
 		env = env->next;
 	}
 	return (g_status = EXIT_SUCCESS);

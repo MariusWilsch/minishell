@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   shell_builtins1.c                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mwilsch <mwilsch@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/04/24 10:40:09 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:00:46 by tklouwer      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   env_builtins.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/05/30 16:01:47 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	exec_builtin(char *func, int argc, char **argv, t_env **env_list)
 	if (ft_strcmp("pwd", func) == 0)
 		pwd();
 	if (ft_strcmp("env", func) == 0)
-		env(env_list);
+		env(env_list, false);
 	if (ft_strcmp("export", func) == 0)
 		export(argc, argv, env_list);
 	if (ft_strcmp("unset", func) == 0)
@@ -35,7 +35,8 @@ int	exisit_env(t_env **env_list, char *str, t_env **found)
 	t_env	*temp;
 	int		position;
 
-	*found = NULL;
+	if (found != NULL)
+		*found = NULL;
 	key = ft_split(str, '=');
 	temp = *env_list;
 	position = 0;
@@ -54,28 +55,55 @@ int	exisit_env(t_env **env_list, char *str, t_env **found)
 	return (-1);
 }
 
+// int	export_checks(char *str)
+// {
+	
+// }
+
+
 int	export(int argc, char *argv[], t_env **env_list)
 {
 	int		i;
+	int		k;
 	t_env	*found;
+	t_env	*temp;
 
 	i = 1;
 	if (argc == 1)
-		return (env(env_list));
+		return (env(env_list, true));
 	while (i < argc)
 	{
-		if (ft_strchr(argv[i], '=') == NULL || ft_isdigit(argv[i][0]))
+		if (ft_strchr(argv[i], '=') == NULL && exisit_env(env_list, argv[i], &temp) == -1)
+		{
+			k = 0;
+			while (argv[i][k] && ft_isalnum(argv[i][k]))
+				k++;
+			if (argv[i][k] == '\0')
+			{
+				add_end(env_list, argv[i], true);
+				i++;
+				continue ;
+			}
+		}
+		if (ft_strchr(argv[i], '=') == NULL)
+		{
+			i++;
+			continue ;
+		}
+		if (ft_isdigit(argv[i][0]))
 		{
 			ft_printf("minishell: export: not a valid identifier\n", argv[i]);
 			return (g_status = EXIT_FAILURE);
 		}
 		exisit_env(env_list, argv[i], &found);
 		if (found == NULL)
-			add_end(env_list, argv[i]);
+			add_end(env_list, argv[i], false);
 		if (found != NULL)
 		{
 			free(found->value);
 			found->value = ft_strdup(argv[i] + ft_strlen(found->key) + 1);
+			if (found->export_only == true)
+				found->export_only = false;
 		}
 		i++;
 	}
