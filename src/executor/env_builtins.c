@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/30 16:30:54 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/30 17:32:07 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,17 @@ int	exisit_env(t_env **env_list, char *str, t_env **found)
 void	export_routine(char *str, t_env **env_list)
 {
 	t_env	*found;
+	t_env	*temp;
 
 	found = NULL;
-	if (ft_strchr(str, '=') == NULL && exisit_env(env_list, str, &found) == -1)
+	temp = NULL;
+	if (ft_strchr(str, '=') == NULL && exisit_env(env_list, str, &temp) == -1)
 	{
 		add_end(env_list, str, true);
 		return ;
 	}
+	if (temp && temp->export_only == true && !ft_strchr(str, '='))
+		return ;
 	exisit_env(env_list, str, &found);
 	if (found == NULL)
 		add_end(env_list, str, false);
@@ -88,10 +92,13 @@ int	export(int argc, char *argv[], t_env **env_list)
 		return (env(env_list, true));
 	while (i < argc)
 	{
+		if (argv[i][0] == '=')
+			return (ft_printf("minishell: export: %s not a valid identifier\n", argv[i]),
+			g_status = EXIT_FAILURE);
 		j = 0;
 		while (argv[i][j] != '\0' && argv[i][j] != '=')
 		{
-			if (ft_isalnum(argv[i][j]) == 0 && ft_isdigit(argv[i][0]) == 0)
+			if (ft_isalnum(argv[i][j]) == 0 && ft_isdigit(argv[i][0]) == 0 && argv[i][0] != '_')
 			{
 				ft_printf("minishell: export: %s not a valid identifier\n", argv[i]);
 				return (g_status = EXIT_FAILURE);
