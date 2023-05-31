@@ -6,31 +6,11 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 11:12:21 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 12:21:51 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 15:50:47 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-void	process_redirection(t_cmds *cmd, int i, int *pipe_fd)
-{
-	int	heredoc_fd;
-
-	heredoc_fd = -1;
-	handle_heredoc(cmd, &heredoc_fd);
-	if (heredoc_fd >= 0)
-	{
-		if (close(heredoc_fd) < 0)
-			p_error("close", EXIT_FAILURE);
-	}
-	if (cmd[i].redir)
-	{
-		if (!heredoc_fd)
-			cmd[i].in_fd = pipe_fd[0];
-		cmd[i].out_fd = pipe_fd[1];
-		redirect_command_fd(&cmd[i]);
-	}
-}
 
 void	execute_cmd_or_builtin(t_cmds *cmd)
 {

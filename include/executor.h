@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/31 14:11:28 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   executor.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/05/31 15:52:42 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		redirect_command_fd(t_cmds *head);
 int		redirect_input(t_redir *redir);
 int		redirect_output(t_redir *redir);
 int		*create_pipes(int cmd_cnt);
-void	process_redirection(t_cmds *cmd, int i, int *pipe_fd);
+void	process_redirection(t_cmds *cmd, int *pipe_fd);
 
 /* 				REDIR_UTILS		 */
 void	child_signal_handler(int signum);

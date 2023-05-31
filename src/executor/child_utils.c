@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   redir_utils.c                                      :+:    :+:            */
+/*   child_utils.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/16 15:12:25 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 14:27:17 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 16:17:33 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	close_pipes(int *pipe_fd, int cmd_cnt, int current_cmd, int used)
 void	child_signal_handler(int signum)
 {
 	if (signum == SIGQUIT)
-		exit(3);
+		exit(131);
 	if (signum == SIGINT)
-		exit(2);
+		exit(130);
 }
