@@ -78,7 +78,7 @@ int	cd(int argc, char *path, t_env *env_list)
 	{
 		if (chdir(path) == -1)
 			return (g_status = 1,
-		ft_printf("cd: error changing directory: %s\n", path));
+				ft_printf("cd: error changing directory: %s\n", path));
 		return (g_status = EXIT_SUCCESS);
 	}
 	if (argc > 2)

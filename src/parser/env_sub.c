@@ -45,7 +45,7 @@ char	*sub_env(char *str, int env_len, t_env **env_l)
 	const int	start = ft_strclen(str, '$') + 1;
 	char		*new;
 	int			len;
-	t_env 	*env_var;
+	t_env		*env_var;
 
 	if (!str)
 		return (NULL);
@@ -62,7 +62,8 @@ char	*sub_env(char *str, int env_len, t_env **env_l)
 		return (NULL);
 	len = ft_strlcpy(new, str, ft_strclen(str, '$') + 1);
 	if (env_var->value)
-		len = ft_strlcat(new, env_var->value, len + ft_strlen(env_var->value) + 1);
+		len = ft_strlcat(new, env_var->value,
+		len + ft_strlen(env_var->value) + 1);
 	env_len += start;
 	while (str[env_len] && env_len < len)
 		new[len++] = str[env_len++];

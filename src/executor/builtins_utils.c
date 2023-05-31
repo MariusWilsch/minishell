@@ -14,10 +14,11 @@
 
 bool	check_flag(char **argv, int *i)
 {
-	int		idx = 1;
+	int		idx;
 	int		idx_2;
 	bool	flag;
-	
+
+	idx = 1;
 	if (!argv[1])
 		return (true);
 	flag = true;
@@ -32,30 +33,8 @@ bool	check_flag(char **argv, int *i)
 			flag = false;
 		}
 		else
-			break;
+			break ;
 		idx++;
 	}
 	return (flag);
 }
-
-// bool	check_flag(char *argv[], int *idx)
-// {
-// 	int	i;
-	
-// 	if (!argv[1])
-// 		return (true);
-// 	while (argv[*idx])
-// 	{
-// 		i = 0;
-// 		while (argv[*idx][i] && incl_char(argv[*idx][i], "-n"))
-// 			i++;
-// 		if (i == ft_strlen(argv[*idx]))
-// 			(*idx)++;
-// 		else
-// 			return (true);
-// 	}
-// 	return (false);
-// }
-
-// If -n is the first argument we want to skip the newline
-// If -n is the first argument and there more -n after the first one we skip those too

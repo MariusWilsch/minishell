@@ -87,7 +87,7 @@ void	handle_heredoc(t_cmds *cmd, int *heredoc_fd);
 int		heredoc(const char *delimiter);
 
 /* 				REDIR IO		 */
-void 	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd);
+void	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd);
 int		redirect_command_fd(t_cmds *head);
 int		redirect_input(t_redir *redir);
 int		redirect_output(t_redir *redir);

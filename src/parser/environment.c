@@ -126,14 +126,15 @@ void	env_init(t_env **env, char **envp)
 {
 	int		index;
 	int		lvl;
-	char *lvl_str;
+	char	*lvl_str;
+	char	*shlvl;
 
 	if (*env != NULL)
 		return ;
 	index = 0;
 	lvl = 0;
 	lvl_str = NULL;
-	char *shlvl = getenv("SHLVL");
+	*shlvl = getenv("SHLVL");
 	if (shlvl)
 	{
 		lvl = ft_atoi(shlvl);

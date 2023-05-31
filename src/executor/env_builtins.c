@@ -66,8 +66,8 @@ int	export(int argc, char *argv[], t_env **env_list)
 	while (i < argc)
 	{
 		if (argv[i][0] == '=')
-			return (ft_printf("minishell: export: %s not a valid identifier\n", argv[i]),
-			g_status = EXIT_FAILURE);
+			return (ft_printf("minishell: export: %s not a valid identifier\n",
+					argv[i]), g_status = EXIT_FAILURE);
 		j = 0;
 		while (argv[i][j] != '\0' && argv[i][j] != '=')
 		{

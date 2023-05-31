@@ -40,16 +40,16 @@ void	parent_process(pid_t child_pid)
 
 void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
-    if (i > 0)
-    {
-        if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
-            p_error("dup2", EXIT_FAILURE);
-    }
-    if (i < cmd_cnt - 1)
-    {
-        if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
-            p_error("dup2", EXIT_FAILURE);
-    }
+	if (i > 0)
+	{
+		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
+			p_error("dup2", EXIT_FAILURE);
+	}
+	if (i < cmd_cnt - 1)
+	{
+		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
+			p_error("dup2", EXIT_FAILURE);
+	}
 	close_pipes(pipe_fd, cmd_cnt, i, 1);
 	if (cmd->redir)
 		process_redirection(cmd, pipe_fd);

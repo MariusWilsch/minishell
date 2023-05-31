@@ -29,6 +29,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	ft_strlcpy(target, (char *)s1, ft_strlen(s1) + 1);
 	ft_strlcat(target, (char *)s2, size + 1);
-	
 	return (target);
 }

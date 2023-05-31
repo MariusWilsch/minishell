@@ -84,7 +84,6 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 	new = create_node(str, type);
 	if (!new)
 		return (-1);
-
 	if (!temp)
 	{
 		*head = new;
@@ -92,7 +91,6 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 			new->type = CMD;
 		if (type == QUOTE_ARG)
 			new->arg = del_quotes(new->arg);
-
 		return (0);
 	}
 	while (temp->next != NULL)
@@ -103,7 +101,6 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 		new->type = CMD;
 	temp->next = new;
 	new->prev = temp;
-
 	return (0);
 }
 
@@ -127,7 +124,6 @@ t_args	*create_tok_list(char *input, t_args *head)
 			i = add_tok(get_tok(input, i, QUOTE_ARG), &head, QUOTE_ARG);
 		if (i == -1)
 			return (NULL);
-
 		i++;
 	}
 	return (head);
@@ -142,7 +138,8 @@ t_args	*process_tok(t_args *head, char *input, t_env **env)
 	{
 		if (node->type == CMD && !is_builtin(node))
 			node->arg = resolute_cmd(node, ft_strdup(node->arg), env);
-		if (node->type == REDIR && c_red(node->arg, cnt_occur(node->arg, node->arg[0]), node, env) > 0)
+		if (node->type == REDIR && c_red(node->arg,
+				cnt_occur(node->arg, node->arg[0]), node, env) > 0)
 			return (head->type = REPROMPT, free_list(head), free(input), NULL);
 		if (ft_strcmp(node->arg, "$?") == 0)
 		{
@@ -159,32 +156,3 @@ t_args	*process_tok(t_args *head, char *input, t_env **env)
 	}
 	return (head);
 }
-
-// t_args	*process_tok(t_args *head, char *input)
-// {
-// 	t_args	*node;
-
-// 	node = head;
-// 	while (node != NULL)
-// 	{
-// 		if (node->type == CMD && !is_builtin(node))
-// 			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-// 		if (node->type == REDIR && c_red(node->arg,
-// 				cnt_occur(node->arg, node->arg[0]), node) > 0)
-// 			return (head->type = REPROMPT, free_list(head), free(input), NULL);
-// 		if (ft_strcmp(node->arg, "$?") == 0)
-// 		{
-// 			free(node->arg);
-// 			node->arg = ft_itoa(g_status);
-// 		}
-// 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
-// 		{
-// 			while (ft_strcmp(node->arg, "$?") != 0
-// 				&& ft_strchr(node->arg, '$') && node->type != REDIR)
-// 				node->arg = sub_env(node->arg, get_env_len(node->arg));
-// 		}
-// 		del_quotes(node->arg);
-// 		node = node->next;
-// 	}
-// 	return (head);
-// }
