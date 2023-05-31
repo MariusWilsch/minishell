@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   executor.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/31 12:22:10 by dickklouwer   ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   executor.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/24 11:18:31 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/05/31 14:11:28 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	execute_command(t_cmds *head);
 int		p_error(char *str, int status);
 int		wr_dup2(int fd1, int fd2);
 void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd);
-bool	check_flag(char *argv[], int *idx);
+bool	check_flag(char *argv[], int *i);
 void	execute_cmd_or_builtin(t_cmds *cmd);
 
 /* 				EXECUTE	 */
