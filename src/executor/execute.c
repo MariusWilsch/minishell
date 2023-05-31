@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 16:42:20 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 16:45:44 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ void	parent_process(pid_t child_pid)
 			p_error("waitpid", 1);
 	}
 	if (WIFEXITED(status))
-	{
 		g_status = WEXITSTATUS(status);
-	}
-	else if (WIFSIGNALED(status))
+	if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGINT)
-			g_status = 130;
-		else if (WTERMSIG(status) == SIGQUIT)
+		g_status = 130;
+	}
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
 		{
 			ft_putstr_fd("Quit: 3\n", 1);
 			g_status = 131;
