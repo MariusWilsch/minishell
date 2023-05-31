@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 14:42:19 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 14:45:08 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
         if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
             p_error("dup2", EXIT_FAILURE);
     }
-	close_pipes(pipe_fd, cmd_cnt, i, 2);
+	close_pipes(pipe_fd, cmd_cnt, i, 1);
 	if (cmd->redir)
 		process_redirection(cmd, i, pipe_fd);
 	if (cmd->cmd_type == BUILT_IN_EXE)
