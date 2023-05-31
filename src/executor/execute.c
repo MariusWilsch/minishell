@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/22 16:40:17 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/30 13:38:41 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   execute.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/05/31 11:44:30 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,17 @@ void	parent_process(pid_t child_pid)
 
 void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
-	close_pipes(pipe_fd, cmd_cnt, i, 0);
-	if (cmd_cnt != 1 && !cmd->redir)
-		redirect_pipe_fd(i, cmd_cnt, pipe_fd);
+    if (i > 0)
+    {
+        if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
+            p_error("dup2", EXIT_FAILURE);
+    }
+    if (i < cmd_cnt - 1)
+    {
+        if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
+            p_error("dup2", EXIT_FAILURE);
+    }
+    close_pipes(pipe_fd, cmd_cnt, i, 1);
 	if (cmd->redir)
 		process_redirection(cmd, i, pipe_fd);
 	execute_cmd_or_builtin(cmd, i);
@@ -62,7 +70,7 @@ void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 		{
 			signal(SIGQUIT, child_signal_handler);
 			signal(SIGINT, child_signal_handler);
-			child_process(cmd, i, cmd_cnt, pipe_fd);
+			child_process(&cmd[i], i, cmd_cnt, pipe_fd);
 		}
 		i++;
 	}
@@ -102,7 +110,6 @@ int	executor(t_args *head, t_env **env_l)
 	cmd_cnt = 1;
 	pipe_fd = malloc(1 * sizeof(pipe_fd));
 	cmd = create_structs(head, &cmd_cnt, env_l);
-	// printf("redir: %d\n", cmd->redir->type);
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
 		if (mini_exit(cmd))

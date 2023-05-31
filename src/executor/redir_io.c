@@ -6,36 +6,42 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/29 16:26:30 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/27 10:17:00 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/31 11:29:33 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int	redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd)
+void redirect_pipe_fd(int i, int cmd_cnt, int *pipe_fd)
 {
-	if (i == 0)
-	{
-		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		return (close(pipe_fd[2 * i + 1]));
-	}
-	if (i < cmd_cnt - 1)
-	{
-		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		close(pipe_fd[2 * (i - 1)]);
-		if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		return (close(pipe_fd[2 * i + 1]));
-	}
-	else
-	{
-		if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
-			p_error("dup2", EXIT_FAILURE);
-		return (close(pipe_fd[2 * (i - 1)]));
-	}
+    // If not the first command, redirect input from the previous command
+    if (i > 0)
+    {
+        if (dup2(pipe_fd[2 * (i - 1)], STDIN_FILENO) == -1)
+        {
+            p_error("dup2", EXIT_FAILURE);
+        }
+    }
+
+    // If not the last command, redirect output to the next command
+    if (i < cmd_cnt - 1)
+    {
+        if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
+        {
+            p_error("dup2", EXIT_FAILURE);
+        }
+    }
+
+    // Close all pipe file descriptors
+    for (int j = 0; j < 2 * cmd_cnt; j++)
+    {
+        if (close(pipe_fd[j]) == -1)
+        {
+            p_error("close", EXIT_FAILURE);
+        }
+    }
 }
+
 
 int	redirect_command_fd(t_cmds *head)
 {
