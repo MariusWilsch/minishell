@@ -6,11 +6,39 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/30 15:36:42 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/31 09:33:37 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	exisit_env(t_env **env_list, char *str, t_env **found)
+{
+	char	**key;
+	t_env	*temp;
+	int		position;
+
+	if (env_list == NULL || *env_list == NULL || !str[0])
+		return (-1);
+	if (found != NULL)
+		*found = NULL;
+	key = ft_split(str, '=');
+	temp = *env_list;
+	position = 0;
+	while (temp != NULL)
+	{
+		if (temp->key != NULL && ft_strcmp(key[0], temp->key) == 0)
+		{
+			*found = temp;
+			free_split(key);
+			return (position);
+		}
+		temp = temp->next;
+		position++;
+	}
+	free_split(key);
+	return (-1);
+}
 
 char	**convert_data(t_env *env)
 {

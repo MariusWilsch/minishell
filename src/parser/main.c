@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/10 10:37:57 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/22 14:58:14 by dickklouwer   ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/10 10:37:57 by verdant           #+#    #+#             */
+/*   Updated: 2023/05/31 09:00:26 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ int	minishell(t_args *head, char **envp)
 			ft_printf("%d\n", g_status);
 			continue ;
 		}
+		env_init(&env_l, envp);
 		head = create_tok_list(input, head);
-		head = process_tok(head, input);
+		head = process_tok(head, input, &env_l);
 		if (head == NULL)
 			continue ;
-		env_init(&env_l, envp);
 		executor(head, &env_l);
 		free(input);
 		free_list(head);

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:38:21 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/30 14:23:55 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/31 09:49:03 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,25 +83,25 @@ t_args		*create_delimiter_node(t_args *temp, char *str);
 
 /*			Tokenizer			*/
 char		*get_tok(char *input, int start, t_type_tok type);
-t_args		*create_node(char *str, t_type_tok type);
 int			add_tok(char *str, t_args **head, t_type_tok type);
+t_args		*create_node(char *str, t_type_tok type);
 t_args		*create_tok_list(char *input, t_args *head);
-t_args		*process_tok(t_args *head, char *input);
+t_args		*process_tok(t_args *head, char *input, t_env **env);
 
 /*			Command Resolution			*/
 bool		is_builtin(t_args *node);
-char		*cmd_err(t_args *node);
+char		*cmd_err(t_args *node, t_env **env);
 char		*prep_cmd(char *str);
-char		*resolute_cmd(t_args *node, char *cmd);
+char		*resolute_cmd(t_args *node, char *cmd, t_env **env);
 
 /*			Environment Subsitution			*/
 int			get_env_len(char *str);
-char		*sub_env(char *str, int env_len);
+char		*sub_env(char *str, int env_len, t_env **env);
 
 /*			Redirect Checking			*/
 int			err_msg(t_err_tok err);
-int			env_var_case(char *str, int env_len, int cnt);
-int			c_red(char *str, int cnt, t_args *node);
+int			env_var_case(char *str, int env_len, int cnt, t_env **env);
+int			c_red(char *str, int cnt, t_args *node, t_env **env);
 
 /*			Environment			*/
 char		**convert_data(t_env *env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/30 17:32:12 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/31 09:48:53 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ t_args	*create_tok_list(char *input, t_args *head)
 	return (head);
 }
 
-t_args	*process_tok(t_args *head, char *input)
+t_args	*process_tok(t_args *head, char *input, t_env **env)
 {
 	t_args	*node;
 
@@ -141,9 +141,8 @@ t_args	*process_tok(t_args *head, char *input)
 	while (node != NULL)
 	{
 		if (node->type == CMD && !is_builtin(node))
-			node->arg = resolute_cmd(node, ft_strdup(node->arg));
-		if (node->type == REDIR && c_red(node->arg,
-				cnt_occur(node->arg, node->arg[0]), node) > 0)
+			node->arg = resolute_cmd(node, ft_strdup(node->arg), env);
+		if (node->type == REDIR && c_red(node->arg, cnt_occur(node->arg, node->arg[0]), node, env) > 0)
 			return (head->type = REPROMPT, free_list(head), free(input), NULL);
 		if (ft_strcmp(node->arg, "$?") == 0)
 		{
@@ -152,12 +151,40 @@ t_args	*process_tok(t_args *head, char *input)
 		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{
-			while (ft_strcmp(node->arg, "$?") != 0
-				&& ft_strchr(node->arg, '$') && node->type != REDIR)
-				node->arg = sub_env(node->arg, get_env_len(node->arg));
+			while (ft_strchr(node->arg, '$') && node->type != REDIR)
+				node->arg = sub_env(node->arg, get_env_len(node->arg), env);
 		}
 		del_quotes(node->arg);
 		node = node->next;
 	}
 	return (head);
 }
+
+// t_args	*process_tok(t_args *head, char *input)
+// {
+// 	t_args	*node;
+
+// 	node = head;
+// 	while (node != NULL)
+// 	{
+// 		if (node->type == CMD && !is_builtin(node))
+// 			node->arg = resolute_cmd(node, ft_strdup(node->arg));
+// 		if (node->type == REDIR && c_red(node->arg,
+// 				cnt_occur(node->arg, node->arg[0]), node) > 0)
+// 			return (head->type = REPROMPT, free_list(head), free(input), NULL);
+// 		if (ft_strcmp(node->arg, "$?") == 0)
+// 		{
+// 			free(node->arg);
+// 			node->arg = ft_itoa(g_status);
+// 		}
+// 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
+// 		{
+// 			while (ft_strcmp(node->arg, "$?") != 0
+// 				&& ft_strchr(node->arg, '$') && node->type != REDIR)
+// 				node->arg = sub_env(node->arg, get_env_len(node->arg));
+// 		}
+// 		del_quotes(node->arg);
+// 		node = node->next;
+// 	}
+// 	return (head);
+// }

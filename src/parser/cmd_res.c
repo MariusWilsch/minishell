@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/30 13:17:24 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/31 09:58:40 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ bool	is_builtin(t_args *node)
  * @param node the node of the linked list where a error occured
  * int s = start
  */
-char	*cmd_err(t_args *node)
+char	*cmd_err(t_args *node, t_env **env)
 {
 	int		s;
 	char	*str;
@@ -60,9 +60,9 @@ char	*cmd_err(t_args *node)
 	}
 	if (ft_strchr(str, '$') && str[1] != '\0')
 	{
-		str = sub_env(str, get_env_len(str));
+		str = sub_env(str, get_env_len(str), env);
 		if (!ft_strchr(str, '/'))
-			return (resolute_cmd(node, ft_strdup(node->arg)));
+			return (resolute_cmd(node, ft_strdup(node->arg), env));
 		ft_printf("minishell: %s: No such file or directory\n", str);
 		return (node->err_tok = NO_FILE_DIR, str);
 	}
@@ -101,7 +101,7 @@ char	*prep_cmd(char *str)
  * 
  * @note I need to also resolute in the current working directory
  */
-char	*resolute_cmd(t_args *node, char *cmd)
+char	*resolute_cmd(t_args *node, char *cmd, t_env **env)
 {
 	char	*temp;
 	char	**path_2d;
@@ -126,6 +126,6 @@ char	*resolute_cmd(t_args *node, char *cmd)
 	free(temp);
 	free_split(path_2d);
 	if (cmd == NULL || temp == NULL)
-		return (free(cmd), cmd_err(node));
+		return (free(cmd), cmd_err(node, env));
 	return (free(node->arg), cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:33:01 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/04/26 13:33:19 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/31 09:58:23 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,29 +40,31 @@ int	get_env_len(char *str)
  * 
  * @note I'm missing the deletion of env_var if env_var does not exsit
 */
-char	*sub_env(char *str, int env_len)
+char	*sub_env(char *str, int env_len, t_env **env_l)
 {
 	const int	start = ft_strclen(str, '$') + 1;
-	char		*env_var;
 	char		*new;
 	int			len;
+	t_env 	*env_var;
 
 	if (!str)
 		return (NULL);
-	new = ft_substr(str, start, env_len);
-	env_var = getenv(new);
+	if (ft_strcmp(str, "$?") == 0)
+		return (str);	
+	new = ft_substr(str, start, env_len);	
+	exisit_env(env_l, new, &env_var);
 	free(new);
 	if (!env_var)
 		return (del_substr(str, start - 1, env_len + 1));
-	len = (ft_strlen(str) + ft_strlen(env_var)) - (env_len + 1);
+	len = (ft_strlen(str) + ft_strlen(env_var->value)) - (env_len + 1);
 	new = ft_calloc(sizeof(char), (len + 1));
 	if (!new)
 		return (NULL);
 	len = ft_strlcpy(new, str, ft_strclen(str, '$') + 1);
-	len = ft_strlcat(new, env_var, len + ft_strlen(env_var) + 1);
+	if (env_var->value)
+		len = ft_strlcat(new, env_var->value, len + ft_strlen(env_var->value) + 1);
 	env_len += start;
 	while (str[env_len] && env_len < len)
 		new[len++] = str[env_len++];
-	free(str);
-	return (new);
+	return (free(str), new);
 }

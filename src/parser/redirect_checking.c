@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 12:31:04 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/17 16:19:25 by verdant          ###   ########.fr       */
+/*   Updated: 2023/05/31 09:40:01 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ int	err_msg(t_err_tok err)
 	return (1);
 }
 
-int	env_var_case(char *str, int env_len, int cnt)
+int	env_var_case(char *str, int env_len, int cnt, t_env **env)
 {
 	char	*env_var;
 	bool	flag;
 
 	flag = false;
 	env_var = ft_substr(str, ft_strclen(str, '$'), env_len);
-	env_var = sub_env(env_var, env_len - 1);
+	env_var = sub_env(env_var, env_len - 1, env);
 	if (!env_var)
 		return (1);
 	if (env_var[0] != '/' && !ft_strchr(str, '\"'))
@@ -51,7 +51,7 @@ int	env_var_case(char *str, int env_len, int cnt)
 		while (str[cnt] && str[cnt] == ' ')
 			cnt++;
 		str = del_substr(del_quotes(str), 0, cnt);
-		str = sub_env(ft_strdup(str), env_len - 1);
+		str = sub_env(ft_strdup(str), env_len - 1, env);
 		if (access(str, W_OK))
 			ft_printf("minishell: %s: permission denied\n", str);
 	}
@@ -69,7 +69,7 @@ int	env_var_case(char *str, int env_len, int cnt)
  * 4. Special case: <> is valid but I will error
  * 5. redirect: >"" --> No such file or directory (Not implemented)
 */
-int	c_red(char *str, int cnt, t_args *node)
+int	c_red(char *str, int cnt, t_args *node, t_env **env)
 {
 	int	i;
 
@@ -91,7 +91,7 @@ int	c_red(char *str, int cnt, t_args *node)
 			return (err_msg(NEWLINE_ERR));
 	}
 	if (!ft_strchr(str, '\'') && ft_strchr(str, '$'))
-		node->err_tok = env_var_case(str, get_env_len(str) + 1, cnt);
+		node->err_tok = env_var_case(str, get_env_len(str) + 1, cnt, env);
 	str = del_substr(str, cnt, cnt_occur(str + cnt, ' '));
 	return (0);
 }

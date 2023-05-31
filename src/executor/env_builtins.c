@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/30 17:32:07 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/05/31 09:33:43 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,6 @@ int	exec_builtin(char *func, int argc, char **argv, t_env **env_list)
 	if (ft_strcmp("unset", func) == 0)
 		unset(argc, argv, env_list);
 	return (EXIT_SUCCESS);
-}
-
-int	exisit_env(t_env **env_list, char *str, t_env **found)
-{
-	char	**key;
-	t_env	*temp;
-	int		position;
-
-	if (found != NULL)
-		*found = NULL;
-	key = ft_split(str, '=');
-	temp = *env_list;
-	position = 0;
-	while (temp != NULL)
-	{
-		if (temp->key != NULL && ft_strcmp(key[0], temp->key) == 0)
-		{
-			*found = temp;
-			free_split(key);
-			return (position);
-		}
-		temp = temp->next;
-		position++;
-	}
-	free_split(key);
-	return (-1);
 }
 
 void	export_routine(char *str, t_env **env_list)
@@ -80,7 +54,6 @@ void	export_routine(char *str, t_env **env_list)
 			found->export_only = false;
 	}
 }
-
 
 int	export(int argc, char *argv[], t_env **env_list)
 {
