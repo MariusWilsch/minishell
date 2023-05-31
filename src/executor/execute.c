@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 11:44:30 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 13:40:22 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
     close_pipes(pipe_fd, cmd_cnt, i, 1);
 	if (cmd->redir)
 		process_redirection(cmd, i, pipe_fd);
-	execute_cmd_or_builtin(cmd, i);
+	if (cmd->cmd_type == BUILT_IN_EXE)
+		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+	else
+		execute_command(cmd);
 }
 
 void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)

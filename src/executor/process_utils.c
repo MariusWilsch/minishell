@@ -6,7 +6,7 @@
 /*   By: tklouwer <tklouwer@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 11:12:21 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/27 10:19:36 by tklouwer      ########   odam.nl         */
+/*   Updated: 2023/05/31 12:21:51 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ void	process_redirection(t_cmds *cmd, int i, int *pipe_fd)
 	}
 }
 
-void	execute_cmd_or_builtin(t_cmds *cmd, int i)
+void	execute_cmd_or_builtin(t_cmds *cmd)
 {
 	if (cmd->cmd_type == BUILT_IN_EXE)
 		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
 	else
-		execute_command(&cmd[i]);
+		execute_command(cmd);
 	exit(EXIT_SUCCESS);
 }
 

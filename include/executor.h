@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/24 11:18:31 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/05/31 11:51:55 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 12:22:10 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int		p_error(char *str, int status);
 int		wr_dup2(int fd1, int fd2);
 void	cleanup(int cmd_cnt, t_cmds *cmd, int *pipe_fd);
 bool	check_flag(char *argv[], int *idx);
-void	execute_cmd_or_builtin(t_cmds *cmd, int i);
+void	execute_cmd_or_builtin(t_cmds *cmd);
 
 /* 				EXECUTE	 */
 int		executor(t_args *head, t_env **env);
