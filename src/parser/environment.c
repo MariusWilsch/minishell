@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   environment.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/17 17:43:37 by verdant           #+#    #+#             */
-/*   Updated: 2023/05/31 09:33:37 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   environment.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/17 17:43:37 by verdant       #+#    #+#                 */
+/*   Updated: 2023/05/31 18:01:20 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	env_init(t_env **env, char **envp)
 	index = 0;
 	lvl = 0;
 	lvl_str = NULL;
-	*shlvl = getenv("SHLVL");
+	shlvl = getenv("SHLVL");
 	if (shlvl)
 	{
 		lvl = ft_atoi(shlvl);
