@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 16:21:55 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 16:42:20 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ void	parent_process(pid_t child_pid)
 			p_error("waitpid", 1);
 	}
 	if (WIFEXITED(status))
-		g_status = WEXITSTATUS(status);
-	if (WIFSIGNALED(status))
 	{
-		g_status = 130;
+		g_status = WEXITSTATUS(status);
 	}
-	if (WIFSIGNALED(status))
+	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)
 			g_status = 130;
@@ -54,9 +52,7 @@ void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
     }
 	close_pipes(pipe_fd, cmd_cnt, i, 1);
 	if (cmd->redir)
-	{
 		process_redirection(cmd, pipe_fd);
-	}
 	if (cmd->cmd_type == BUILT_IN_EXE)
 	{
 		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
