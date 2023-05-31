@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 13:40:22 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/05/31 14:42:19 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
         if (dup2(pipe_fd[2 * i + 1], STDOUT_FILENO) == -1)
             p_error("dup2", EXIT_FAILURE);
     }
-    close_pipes(pipe_fd, cmd_cnt, i, 1);
+	close_pipes(pipe_fd, cmd_cnt, i, 2);
 	if (cmd->redir)
 		process_redirection(cmd, i, pipe_fd);
 	if (cmd->cmd_type == BUILT_IN_EXE)
+	{
 		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
+		exit (0);
+	}
 	else
 		execute_command(cmd);
 }
@@ -89,7 +92,7 @@ void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 	if (pid == NULL)
 		p_error("malloc", EXIT_FAILURE);
 	exec_pipeline(cmd, cmd_cnt, pipe_fd, pid);
-	close_pipes(pipe_fd, cmd_cnt, i, 1);
+	close_pipes(pipe_fd, cmd_cnt, cmd_cnt, 1);
 	while (i < cmd_cnt)
 	{
 		parent_process(pid[i]);
@@ -111,7 +114,7 @@ int	executor(t_args *head, t_env **env_l)
 	int				*pipe_fd;
 
 	cmd_cnt = 1;
-	pipe_fd = malloc(1 * sizeof(pipe_fd));
+	pipe_fd = NULL;
 	cmd = create_structs(head, &cmd_cnt, env_l);
 	if (ft_strcmp("exit", head->arg) == 0)
 	{
@@ -125,7 +128,6 @@ int	executor(t_args *head, t_env **env_l)
 	{
 		if (cmd_cnt > 1)
 		{
-			free(pipe_fd);
 			pipe_fd = create_pipes(cmd_cnt);
 		}
 		shell_process(cmd, cmd_cnt, pipe_fd);
