@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/06/01 08:56:43 by verdant          ###   ########.fr       */
+/*   Updated: 2023/06/01 09:12:50 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,12 @@ int	export(int argc, char *av[], t_env **env_list)
 		return (env(env_list, true));
 	while (i < argc)
 	{
-		if (av[i][0] == '=')
+		if (av[i][0] == '=' || ft_isdigit(av[i][0]) == 1)
 			return (print_it(av[i]));
 		j = 0;
 		while (av[i][j] != '\0' && av[i][j] != '=')
 		{
-			if (ft_isalnum(av[i][j]) == 0 || ft_isdigit(av[i][0]) == 0
-					|| av[i][0] != '_')
+			if ((ft_isalnum(av[i][j]) == 0 && av[i][j] != '_'))
 				return (print_it(av[i]));
 			j++;
 		}
