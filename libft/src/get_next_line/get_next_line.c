@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/27 14:56:22 by verdant           #+#    #+#             */
-/*   Updated: 2022/12/25 13:11:37 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   get_next_line.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/10/27 14:56:22 by verdant       #+#    #+#                 */
+/*   Updated: 2023/06/01 09:25:08 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*trim_buf(char *buf, char *current_line)
 	if (!current_line)
 		return (NULL);
 	cur_len = ft_strclen_bool(current_line, false);
-		next_line = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	next_line = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!next_line)
 		return (NULL);
 	while (buf[cur_len + i])

@@ -6,39 +6,11 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/17 17:43:37 by verdant       #+#    #+#                 */
-/*   Updated: 2023/05/31 18:01:20 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/06/01 09:19:40 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	exisit_env(t_env **env_list, char *str, t_env **found)
-{
-	char	**key;
-	t_env	*temp;
-	int		position;
-
-	if (env_list == NULL || *env_list == NULL || !str[0])
-		return (-1);
-	if (found != NULL)
-		*found = NULL;
-	key = ft_split(str, '=');
-	temp = *env_list;
-	position = 0;
-	while (temp != NULL)
-	{
-		if (temp->key != NULL && ft_strcmp(key[0], temp->key) == 0)
-		{
-			*found = temp;
-			free_split(key);
-			return (position);
-		}
-		temp = temp->next;
-		position++;
-	}
-	free_split(key);
-	return (-1);
-}
 
 char	**convert_data(t_env *env)
 {
@@ -122,25 +94,32 @@ void	add_end(t_env **head, char *str, bool export_only)
 	new_node->export_only = export_only;
 }
 
-void	env_init(t_env **env, char **envp)
+char	*shlvl_increment(void)
 {
-	int		index;
 	int		lvl;
 	char	*lvl_str;
 	char	*shlvl;
 
-	if (*env != NULL)
-		return ;
-	index = 0;
-	lvl = 0;
-	lvl_str = NULL;
 	shlvl = getenv("SHLVL");
 	if (shlvl)
 	{
 		lvl = ft_atoi(shlvl);
 		lvl_str = ft_itoa(lvl + 1);
 		shlvl = ft_strjoin("SHLVL=", lvl_str);
+		free(lvl_str);
 	}
+	return (shlvl);
+}
+
+void	env_init(t_env **env, char **envp)
+{
+	int		index;
+	char	*shlvl;
+
+	index = 0;
+	if (*env != NULL)
+		return ;
+	shlvl = shlvl_increment();
 	while (envp[index])
 	{
 		if (ft_strncmp(envp[index], "SHLVL", 5) != 0)
@@ -149,5 +128,5 @@ void	env_init(t_env **env, char **envp)
 			add_end(env, shlvl, false);
 		index++;
 	}
-	return (free(shlvl), free(lvl_str), (void)0);
+	free(shlvl);
 }
