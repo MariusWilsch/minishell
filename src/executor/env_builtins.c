@@ -1,33 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env_builtins.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/31 09:33:43 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   env_builtins.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/24 10:40:09 by tklouwer      #+#    #+#                 */
+/*   Updated: 2023/06/01 09:10:38 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-int	exec_builtin(char *func, int argc, char **argv, t_env **env_list)
-{
-	if (ft_strcmp("echo", func) == 0)
-		echo(argc, argv);
-	if (ft_strcmp("cd", func) == 0)
-		cd(argc, argv[1], *env_list);
-	if (ft_strcmp("pwd", func) == 0)
-		pwd();
-	if (ft_strcmp("env", func) == 0)
-		env(env_list, false);
-	if (ft_strcmp("export", func) == 0)
-		export(argc, argv, env_list);
-	if (ft_strcmp("unset", func) == 0)
-		unset(argc, argv, env_list);
-	return (EXIT_SUCCESS);
-}
 
 void	export_routine(char *str, t_env **env_list)
 {
@@ -55,28 +38,38 @@ void	export_routine(char *str, t_env **env_list)
 	}
 }
 
+int	is_valid_identifier(char *arg)
+{
+	int	j;
+
+	j = 0;
+	if (arg[0] == '=' || ft_isdigit(arg[0]) == 0 || arg[0] != '_')
+	{
+		while (arg[j] != '\0' && arg[j] != '=')
+		{
+			if (ft_isalnum(arg[j]) == 0)
+			{
+				return (EXIT_SUCCESS);
+			}
+			j++;
+		}
+	}
+	return (EXIT_FAILURE);
+}
+
 int	export(int argc, char *argv[], t_env **env_list)
 {
-	int		i;
-	int		j;
+	int	i;
 
 	i = 1;
 	if (argc == 1)
 		return (env(env_list, true));
 	while (i < argc)
 	{
-		if (argv[i][0] == '=')
-			return (ft_printf("minishell: export: %s not a valid identifier\n",
-					argv[i]), g_status = EXIT_FAILURE);
-		j = 0;
-		while (argv[i][j] != '\0' && argv[i][j] != '=')
+		if (!is_valid_identifier(argv[i]))
 		{
-			if (ft_isalnum(argv[i][j]) == 0 && ft_isdigit(argv[i][0]) == 0 && argv[i][0] != '_')
-			{
-				ft_printf("minishell: export: %s not a valid identifier\n", argv[i]);
-				return (g_status = EXIT_FAILURE);
-			}
-			j++;
+			ft_printf("minishell: export: %s not a valid identifier\n", argv[i]);
+			return (g_status = EXIT_FAILURE);
 		}
 		export_routine(argv[i], env_list);
 		i++;

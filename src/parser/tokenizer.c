@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/31 09:48:53 by verdant          ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   tokenizer.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: verdant <verdant@student.42.fr>              +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
+/*   Updated: 2023/06/01 09:10:56 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_args	*create_node(char *str, t_type_tok type)
 	{
 		new->type = CMD;
 		if (ft_strchr(str, '>') || ft_strchr(str, '<'))
-		new->type = REDIR;
+			new->type = REDIR;
 	}
 	if (incl_char(str[0], "><") && type == OPERATOR)
 		new->type = REDIR;

@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/22 16:40:17 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/05/31 18:28:30 by dickklouwer   ########   odam.nl         */
+/*   Updated: 2023/06/01 08:47:47 by dickklouwer   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,24 @@ void	parent_process(pid_t child_pid)
 {
 	int	status;
 
-	status = child_pid;
-	waitpid(-1, &status, 0);
+	waitpid(child_pid, &status, 0);
 	if (WIFEXITED(status))
 	{
 		g_status = WEXITSTATUS(status);
-		g_status += 128;
 	}
-	else if (WIFSIGNALED(status))
+	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)
-		{
 			g_status = 130;
-		}
 		else if (WTERMSIG(status) == SIGQUIT)
 		{
 			ft_putstr_fd("Quit: 3\n", 1);
 			g_status = 131;
 		}
+		else
+			g_status = 130;
 	}
 }
-
 
 void	child_process(t_cmds *cmd, int i, int cmd_cnt, int *pipe_fd)
 {
@@ -86,13 +83,19 @@ void	exec_pipeline(t_cmds *cmd, int cmd_cnt, int *pipe_fd, pid_t *pid)
 void	shell_process(t_cmds *cmd, int cmd_cnt, int *pipe_fd)
 {
 	pid_t	*pid;
+	int		i;
 
+	i = 0;
 	pid = malloc(sizeof(pid_t) * cmd_cnt);
 	if (pid == NULL)
 		p_error("malloc", EXIT_FAILURE);
 	exec_pipeline(cmd, cmd_cnt, pipe_fd, pid);
 	close_pipes(pipe_fd, cmd_cnt, cmd_cnt, 1);
-	parent_process(*pid);
+	while (i < cmd_cnt)
+	{
+		parent_process(pid[i]);
+		i++;
+	}
 	free(pid);
 }
 
@@ -121,10 +124,7 @@ int	executor(t_args *head, t_env **env_l)
 		exec_builtin(cmd->cmd_path, cmd->argc, cmd->argv, cmd->env);
 	else
 	{
-		if (cmd_cnt > 1 || cmd->redir)
-		{
-			pipe_fd = create_pipes(cmd_cnt);
-		}
+		pipe_fd = create_pipes(cmd_cnt);
 		shell_process(cmd, cmd_cnt, pipe_fd);
 	}
 	cleanup(cmd_cnt, cmd, pipe_fd);
