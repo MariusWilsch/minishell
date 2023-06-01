@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   env_builtins.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/04/24 10:40:09 by tklouwer      #+#    #+#                 */
-/*   Updated: 2023/06/01 09:10:38 by dickklouwer   ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   env_builtins.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/24 10:40:09 by tklouwer          #+#    #+#             */
+/*   Updated: 2023/06/01 08:54:23 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+int	print_it(char *str)
+{
+	ft_printf("minishell: export: %s not a valid identifier\n", str);
+	return (g_status = EXIT_FAILURE);
+}
 
 void	export_routine(char *str, t_env **env_list)
 {
@@ -38,40 +44,27 @@ void	export_routine(char *str, t_env **env_list)
 	}
 }
 
-int	is_valid_identifier(char *arg)
+int	export(int argc, char *av[], t_env **env_list)
 {
-	int	j;
-
-	j = 0;
-	if (arg[0] == '=' || ft_isdigit(arg[0]) == 0 || arg[0] != '_')
-	{
-		while (arg[j] != '\0' && arg[j] != '=')
-		{
-			if (ft_isalnum(arg[j]) == 0)
-			{
-				return (EXIT_SUCCESS);
-			}
-			j++;
-		}
-	}
-	return (EXIT_FAILURE);
-}
-
-int	export(int argc, char *argv[], t_env **env_list)
-{
-	int	i;
+	int		i;
+	int		j;
 
 	i = 1;
 	if (argc == 1)
 		return (env(env_list, true));
 	while (i < argc)
 	{
-		if (!is_valid_identifier(argv[i]))
+		if (av[i][0] == '=')
+			return (print_it(av[i]));
+		j = 0;
+		while (av[i][j] != '\0' && av[i][j] != '=')
 		{
-			ft_printf("minishell: export: %s not a valid identifier\n", argv[i]);
-			return (g_status = EXIT_FAILURE);
+			if (ft_isalnum(av[i][j]) == 0 && ft_isdigit(av[i][0]) == 0
+					&& av[i][0] != '_')
+				return (print_it(av[i]));
+			j++;
 		}
-		export_routine(argv[i], env_list);
+		export_routine(av[i], env_list);
 		i++;
 	}
 	return (g_status = EXIT_SUCCESS);
