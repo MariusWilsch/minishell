@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   tokenizer.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/03/15 14:12:14 by mwilsch       #+#    #+#                 */
-/*   Updated: 2023/06/01 09:10:56 by dickklouwer   ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/06/01 09:01:31 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,8 @@ t_args	*process_tok(t_args *head, char *input, t_env **env)
 		}
 		if (ft_strchr(node->arg, '$') && node->arg[0] != '\'')
 		{
-			while (ft_strchr(node->arg, '$') && node->type != REDIR)
+			while (ft_strchr(node->arg, '$') && node->type != REDIR
+				&& node->arg[1] != '\0')
 				node->arg = sub_env(node->arg, get_env_len(node->arg), env);
 		}
 		del_quotes(node->arg);
