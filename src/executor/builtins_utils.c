@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   builtins_utils.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: verdant <verdant@student.42.fr>              +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/05/21 10:38:52 by dickklouwer   #+#    #+#                 */
-/*   Updated: 2023/06/01 09:07:31 by dickklouwer   ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   builtins_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/21 10:38:52 by dickklouwer       #+#    #+#             */
+/*   Updated: 2023/06/01 08:34:59 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ bool	check_flag(char **argv, int *i)
 		idx_2 = 0;
 		while (argv[idx][idx_2] && incl_char(argv[idx][idx_2], "-n"))
 			idx_2++;
+		ft_printf("argv[idx][idx_2] = %d\n", argv[idx][idx_2]);
 		if (argv[idx][idx_2] == '\0')
 		{
+			// ft_printf("i = %d\n", *i);
 			(*i)++;
 			flag = false;
 		}
