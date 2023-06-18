@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:05:40 by tklouwer          #+#    #+#             */
-/*   Updated: 2023/05/31 14:11:17 by verdant          ###   ########.fr       */
+/*   Updated: 2023/06/01 12:18:25 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	echo(int argc, char **argv)
 
 	i = 1;
 	flag = check_flag(argv, &i);
+	// printf("%d", flag);
 	while (i < argc)
 	{
 		if (ft_strcmp(argv[i], "$?") == 0)

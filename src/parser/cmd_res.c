@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:32:28 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/05/31 09:58:40 by verdant          ###   ########.fr       */
+/*   Updated: 2023/06/01 12:26:58 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,14 @@ bool	is_builtin(t_args *node)
 	int	i;
 
 	i = 0;
+	if (incl_char(node->arg[0], "'\""))
+		del_quotes(node->arg);
 	while (node->arg[i])
 	{
 		node->arg[i] = ft_tolower(node->arg[i]);
 		i++;
 	}
-	if (ft_strncmp("echo", node->arg, 4) == 0)
+	if (ft_strcmp("echo", node->arg) == 0)
 		return (node->type = BUILT_IN, true);
 	if (ft_strncmp("pwd", node->arg, 3) == 0)
 		return (node->type = BUILT_IN, true);

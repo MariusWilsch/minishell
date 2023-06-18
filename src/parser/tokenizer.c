@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 14:12:14 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/06/01 09:01:31 by verdant          ###   ########.fr       */
+/*   Updated: 2023/06/18 11:49:55 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_tok(char *input, int start, t_type_tok type)
 	if (type == QUOTE_ARG)
 	{
 		len = cnt_len_between(input, input[start], start + 1) + 2;
-		while (input[len] && !incl_char(input[len], " >|<"))
+		while (input[len] && !incl_char(input[start+len], " >|<"))
 			len++;
 	}
 	res = ft_substr(input, start, len);
@@ -97,7 +97,7 @@ int	add_tok(char *str, t_args **head, t_type_tok type)
 		temp = temp->next;
 	if (str[0] == '|')
 		temp = create_delimiter_node(temp, str);
-	if (temp && type == ARG && temp->type == REDIR)
+	if (temp && (type == ARG || type == QUOTE_ARG) && temp->type == REDIR)
 		new->type = CMD;
 	temp->next = new;
 	new->prev = temp;
@@ -120,6 +120,10 @@ t_args	*create_tok_list(char *input, t_args *head)
 			i = add_tok(get_tok(input, i, OPERATOR), &head, OPERATOR);
 		if (ft_isalnum(input[i]) || incl_char(input[i], ".$-/_+-*="))
 			i = add_tok(get_tok(input, i, ARG), &head, ARG);
+		if (input && input[0] == '|')
+ 			i  = add_tok(get_tok(input, i, OPERATOR), &head, ARG);
+		if (input && input[0] != '\0' && input[0] == '|')
+			continue ;
 		if (incl_char(input[i], "\'\""))
 			i = add_tok(get_tok(input, i, QUOTE_ARG), &head, QUOTE_ARG);
 		if (i == -1)
